@@ -1,0 +1,54 @@
+<launch>
+
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+
+
+  <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <!-- <arg name="world_name" value="$(find ur10e_robot_gazebo)/worlds/no_shadows.world" /> -->
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find ur_socket_describe)/urdf/ur_socket_complex.xacro"/>
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model ur10e_robot -param robot_description"/>
+
+
+  <rosparam file="$(find ur_control)/config/ur10e_robot_control_moveit.yaml" command="load"/>
+
+
+  <!--加载位置控制器-->
+  <node name="arm_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/ur10e_robot" args="  arm_controller  " />
+
+  <!--加载关节状态控制器-->
+  <!-- <node name="hand_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/ur10e_robot" args="  hand_controller  " /> -->
+
+  <node name="joint_state_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn joint_state_controller" ns="/ur10e_robot" respawn="false" output="screen"/>
+
+
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+    <param name="publish_frequency" type="double" value="50.0" />
+    <remap from="/joint_states" to="/ur10e_robot/joint_states" />
+  </node>
+
+
+</launch>
+
+
+
+
+
+
+
+
+
+

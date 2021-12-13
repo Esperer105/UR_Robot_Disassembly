@@ -1,0 +1,22 @@
+# controller_manager_ns: ''
+# controller_list:
+#     - name: rokae/arm_controller
+#       action_ns: follow_joint_trajectory
+#       type: FollowJointTrajectory
+#       default: true
+#       joints:
+
+controller_manager_ns: ""
+controller_list:
+  - name: ur10e_robot/arm_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - elbow_joint
+      - shoulder_lift_joint
+      - shoulder_pan_joint
+      # - sleeve_joint
+      - wrist_1_joint
+      - wrist_2_joint
+      - wrist_3_joint

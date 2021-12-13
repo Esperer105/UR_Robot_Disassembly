@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<robot name="rokae" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+  <xacro:include filename="$(find rokae_desk)/urdf/robot.xacro" />
+  <xacro:include filename="$(find cai_env)/urdf/table.urdf.xacro" />
+  <!-- <xacro:include filename="$(find battery_pack_describe)/urdf/battery_pack.xacro" /> -->
+
+  <xacro:include filename="$(find rokae_desk)/urdf/camera_taotong.xacro" />
+  <xacro:include filename="$(find realsense2_description)/urdf/test_d435_camera.urdf.xacro"   />
+  <xacro:include filename="$(find realsense2_description)/urdf/gloal_d435_camera.urdf.xacro"   />
+  <xacro:include filename="$(find battery_pack_describe)/urdf/weilan.urdf" />
+  <!-- <xacro:include filename="$(find battery_pack_describe)/urdf/v_battery.xacro"   /> -->
+
+
+  <joint name="weilan_joint" type="fixed">
+    <origin xyz="0 0 0.05" rpy="0 0 0" />
+    <parent link="table"/>
+    <child link="weilan"/>
+  </joint>
+
+  <joint name="table_ur5_joint" type="fixed">
+    <origin xyz="-0.55 0 0.12" rpy="0 0 0" />
+    <parent link="table"/>
+    <child link="rokae_base"/>
+  </joint>
+
+  <!-- <joint name="battery_pack_joint" type="fixed">
+    <origin xyz="0 0 0.1000002" rpy="0 0 3.14" />
+    <parent link="table"/>
+    <child link="v_battery_base_link"/>
+  </joint> -->
+
+  <joint name="taotong_tool_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 3.14 0" />
+    <parent link="rokae_link7"/>
+    <child link="tool_base_link"/>
+  </joint>
+
+  <joint name="arm_camera_joint" type="fixed">
+    <origin xyz="0 -0.02 0.10" rpy="0 -1.57 1.57"/>
+    <parent link="rokae_link7"/>
+    <child link="world_base"/>
+  </joint>
+
+
+  <joint name="scene_camera_joint" type="fixed">
+    <origin xyz="0 0 1.50" rpy="0 1.57 1.57"/>
+    <parent link="table"/>
+    <child link="gloal_world_base"/>
+  </joint>
+
+
+
+
+
+</robot>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot  name="weilan">
+  <link    name="weilan">
+    <inertial>
+      <origin
+        xyz="4.3411E-14 -5.43668769682309E-15 0.01"
+        rpy="0 0 0" />
+      <mass
+        value="0.31968" />
+      <inertia
+        ixx="0.2127"
+        ixy="-2.3971E-16"
+        ixz="8.19449999999999E-18"
+        iyy="0.2127"
+        iyz="1.85842762697241E-17"
+        izz="0.42539" />
+    </inertial>
+
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="1.5707963267949 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/weilan.stl" scale="0.75 2  0.75 "/>
+      </geometry>
+      <material
+        name="">
+        <color          rgba="1 1 1 1" />
+      </material>
+    </visual>
+
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="1.5707963267949 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/weilan.stl" scale="0.75  2  0.75 "/>
+      </geometry>
+    </collision>
+
+  </link>
+
+
+    
+  <gazebo reference="weilan">
+     <material>Gazebo/GreyTransparent</material>
+  </gazebo>
+  
+
+
+</robot>
+
+
+

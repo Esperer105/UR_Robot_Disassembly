@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot  name="battery_pack"   xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <link    name="battery_pack_link">
+    <inertial>
+      <origin
+        xyz="-0.18358 0.00059075 -0.19041"
+        rpy="0 0 0" />
+      <mass
+        value="2.0722" />
+      <inertia
+        ixx="0.040611"
+        ixy="-0.00037803"
+        ixz="-0.0028159"
+        iyy="0.083995"
+        iyz="-0.00066456"
+        izz="0.043726" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/battery_pack_link.stl" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/battery_pack_link.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+    <gazebo reference="battery_pack_link">
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+  <link
+    name="bolt_vertical_Link">
+    <inertial>
+      <origin
+        xyz="-0.0072755 -2.2597E-09 1.2677E-09"
+        rpy="0 0 0" />
+      <mass
+        value="0.0089367" />
+      <inertia
+        ixx="1.0038E-07"
+        ixy="-1.3465E-13"
+        ixz="7.1805E-14"
+        iyy="5.5608E-07"
+        iyz="5.3176E-14"
+        izz="5.5608E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/bolt_vertical_Link.stl" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.77647 0.75686 0.73725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/bolt_vertical_Link.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+      <gazebo reference="bolt_vertical_Link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+
+  <joint
+    name="bolt_vertical"
+    type="fixed">
+    <origin
+      xyz="0.057323 -0.038452 0"
+      rpy="1.8719 1.5708 0" />
+    <parent
+      link="battery_pack_link" />
+    <child
+      link="bolt_vertical_Link" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="nut_vertical_Link">
+    <inertial>
+      <origin
+        xyz="-5.5337E-09 6.9389E-18 -0.0026006"
+        rpy="0 0 0" />
+      <mass
+        value="0.0026574" />
+      <inertia
+        ixx="2.7975E-08"
+        ixy="5.007E-14"
+        ixz="1.6954E-14"
+        iyy="2.7977E-08"
+        iyz="-6.756E-14"
+        izz="4.4616E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/nut_vertical_Link.stl" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.77647 0.75686 0.73725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/nut_vertical_Link.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="nut_vertical_Link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+
+  <joint
+    name="nut_vertical"
+    type="continuous">
+    <origin
+      xyz="0.057323 -0.038452 0"
+      rpy="0 0 -0.57871" />
+    <parent
+      link="battery_pack_link" />
+    <child
+      link="nut_vertical_Link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+
+  <link
+    name="bolt_Horizontal_Link">
+    <inertial>
+      <origin
+        xyz="-0.022248 -9.0785E-10 2.5227E-09"
+        rpy="0 0 0" />
+      <mass
+        value="0.010043" />
+      <inertia
+        ixx="8.1604E-08"
+        ixy="-1.0075E-13"
+        ixz="2.7794E-13"
+        iyy="1.2291E-06"
+        iyz="-1.2009E-13"
+        izz="1.2291E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/bolt_Horizontal_Link.stl" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.77647 0.75686 0.73725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/bolt_Horizontal_Link.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="bolt_Horizontal_Link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <joint
+    name="bolt_Horizontal"
+    type="continuous">
+    <origin
+      xyz="-0.036344 -0.016452 -0.005"
+      rpy="1.9639 0 1.5708" />
+    <parent
+      link="battery_pack_link" />
+    <child
+      link="bolt_Horizontal_Link" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+
+  <link
+    name="nut_Horizontal_Link">
+    <inertial>
+      <origin
+        xyz="-5.5337E-09 1.7347E-18 -0.0026006"
+        rpy="0 0 0" />
+      <mass
+        value="0.0026574" />
+      <inertia
+        ixx="2.7975E-08"
+        ixy="5.007E-14"
+        ixz="1.6954E-14"
+        iyy="2.7977E-08"
+        iyz="-6.756E-14"
+        izz="4.4616E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/nut_Horizontal_Link.stl" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.77647 0.75686 0.73725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/nut_Horizontal_Link.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="nut_Horizontal_Link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <joint
+    name="nut_Horizontal"
+    type="continuous">
+    <origin
+      xyz="-0.036344 -0.021252 -0.005"
+      rpy="1.5708 0.39309 -3.1416" />
+    <parent
+      link="battery_pack_link" />
+    <child
+      link="nut_Horizontal_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="bolt_Arbitrary_Link">
+    <inertial>
+      <origin
+        xyz="-0.003848 -2.2626E-09 1.0605E-09"
+        rpy="0 0 0" />
+      <mass
+        value="0.010043" />
+      <inertia
+        ixx="8.1604E-08"
+        ixy="-2.5594E-13"
+        ixz="1.1928E-13"
+        iyy="1.2291E-06"
+        iyz="5.5743E-14"
+        izz="1.2291E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/bolt_Arbitrary_Link.stl" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.77647 0.75686 0.73725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/bolt_Arbitrary_Link.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="bolt_Arbitrary_Link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <joint
+    name="bolt_Arbitrary"
+    type="continuous">
+    <origin
+      xyz="0.055323 0.079287 0.0078564"
+      rpy="0.7854 0.7854 -1.5708" />
+    <parent
+      link="battery_pack_link" />
+    <child
+      link="bolt_Arbitrary_Link" />
+    <axis
+      xyz="-1 0 0" />
+  </joint>
+  <link
+    name="nut_Sink_Link">
+    <inertial>
+      <origin
+        xyz="-5.5337E-09 -1.0408E-17 0.0026006"
+        rpy="0 0 0" />
+      <mass
+        value="0.0026574" />
+      <inertia
+        ixx="2.7975E-08"
+        ixy="-5.007E-14"
+        ixz="-1.6954E-14"
+        iyy="2.7977E-08"
+        iyz="-6.756E-14"
+        izz="4.4616E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/nut_Sink_Link.stl" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.77647 0.75686 0.73725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/nut_Sink_Link.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="nut_Sink_Link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <joint
+    name="nut_Sink"
+    type="continuous">
+    <origin
+      xyz="0.035123 0.063548 0.025"
+      rpy="-1.5708 0 -1.5708" />
+    <parent
+      link="battery_pack_link" />
+    <child
+      link="nut_Sink_Link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="bolt_Sink_Link">
+    <inertial>
+      <origin
+        xyz="-0.18358 0.00059075 -0.19041"
+        rpy="0 0 0" />
+      <mass
+        value="2.0722" />
+      <inertia
+        ixx="0.040611"
+        ixy="-0.00037803"
+        ixz="-0.0028159"
+        iyy="0.083995"
+        iyz="-0.00066456"
+        izz="0.043726" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/bolt_Sink_Link.stl" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/bolt_Sink_Link.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="bolt_Sink_Link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+
+  <joint
+    name="bolt_Sink"
+    type="continuous">
+    <origin
+      xyz="0.025323 0.063548 0.025"
+      rpy="2.7498 0 3.1416" />
+    <parent
+      link="battery_pack_link" />
+    <child
+      link="bolt_Sink_Link" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+</robot>

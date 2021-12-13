@@ -1,0 +1,15 @@
+controller_manager_ns: ''
+  controller_list:
+    - name: rokae/arm_controller
+      action_ns: follow_joint_trajectory
+      type: FollowJointTrajectory
+      default: true
+      joints:
+        - xmate_joint_1
+        - xmate_joint_2
+        - xmate_joint_3
+        - xmate_joint_4
+        - xmate_joint_5
+        - xmate_joint_6
+        - xmate_joint_7
+        - xmate_joint_8

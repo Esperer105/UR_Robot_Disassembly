@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot   name="battery_pack_describe"  xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <link
+    name="h_battery_base_link">
+    <inertial>
+      <origin
+        xyz="-0.17823 0.0014541 -0.18254"
+        rpy="0 0 0" />
+      <mass
+        value="2.1452" />
+      <inertia
+        ixx="0.04437"
+        ixy="-0.00066651"
+        ixz="-0.0054047"
+        iyy="0.089539"
+        iyz="-0.0010719"
+        izz="0.045613" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh     filename="package://battery_pack_describe/meshes/v_battery_base_link.dae" />
+
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <box size="0.5 0.5 0.05" />
+        <mesh     filename="package://battery_pack_describe/meshes/v_battery_base_link.dae" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="h_battery_base_link">
+      <maxVel>0.01</maxVel>
+      <kd>1</kd>
+      <maxContacts>20</maxContacts>
+      <mu2>50000</mu2>
+      <selfCollide>0</selfCollide>
+      <mu1>50000</mu1>
+      <minDepth>0</minDepth>
+      <kp>1000000000000.0</kp>
+  </gazebo>
+
+
+
+  <link
+    name="h_bolt_Link">
+    <inertial>
+      <origin
+        xyz="-0.0222479735541268 -9.0784925931009E-10 2.52273613804421E-09"
+        rpy="0 0 0" />
+      <mass
+        value="0.010043058879212" />
+      <inertia
+        ixx="8.16036465000951E-08"
+        ixy="-1.00752974041648E-13"
+        ixz="2.77939961727333E-13"
+        iyy="1.22914693737395E-06"
+        iyz="-1.20094091925575E-13"
+        izz="1.22914681810822E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/h_bolt_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.776470588235294 0.756862745098039 0.737254901960784 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <cylinder length="0.04" radius="0.02"/>
+        <mesh
+          filename="package://battery_pack_describe/meshes/h_bolt_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="h_bolt_Link">
+      <maxVel>0.01</maxVel>
+      <kd>1</kd>
+      <maxContacts>20</maxContacts>
+      <mu2>50000</mu2>
+      <selfCollide>0</selfCollide>
+      <mu1>50000</mu1>
+      <minDepth>0</minDepth>
+      <kp>1000000000000.0</kp>
+    <material>Gazebo/Grey </material>
+  </gazebo>
+
+
+
+  <joint
+    name="h_bolt_joint"
+    type="continuous">
+    <origin
+      xyz="-0.036344 -0.016452 0.03"
+      rpy="1.9639 0 1.5708" />
+    <parent
+      link="h_battery_base_link" />
+    <child
+      link="h_bolt_Link" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="h_nut_Link">
+    <inertial>
+      <origin
+        xyz="-8.23260334903431E-10 6.93889390390723E-18 -0.0026006024331304"
+        rpy="0 0 0" />
+      <mass
+        value="0.00265736664598247" />
+      <inertia
+        ixx="2.79753045005072E-08"
+        ixy="4.13590306276514E-24"
+        ixz="1.31793635416195E-18"
+        iyy="2.79771327058772E-08"
+        iyz="-4.83267733668677E-14"
+        izz="4.46160415460722E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/h_nut_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.776470588235294 0.756862745098039 0.737254901960784 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_describe/meshes/h_nut_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+      <gazebo reference="h_nut_Link">
+    <material>Gazebo/Gray</material>
+  </gazebo>
+
+
+
+  <joint
+    name="h_nut_joint"
+    type="continuous">
+    <origin
+      xyz="-0.036344 -0.021252 0.03"
+      rpy="1.5708 0.39309 -3.1416" />
+    <parent
+      link="h_battery_base_link" />
+    <child
+      link="h_nut_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+</robot>

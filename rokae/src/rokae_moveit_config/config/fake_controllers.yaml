@@ -1,0 +1,15 @@
+controller_list:
+  - name: fake_arm_controller
+    type: $(arg execution_type)
+    joints:
+      - xmate_joint_1
+      - xmate_joint_2
+      - xmate_joint_3
+      - xmate_joint_4
+      - xmate_joint_5
+      - xmate_joint_6
+      - xmate_joint_7
+      - xmate_joint_8
+initial:  # Define initial robot poses.
+  - group: arm
+    pose: home

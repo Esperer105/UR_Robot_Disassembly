@@ -1,0 +1,94 @@
+<?xml version="1.0" ?>
+<!--This does not replace URDF, and is not an extension of URDF.
+    This is a format for representing semantic information about the robot structure.
+    A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
+-->
+<robot name="rokae">
+    <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
+    <!--LINKS: When a link is specified, the parent joint of that link (if it exists) is automatically included-->
+    <!--JOINTS: When a joint is specified, the child link of that joint (which will always exist) is automatically included-->
+    <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
+    <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
+    <group name="arm">
+        <joint name="xmate_joint_1" />
+        <joint name="xmate_joint_2" />
+        <joint name="xmate_joint_3" />
+        <joint name="xmate_joint_4" />
+        <joint name="xmate_joint_5" />
+        <joint name="xmate_joint_6" />
+        <joint name="xmate_joint_7" />
+        <joint name="xmate_joint_8" />
+    </group>
+    <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
+    <group_state name="home" group="arm">
+        <joint name="xmate_joint_1" value="0" />
+        <joint name="xmate_joint_2" value="0" />
+        <joint name="xmate_joint_3" value="0" />
+        <joint name="xmate_joint_4" value="0" />
+        <joint name="xmate_joint_5" value="0" />
+        <joint name="xmate_joint_6" value="0" />
+        <joint name="xmate_joint_7" value="0" />
+        <joint name="xmate_joint_8" value="0" />
+    </group_state>
+    <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
+    <end_effector name="End_Effectors" parent_link="rokae_link7" group="arm" />
+    <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
+    <virtual_joint name="virtual_joint" type="fixed" parent_frame="world" child_link="table" />
+    <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+    <!-- <disable_collisions link1="battery_pack_link" link2="luomu_Link" reason="Adjacent" />
+    <disable_collisions link1="battery_pack_link" link2="luoshuan_Link" reason="Adjacent" />
+    <disable_collisions link1="battery_pack_link" link2="rokae_base" reason="Never" />
+    <disable_collisions link1="battery_pack_link" link2="rokae_link1" reason="Never" />
+    <disable_collisions link1="battery_pack_link" link2="rokae_link2" reason="Never" />
+    <disable_collisions link1="battery_pack_link" link2="rokae_link3" reason="Never" />
+    <disable_collisions link1="battery_pack_link" link2="rokae_link4" reason="Never" />
+    <disable_collisions link1="battery_pack_link" link2="table" reason="Adjacent" /> -->
+    <disable_collisions link1="luomu_Link" link2="luoshuan_Link" reason="Default" />
+    <disable_collisions link1="luomu_Link" link2="rokae_base" reason="Never" />
+    <disable_collisions link1="luomu_Link" link2="rokae_link1" reason="Never" />
+    <disable_collisions link1="luomu_Link" link2="rokae_link2" reason="Never" />
+    <disable_collisions link1="luomu_Link" link2="rokae_link3" reason="Never" />
+    <disable_collisions link1="luomu_Link" link2="rokae_link4" reason="Never" />
+    <disable_collisions link1="luomu_Link" link2="rokae_link5" reason="Never" />
+    <disable_collisions link1="luomu_Link" link2="rokae_link7" reason="Never" />
+    <disable_collisions link1="luomu_Link" link2="table" reason="Never" />
+    <disable_collisions link1="luoshuan_Link" link2="rokae_base" reason="Never" />
+    <disable_collisions link1="luoshuan_Link" link2="rokae_link1" reason="Never" />
+    <disable_collisions link1="luoshuan_Link" link2="rokae_link2" reason="Never" />
+    <disable_collisions link1="luoshuan_Link" link2="rokae_link3" reason="Never" />
+    <disable_collisions link1="luoshuan_Link" link2="rokae_link4" reason="Never" />
+    <disable_collisions link1="luoshuan_Link" link2="rokae_link7" reason="Never" />
+    <disable_collisions link1="luoshuan_Link" link2="table" reason="Never" />
+    <disable_collisions link1="rokae_base" link2="rokae_link1" reason="Adjacent" />
+    <disable_collisions link1="rokae_base" link2="rokae_link2" reason="Never" />
+    <disable_collisions link1="rokae_base" link2="rokae_link3" reason="Never" />
+    <disable_collisions link1="rokae_base" link2="table" reason="Adjacent" />
+    <disable_collisions link1="rokae_link1" link2="rokae_link2" reason="Adjacent" />
+    <disable_collisions link1="rokae_link1" link2="rokae_link3" reason="Never" />
+    <disable_collisions link1="rokae_link1" link2="rokae_link4" reason="Never" />
+    <disable_collisions link1="rokae_link1" link2="rokae_link5" reason="Never" />
+    <disable_collisions link1="rokae_link1" link2="table" reason="Never" />
+    <disable_collisions link1="rokae_link2" link2="rokae_link3" reason="Adjacent" />
+    <disable_collisions link1="rokae_link2" link2="rokae_link4" reason="Never" />
+    <disable_collisions link1="rokae_link2" link2="rokae_link5" reason="Never" />
+    <disable_collisions link1="rokae_link2" link2="rokae_link6" reason="Never" />
+    <disable_collisions link1="rokae_link2" link2="rokae_link7" reason="Never" />
+    <disable_collisions link1="rokae_link2" link2="table" reason="Never" />
+    <disable_collisions link1="rokae_link3" link2="rokae_link4" reason="Adjacent" />
+    <disable_collisions link1="rokae_link3" link2="rokae_link5" reason="Never" />
+    <disable_collisions link1="rokae_link3" link2="rokae_link6" reason="Never" />
+    <disable_collisions link1="rokae_link3" link2="rokae_link7" reason="Never" />
+    <disable_collisions link1="rokae_link3" link2="table" reason="Never" />
+    <disable_collisions link1="rokae_link3" link2="taotong_link8" reason="Never" />
+    <disable_collisions link1="rokae_link4" link2="rokae_link5" reason="Adjacent" />
+    <disable_collisions link1="rokae_link4" link2="rokae_link6" reason="Never" />
+    <disable_collisions link1="rokae_link4" link2="rokae_link7" reason="Never" />
+    <disable_collisions link1="rokae_link4" link2="table" reason="Never" />
+    <disable_collisions link1="rokae_link4" link2="taotong_link8" reason="Never" />
+    <disable_collisions link1="rokae_link5" link2="rokae_link6" reason="Adjacent" />
+    <disable_collisions link1="rokae_link5" link2="rokae_link7" reason="Never" />
+    <disable_collisions link1="rokae_link5" link2="taotong_link8" reason="Never" />
+    <disable_collisions link1="rokae_link6" link2="rokae_link7" reason="Adjacent" />
+    <disable_collisions link1="rokae_link6" link2="taotong_link8" reason="Never" />
+    <disable_collisions link1="rokae_link7" link2="taotong_link8" reason="Adjacent" />
+</robot>

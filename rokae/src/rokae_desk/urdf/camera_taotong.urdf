@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<robot  name="rokea"   xmlns:xacro="http://wiki.ros.org/xacro">
+
+
+<!--link 4--> 
+  <link    name="tool_base_link">
+    <inertial>
+      <origin        xyz="0 0 0"        rpy="0 0 0" />
+      <mass        value="0.01453" />
+      <inertia
+        ixx="3.22"
+        ixy="2.35"
+        ixz="3.38"
+        iyy="3.22"
+        iyz="-1.14"
+        izz="6.36" />
+    </inertial>
+
+    <visual>
+      <geometry>
+        <mesh          filename="package://rokae_desk/meshes/tool_base_link.stl" />
+      </geometry>
+	      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <material name="white"/>
+    </visual>
+
+    <collision>
+      <geometry>
+        <mesh          filename="package://rokae_desk/meshes/tool_base_link.stl" />
+      </geometry>
+	    <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+    </collision>
+
+  </link>
+  
+  
+   <joint    name="tool_taotong"    type="continuous">
+    <parent      link="tool_base_link" />
+    <child      link="tool_link" />
+    <axis      xyz="0 0 -1" />
+    <origin      xyz="0 0 0"      rpy="0 0 0" />
+  </joint>
+  
+
+
+
+  <transmission name="tool_base_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="tool_taotong">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_tool_base">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+
+  <gazebo reference="tool_base_link">
+     <material>Gazebo/Green</material>
+  </gazebo>
+
+
+
+<!-- tool_Link -->
+  <link    name="tool_link">
+    <visual>
+      <geometry>
+        <mesh          filename="package://rokae_desk/meshes/tool_Link.stl"  scale="1.25 1.25 1.25"/>
+       
+      </geometry>
+	    <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"    />
+    </visual>
+    
+    <inertial>
+      <mass        value="0.0282087806682537" />
+      <inertia
+        ixx="0.000106"
+        ixy="-8.0779"
+        ixz="-3.99"
+        iyy="0.000106"
+        iyz="-1.185"
+        izz="6.544" />    
+      <origin        xyz="5.20417042793042E-18 3.79470760369927E-19 -0.0550139882029437"        rpy="0 0 0" />
+    </inertial>
+    
+    <collision>
+      <geometry>
+        <cylinder length="0.04" radius="0.02"/>
+        <mesh          filename="package://rokae_desk/meshes/tool_Link.stl" />
+      </geometry>
+	    <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+  </link>
+
+
+
+  <gazebo reference="tool_Link">
+     <material>Gazebo/BlackTransparent</material>
+  </gazebo>
+
+
+<!-- ros_control plugin
+<gazebo>
+  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <robotNamespace>/camera_taotong</robotNamespace>
+    <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    <legacyModeNS>true</legacyModeNS>
+  </plugin>
+</gazebo>
+-->
+</robot>

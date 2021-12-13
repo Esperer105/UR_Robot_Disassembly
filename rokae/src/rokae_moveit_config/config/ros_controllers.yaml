@@ -1,0 +1,80 @@
+# Simulation settings for using moveit_sim_controllers
+moveit_sim_hw_interface:
+  joint_model_group: arm
+  joint_model_group_pose: home
+# Settings for ros_control_boilerplate control loop
+generic_hw_control_loop:
+  loop_hz: 300
+  cycle_time_error_threshold: 0.01
+# Settings for ros_control hardware interface
+hardware_interface:
+  joints:
+    - luoshuan
+    - xmate_joint_1
+    - xmate_joint_2
+    - xmate_joint_3
+    - xmate_joint_4
+    - xmate_joint_5
+    - xmate_joint_6
+    - xmate_joint_7
+    - xmate_joint_8
+  sim_control_mode: 1  # 0: position, 1: velocity
+# Publish all joint states
+# Creates the /joint_states topic necessary in ROS
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+controller_list:
+  []
+arm_controller:
+  type: position_controllers/JointPositionController
+  joints:
+    - xmate_joint_1
+    - xmate_joint_2
+    - xmate_joint_3
+    - xmate_joint_4
+    - xmate_joint_5
+    - xmate_joint_6
+    - xmate_joint_7
+    - xmate_joint_8
+  gains:
+    xmate_joint_1:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    xmate_joint_2:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    xmate_joint_3:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    xmate_joint_4:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    xmate_joint_5:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    xmate_joint_6:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    xmate_joint_7:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    xmate_joint_8:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1

@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: ur_socket_describe
+    relative_path: urdf/ur_socket_complex.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/ur10e_robot.srdf
+  CONFIG:
+    author_name: per
+    author_email: per@163.com
+    generated_timestamp: 1639018940

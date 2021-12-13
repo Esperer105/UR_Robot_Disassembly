@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<robot name="realsense2_camera" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find realsense2_description)/urdf/gloal_d435.urdf.xacro" />
+
+  <link name="gloal_world_base" />
+  <link name="gloal_base_link" />
+
+    <joint name="gloal_base_link" type="fixed">
+        <parent link="gloal_world_base"/>
+        <child link="gloal_base_link"/>
+    </joint>
+
+  <xacro:gloal_sensor_d435 name="gloal_camera" topics_ns="gloal_camera" parent="gloal_base_link" publish_pointcloud="true">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:gloal_sensor_d435>  
+</robot>

@@ -1,0 +1,32 @@
+rokae:
+  arm_controller:
+    type: "position_controllers/JointTrajectoryController"
+    joints:
+      - xmate_joint_1
+      - xmate_joint_2
+      - xmate_joint_3
+      - xmate_joint_4
+      - xmate_joint_5
+      - xmate_joint_6
+      - xmate_joint_7
+      - xmate_joint_8
+    gains:
+      xmate_joint_1:   {p: 1000.0, i: 0.0, d: 0.1, i_clamp: 0.0}
+      xmate_joint_2:   {p: 1000.0, i: 0.0, d: 0.1, i_clamp: 0.0}
+      xmate_joint_3:   {p: 1000.0, i: 0.0, d: 0.1, i_clamp: 0.0}
+      xmate_joint_4:   {p: 1000.0, i: 0.0, d: 0.1, i_clamp: 0.0}
+      xmate_joint_5:   {p: 1000.0, i: 0.0, d: 0.1, i_clamp: 0.0}
+      xmate_joint_6:   {p: 1000.0, i: 0.0, d: 0.1, i_clamp: 0.0}
+      xmate_joint_7:   {p: 1000.0, i: 0.0, d: 0.1, i_clamp: 0.0}
+      xmate_joint_8:   {p: 1000.0, i: 0.0, d: 0.1, i_clamp: 0.0}
+
+  # hand_controller:
+  #   type: "position_controllers/JointTrajectoryController"
+  #   joints:
+  #     - taotong_joint
+  #   gains:
+  #     taotong_joint:  {p: 50.0, d: 1.0, i: 0.01, i_clamp: 1.0}
+
+
+
+
