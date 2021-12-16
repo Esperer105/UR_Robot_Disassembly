@@ -44,7 +44,7 @@ for recog_dir in os.listdir(recog_path):
         for category in categories:
             category_correspond.append((category['id'], category['name']))
         category_dict = dict(category_correspond)
-        print(category_dict)
+        # print(category_dict)
         images = d['images']
         image_correspond = []
         for image in images:
