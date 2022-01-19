@@ -10,7 +10,7 @@ src/CMakeLists.txt
 *.zip
 .catkin_workspace
 
-*.jpg
+
 src/test/tensorflow_vgg_classify/rokae_image/
 tmp/
 align_images/
