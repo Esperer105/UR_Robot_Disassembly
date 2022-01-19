@@ -38,8 +38,6 @@ from prim_action import PrimAction
 from Queue import Queue
 
 
-
-
 #修改部分   新规划方案
 def auto_plan(original_stage):
     ori_stage=original_stage
