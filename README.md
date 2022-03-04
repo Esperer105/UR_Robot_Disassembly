@@ -44,8 +44,19 @@ deep-learning-for-image-processing中的vgg 是图像处理 和pytorch vgg     �
 
 
 关于nsplanner模块的调用：
+
+1. rokae仿真：
+
 首先加载rokae_gazebo arm_world.launch，然后加载rokae_moveit_config moveit_planning_execution_4_arm_world.launch，再运行~/rokae_robot/rokae/src/rokae_control/scripts/env_setup.py，最后运行~/rokae_robot/rokae/src/rokae_control/scripts/nsplanner.py
 
 动作原语的修改在~/rokae_robot/rokae/src/rokae_control/scripts/prim_action.py中
 
 动作执行判据检测在~/rokae_robot/rokae/src/rokae_control/scripts/pri_cri.py中，当前为空，在nsplanner中设定默认执行结果为保守估计的结果。
+
+2. ur10e执行：
+
+robot:            example_organization_ur_launch   ex-ur10-1.launch
+rviz:             ur10e_moveit_config   moveit_planning_execution_4_arm_world.launch
+realsense:        realsense2_camera   rs_camera.launch align_depth:=true
+handeye:          easy_handeye   publish.launch      需要先将/src/easy_handeye/easy_handeye/launch/ur10e_camera_handeyecalibration_eye_on_hand.yaml文件移动到/home/zys/.ros/easy_handeye目录下
+nslanner:         /src/ur_real_robot/ur_control/scripts/nsplanner.py
