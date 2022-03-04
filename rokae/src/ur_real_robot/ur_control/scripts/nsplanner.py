@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 import os
 import threading
+from tkinter import E
 
 import tf
 import sys
@@ -18,9 +19,7 @@ from visualization_msgs.msg import Marker
 from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image, CameraInfo
 from tf import TransformListener, transformations
-import testmotion
 # from  bolt_position_detector
-import templateMatching
 import copy
 import moveit_commander
 
@@ -36,10 +35,9 @@ import geometry_msgs.msg
 #  新增import
 from prim_action import PrimAction
 from Queue import Queue
+import math
+import select, termios, tty
 
-import socket
-import pickle
-import struct
 
 class NSPlanner:
     def __init__(self, camera_name, rgb_topic, depth_topic, camera_info_topic):
@@ -49,6 +47,9 @@ class NSPlanner:
         self.depth_topic = depth_topic
         self.camera_info_topic = camera_info_topic
         self.bolt_trans_topic = '/NSPlanner/bolt_trans'
+
+        #末端执行器
+        self.effector= sys.argv[1] if len(sys.argv) > 1 else 'tool0'
 
         self.pose = None
 
@@ -81,14 +82,12 @@ class NSPlanner:
 
 
         moveit_commander.roscpp_initialize(sys.argv)
-        self.group = moveit_commander.MoveGroupCommander("arm")
+        self.group = moveit_commander.MoveGroupCommander("manipulator")
         self.group.set_planner_id("RRTConnectkConfigDefault")
         
 
         #初始化stage
         self.stage={'have_coarse_pose':False, 'above_bolt':False,'target_aim':False, 'target_clear':False,'cramped':False,'disassembled':False}
-        
-        
         self.aim_target_prim = PrimAimTarget(self.group)
         self.clear_obstacle_prim = PrimClearObstacle(self.group)
         self.insert_prim = PrimInsert(self.group)
@@ -106,78 +105,9 @@ class NSPlanner:
         self.prim_execution = True
         self.prim_thread.start()
 
-        # socket_client
-        ip_port = ('127.0.0.1', 5050)
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.connect(ip_port)
-
-    def pack_image(self, frame):
-        encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
-        result, frame = cv2.imencode('.jpg', frame, encode_param)
-        data = pickle.dumps(frame, 0)
-        size = len(data)
-        packed = struct.pack(">L", size) + data
-        return packed, data, size
-
-    def get_predicate_result(self):
-        data = self.sock.recv(4096)
-        result = pickle.loads(data)
-        return result
-
-    def call_edge_predicate(self, all_info):
-        action_params = ['rgb_img', 'depth_img', 'camera_model', 'timestamp']
-        for param in action_params:
-            if not param in all_info.keys():
-                print(param, 'must give')
-                return False
-        packed, data, size = self.pack_image(all_info['rgb_img'])
-        self.sock.sendall(packed)
-        print("send all finished")
-        result=(self.get_predicate_result())[0]
-        print(result)
-        if result[0].item() > 0.8:
-            self.stage['target_aim']=True
-            self.stage['target_clear']=False
-        elif  result[1].item() > 0.8:  
-            self.stage['target_aim']=True
-            self.stage['target_clear']=True
-        elif  result[2].item() > 0.8:
-            self.stage['target_aim']=False
-            self.stage['target_clear']=False
-        elif  result[3].item() > 0.8:
-            self.stage['target_aim']=False
-            self.stage['target_clear']=True
-        else:
-            return False
-        return True
-
-    def is_stoping(self):
-        return self.action == 'disassemble'
-
-    def get_bolt_pose(self):
-        #only call for get experiment result
-        return self.bolt_pose
-
-    '''def plan(self):
-        prev_action = self.action
-        #print(self.ret_dict)
-        if 'success' in self.ret_dict.keys() and self.ret_dict['success'] is True:
-            if prev_action == 'start':
-                self.action = 'move'
-            elif prev_action == 'move':
-                self.action = 'aim'
-            elif prev_action == 'aim':
-                self.action = 'clear'
-            elif prev_action == 'clear':
-                self.action = 'end'
-            ## skip insert prim for testing
-            #     self.action = 'insert'
-            # elif self.action == 'insert':
-            #     self.action = 'end'
-        print("%s --> %s"%(prev_action,self.action))'''
-
-    #修改部分   新规划方案
+    #规划方案
     def auto_plan(self,original_stage):
+        print ('start to plan')
         ori_stage=original_stage
 
         #建立动作原语集
@@ -219,6 +149,7 @@ class NSPlanner:
             if len(path)<min_step:
                 min_step=len(path)
         path_list=[i for i in path_list if len(i)==min_step]
+        print (path_list[0])
         return path_list[0]
 
     def start(self,  pose):
@@ -230,6 +161,8 @@ class NSPlanner:
             self.stage['have_coarse_pose']= True
             self.action = 'start'
             self.bolt_pose = pose
+            print ('start, coarse pose:')
+            self.print_pose(pose)
             return True
 
     def do_action(self):
@@ -243,7 +176,10 @@ class NSPlanner:
 
         #生成规划方案
         step_list=self.auto_plan(self.stage)
+        print(step_list)
         i=0
+
+        #执行动作
         while self.prim_execution:
             self.action=step_list[i]
             if self.action == 'disassemble':
@@ -253,16 +189,16 @@ class NSPlanner:
                 infos = copy.deepcopy(self.all_infos)
                 self.all_infos.clear()
                 self.all_infos_lock.release()
-                
                 if self.action in prim_dict.keys():
                     #检测pre是否满足
-                    pre_is_ok=self.call_edge_predicate(infos)
+                    pre_is_ok=True
                     for pre in (prim_dict[self.action]).pre:
                         if not self.stage[pre]==(prim_dict[self.action].pre)[pre]:
                             pre_is_ok=False
                             break
                     if pre_is_ok==True:
                         prim = self.prims[self.action]
+                        
                         for eff in (prim_dict[self.action]).eff:
                             self.stage[eff]=(prim_dict[self.action].eff)[eff]
                         #更新stage
@@ -301,22 +237,46 @@ class NSPlanner:
     def __del__(self):
         self.prim_execution = False
         self.prim_thread.join()
+    
+    def print_pose(self,pose):
+        q = (pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w)
+        rpy = tf.transformations.euler_from_quaternion(q)
+        print '%s: position (%.2f %.2f %.2f) orientation (%.2f %.2f %.2f %.2f) RPY (%.2f %.2f %.2f)' % \
+            (self.effector, pose.position.x, pose.position.y, pose.position.z, \
+            pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w, \
+            rpy[0], rpy[1], rpy[2])
+
+    def reset_arm(self):
+        joints = {}
+        joints["elbow_joint"] = math.pi/4.
+        joints["shoulder_lift_joint"] = -math.pi/2.
+        joints["shoulder_pan_joint"] = math.pi/2.
+        joints["wrist_1_joint"] = -math.pi/4.
+        joints["wrist_2_joint"] = -math.pi/2.
+        joints["wrist_3_joint"] = 0.
+        self.group.set_joint_value_target(joints)
+        plan = self.group.plan()
+        if len(plan.joint_trajectory.points) > 0:
+            self.group.execute(plan, wait=True)
+            self.print_pose(self.group.get_current_pose(self.effector).pose)
+            return True
+        else:
+            return False
+
+
 
 if __name__ == '__main__':
 
-    # 加载电池包，不加载直接回车
-    # testmotion.load_battery()
-    # testmotion.robot_position(0, 0, 1.5)
     try:
         rospy.init_node('nsplanner-moveit', anonymous=True)
 
-        planner = NSPlanner('camera', '/camera/color/image_raw', '/camera/depth/image_raw', '/camera/color/camera_info')
-
+        planner = NSPlanner('camera', '/camera/color/image_raw', '/camera/aligned_depth_to_color/image_raw', '/camera/color/camera_info')
+ 
         quat = tf.transformations.quaternion_from_euler(-3.14, 0, 0)
         pose_target = geometry_msgs.msg.Pose()
-        pose_target.position.x = 0
-        pose_target.position.y = 0
-        pose_target.position.z = 1.3
+        pose_target.position.x = -0.17
+        pose_target.position.y = 0.52
+        pose_target.position.z = 1.08
         pose_target.orientation.x = quat[0]
         pose_target.orientation.y = quat[1]
         pose_target.orientation.z = quat[2]

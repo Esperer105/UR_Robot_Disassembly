@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
-from circle_detect_4_bolt import CircleDetection4Bolt
+from bolt_detector import BoltDetector
 from rigid_transform_3D import rigid_transform_3D
 from prim_base import PrimBase
 import math
@@ -36,7 +36,7 @@ class PrimClearObstacle(PrimBase):
             tgt_pose_in_bolt_frame.orientation.w = q[3]
             # self.print_pose(tgt_pose_in_bolt_frame, 'tgt_pose_in_bolt_frame')
             tgt_pose_in_world_frame = self.transform_pose("bolt_frame",
-                                                          "world",
+                                                          "base",
                                                           tgt_pose_in_bolt_frame,
                                                           all_info['timestamp'])
             if not tgt_pose_in_world_frame is None:
@@ -52,10 +52,12 @@ class PrimClearObstacle(PrimBase):
                 print(param, 'must give')
                 return False
         print("param satified, start to do clear obstacle")
-        detect_ret = self.circle_detector.detect(all_info['rgb_img'])
+
+        detect_ret = self.circle_detector.detect(all_info['rgb_img'],threshold=0.8)
 
         if 'circles' in detect_ret.keys():
             print('circle success')
+            
             circles = detect_ret["circles"]
             circle = self.findBestMatchCircle(circles)
 
@@ -76,7 +78,5 @@ class PrimClearObstacle(PrimBase):
                 ee_pose = self.group.get_current_pose(self.effector).pose
             self.print_pose(ee_pose)
             return {'success': True, 'bolt_pose': bolt_pose}
-        elif 'contours' in detect_ret.keys():
-            contours = detect_ret["contours"]
-            return {'success': True}
+
         return {'success': False}

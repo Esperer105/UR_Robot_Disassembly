@@ -119,11 +119,11 @@ def set_arm_pose(group, pose, effector):
         
 def reset_arm(group):
     joints = {}
-    joints["elbow_joint"] = 0.
-    joints["shoulder_lift_joint"] = 0.
-    joints["shoulder_pan_joint"] = 0.
-    joints["wrist_1_joint"] = 0.
-    joints["wrist_2_joint"] = 0.
+    joints["elbow_joint"] = math.pi/4.
+    joints["shoulder_lift_joint"] = -math.pi/2.
+    joints["shoulder_pan_joint"] = math.pi/2.
+    joints["wrist_1_joint"] = -math.pi/4.
+    joints["wrist_2_joint"] = -math.pi/2.
     joints["wrist_3_joint"] = 0.
     group.set_joint_value_target(joints)
     plan = group.plan()
@@ -156,7 +156,7 @@ if __name__=="__main__":
     print_pose(ee_pose)
     # camera = Camera('camera', '/camera/color/image_raw', '/camera/depth/image_raw',
     #                 '/camera/color/camera_info')
-    all_delta=0.001
+    all_delta=0.01
     z_delta=all_delta
     x_delta=all_delta
     y_delta=all_delta

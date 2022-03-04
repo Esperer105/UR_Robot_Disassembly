@@ -18,22 +18,18 @@ from visualization_msgs.msg import Marker
 from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image, CameraInfo
 from tf import TransformListener, transformations
-import testmotion
-# from  bolt_position_detector
-import templateMatching
 import copy
 import tf2_ros
 import geometry_msgs.msg
 import traceback
-import random
-
+import math
+import select, termios, tty
+import moveit_commander
 
 
 # from PIL import Image,ImageDraw
 # import numpy as np 
-from circle_detect_4_bolt import CircleDetection4Bolt
-from hexagon_detect_4_bolt import HexagonDetection4Bolt
-from color_detect_4_bolt import ColorDetection4Bolt
+from bolt_detector import BoltDetector
 from rigid_transform_3D import rigid_transform_3D
 
  
@@ -41,27 +37,24 @@ class PrimBase(object):
     def __init__(self, group_):
         self.tf_listener = tf.TransformListener()
         self.action_params = ['rgb_img', 'depth_img', 'camera_model', 'timestamp']
-        self.circle_detector = CircleDetection4Bolt()
-        self.hex_detector = HexagonDetection4Bolt()
-        self.color_detector = ColorDetection4Bolt() 
-        self.goal_posision = (0.018798, 0.037462, 0.5)
-        self.goal_orientation_RPY = (-3.14, 0, 0)
+        self.circle_detector = BoltDetector()
+        self.circle_detector.train_SVM()
         self.group = group_
-        self.effector = 'rokae_link7'
+        self.effector = sys.argv[1] if len(sys.argv) > 1 else 'tool0'
         self.clamp = lambda n, minn, maxn: max(min(maxn, n), minn)
         self.br = tf2_ros.TransformBroadcaster()
+
+    def print_pose(self,pose):
+        q = (pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w)
+        rpy = tf.transformations.euler_from_quaternion(q)
+        print '%s: position (%.2f %.2f %.2f) orientation (%.2f %.2f %.2f %.2f) RPY (%.2f %.2f %.2f)' % \
+            (self.effector, pose.position.x, pose.position.y, pose.position.z, \
+            pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w, \
+            rpy[0], rpy[1], rpy[2])
 
     def findBestMatchCircle(self, circles):
         assert len(circles) > 0
         return circles[0]
-
-    def findBestMatchHex(self, hexes):
-        assert len(hexes) > 0
-        return hexes[0]
-
-    def findBestMatchColor(self, colorblocks):
-        assert len(colorblocks) > 0
-        return colorblocks[0]
 
     def get_bolt_pose_in_world_frame(self, all_info):
         tgt_pose_in_bolt_frame = geometry_msgs.msg.Pose()
@@ -76,7 +69,7 @@ class PrimBase(object):
         tgt_pose_in_bolt_frame.orientation.w = q[3]
         # self.print_pose(tgt_pose_in_bolt_frame, 'tgt_pose_in_bolt_frame')
         tgt_pose_in_world_frame = self.transform_pose("bolt_frame",
-                                                      "world",
+                                                      "base",
                                                       tgt_pose_in_bolt_frame,
                                                       all_info['timestamp'])
         # self.print_pose(tgt_pose_in_world_frame, 'tgt_pose_in_world_frame')
@@ -92,20 +85,6 @@ class PrimBase(object):
         else:
             print('no plan result')
             return False
-
-    def print_pose(self, pose, pose_info='rokae_link7'):
-        # try:
-        #     q = (pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w)
-        #     rpy = tf.transformations.euler_from_quaternion(q)
-        #     print '%s: position (%.2f %.2f %.2f) orientation (%.2f %.2f %.2f %.2f) RPY (%.2f %.2f %.2f)' % \
-        #     (pose_info, pose.position.x, pose.position.y, pose.position.z,
-        #      pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w,
-        #      rpy[0], rpy[1], rpy[2])
-        #     print('end print_pose')
-        # except:
-        #     traceback.print_exc()
-        #     print('execption happen in print pose')
-        pass
 
     def calc_transform(self, x, y, d, all_info):
         cam_model = all_info['camera_model']
@@ -152,7 +131,7 @@ class PrimBase(object):
         trans.header.stamp = all_info['timestamp']
         print("broadcast_tf")
         print(trans.header.stamp)
-        trans.header.frame_id = "camera_depth_frame"
+        trans.header.frame_id = "camera_aligned_depth_to_color_frame"
         trans.child_frame_id = "bolt_frame"
         trans.transform.translation.x = -t[2]
         trans.transform.translation.y = t[0]
@@ -197,6 +176,7 @@ class PrimBase(object):
         print((x, y), (tl_x, tl_y, br_x, br_y))
         roi = all_info['depth_img'][tl_y:br_y, tl_x:br_x]
         depth_distance = np.median(roi)
+        print(depth_distance)
 
         if np.isnan(depth_distance):
             print("null depth info")

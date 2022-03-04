@@ -3,7 +3,6 @@
   <!-- Constants for robot dimensions -->
  
   <!-- Import all Gazebo-customization elements, including Gazebo colors -->
-  <!--xacro:include filename="$(find XB06_description)/urdf/XB06.gazebo" /-->
   <!-- Import Rviz colors -->
   <xacro:include filename="$(find rokae_desk)/urdf/materials.xacro" />
   <xacro:property name="nameofManipulator" value = "rokae"/>

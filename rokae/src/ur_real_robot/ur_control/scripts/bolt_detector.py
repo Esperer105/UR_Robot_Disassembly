@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 import os
 import cv2
 from sklearn import svm
@@ -8,7 +9,6 @@ import numpy as np
 from sklearn.externals import joblib
 import sys
 import copy
-
 
 # 满足 windowSize>stepSize
 # windowSize[0]=x,windowSize[1]=y
@@ -100,9 +100,9 @@ def non_max_suppression_fast(boxes, overlapThresh):
 
 class BoltDetector():
     def __init__(self, roi_size=(64, 64), train_path=None,
-                 model_save_path='D:\\Realsense\\SVM_HOG_Model\\SVM_HOG.pkl'):
+                 model_save_path='/Realsense/SVM_HOG_Model/SVM_HOG.pkl'):
         if train_path is None:
-            train_path = {'pos_path': "D:\\Realsense\\new_svm\\1", 'neg_path': "D:\\Realsense\\new_svm\\-1"}
+            train_path = {'pos_path': "/Realsense/new_svm/1", 'neg_path': "/Realsense/new_svm/-1"}
         self.train_path = train_path
         self.roi_size = roi_size
         self.model_save_path = model_save_path
@@ -110,7 +110,7 @@ class BoltDetector():
 
     def train_SVM(self, train=False):
         if train is True:
-            print'***** The training process starts *****'
+            print '***** The training process starts *****'
             data, data_label = [], []
             for file in os.listdir(self.train_path['pos_path']):
                 file_path = os.path.join(self.train_path['pos_path'], file)
@@ -143,7 +143,7 @@ class BoltDetector():
         else:
             print 'directly load the model file at %s ' % self.model_save_path
             self.model = joblib.load(self.model_save_path)
-            print 'model has been loaded'
+            print ('model has been loaded')
 
     def hog_extractor(self, img):
         img1 = cv2.resize(img, self.roi_size)
@@ -183,11 +183,11 @@ class BoltDetector():
                         # print(rectangles)
                         counter += 1
                 except (UnboundLocalError, exceptions.NotFittedError):
-                    print 'the model has not been trained or loaded, please run the method train_SVM() first'
+                    print ('the model has not been trained or loaded, please run the method train_SVM() first')
                     sys.exit()
         windows = np.array(rectangles)
         if len(windows) == 0:
-            print 'no bolt detected'
+            print ('no bolt detected')
         boxes = non_max_suppression_fast(windows, nms_threshold)
         print "bounding box num:", len(boxes)
 
@@ -222,13 +222,14 @@ class BoltDetector():
             print 'the number of detected bolts:', len(bolts)
             ret_dict['circles'] = bolts
         else:
-            print 'no bolts are detected'
+            print ('no bolts are detected')
         return ret_dict
 
 
 if __name__ == "__main__":
     detector1 = BoltDetector()
-    img = cv2.imread('D:\\Realsense\\new_out\\1_Color.png')
+    img = cv2.imread('/Realsense/1_Color.png')
     detector1.train_SVM()
+    print('completed')
     bolts = detector1.detect(img, show=True, threshold=0.8)
     print(bolts)

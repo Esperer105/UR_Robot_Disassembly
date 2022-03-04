@@ -111,7 +111,6 @@ def set_arm_pose(group, pose, effector):
         return False
 
 def reset_arm(group):
-    #the name should be consistant with robot definition
     joints = {}
     joints["xmate_joint_1"] = 0.
     joints["xmate_joint_2"] = 0.
