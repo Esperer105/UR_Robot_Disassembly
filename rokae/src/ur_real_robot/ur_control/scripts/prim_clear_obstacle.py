@@ -6,7 +6,7 @@ from prim_base import PrimBase
 import math
 import geometry_msgs.msg
 import tf
-
+import rospy
 
 class PrimClearObstacle(PrimBase):
     def get_circle_trajectory(self, all_info):
@@ -38,12 +38,14 @@ class PrimClearObstacle(PrimBase):
             tgt_pose_in_world_frame = self.transform_pose("bolt_frame",
                                                           "base",
                                                           tgt_pose_in_bolt_frame,
-                                                          all_info['timestamp'])
+                                                          all_info['bolt_ts'])
             if not tgt_pose_in_world_frame is None:
                 # self.print_pose(tgt_pose_in_world_frame, 'get_circle_trajectory %d' % i)
                 trajectory.append(tgt_pose_in_world_frame)
+                print ("the %d-th trajectory"%(i))
         if len(trajectory) > 0:
             trajectory.append(trajectory[0])
+            print ("trajectory collected")
         return trajectory
 
     def action(self, all_info, pre_result_dict):

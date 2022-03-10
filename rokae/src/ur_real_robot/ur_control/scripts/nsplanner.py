@@ -2,7 +2,6 @@
 # -*- coding: UTF-8 -*-
 import os
 import threading
-from tkinter import E
 
 import tf
 import sys
@@ -176,7 +175,6 @@ class NSPlanner:
 
         #生成规划方案
         step_list=self.auto_plan(self.stage)
-        print(step_list)
         i=0
 
         #执行动作
@@ -276,7 +274,7 @@ if __name__ == '__main__':
         pose_target = geometry_msgs.msg.Pose()
         pose_target.position.x = -0.17
         pose_target.position.y = 0.52
-        pose_target.position.z = 1.08
+        pose_target.position.z = 1.00
         pose_target.orientation.x = quat[0]
         pose_target.orientation.y = quat[1]
         pose_target.orientation.z = quat[2]

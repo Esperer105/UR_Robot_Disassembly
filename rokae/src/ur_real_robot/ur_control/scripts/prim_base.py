@@ -3,6 +3,8 @@
 import os
 import threading
 
+from torch import int32
+
 import tf
 import sys
 import cv2
@@ -56,7 +58,7 @@ class PrimBase(object):
         assert len(circles) > 0
         return circles[0]
 
-    def get_bolt_pose_in_world_frame(self, all_info):
+    def get_bolt_pose_in_world_frame(self,all_info):
         tgt_pose_in_bolt_frame = geometry_msgs.msg.Pose()
         tgt_pose_in_bolt_frame.position.x = 0
         tgt_pose_in_bolt_frame.position.y = 0
@@ -71,7 +73,7 @@ class PrimBase(object):
         tgt_pose_in_world_frame = self.transform_pose("bolt_frame",
                                                       "base",
                                                       tgt_pose_in_bolt_frame,
-                                                      all_info['timestamp'])
+                                                      all_info['bolt_ts'])
         # self.print_pose(tgt_pose_in_world_frame, 'tgt_pose_in_world_frame')
         return tgt_pose_in_world_frame
 
@@ -128,14 +130,15 @@ class PrimBase(object):
     def broadcast_tf(self, R_quat, t, all_info):
         trans = geometry_msgs.msg.TransformStamped()
 
-        trans.header.stamp = all_info['timestamp']
+        trans.header.stamp = rospy.Time.now()
+        all_info['bolt_ts']=trans.header.stamp
         print("broadcast_tf")
         print(trans.header.stamp)
         trans.header.frame_id = "camera_aligned_depth_to_color_frame"
         trans.child_frame_id = "bolt_frame"
-        trans.transform.translation.x = -t[2]
-        trans.transform.translation.y = t[0]
-        trans.transform.translation.z = t[1]
+        trans.transform.translation.x = t[0]
+        trans.transform.translation.y = t[1]
+        trans.transform.translation.z = t[2]
         trans.transform.rotation.x = R_quat[0]
         trans.transform.rotation.y = R_quat[1]
         trans.transform.rotation.z = R_quat[2]
@@ -156,7 +159,9 @@ class PrimBase(object):
         '''
         ps_src = geometry_msgs.msg.PoseStamped()
         try:
-            self.tf_listener.waitForTransform(tgt_frame, src_frame, ts, rospy.Duration(0.2))
+            print ('transform pose') 
+            print (ts)
+            self.tf_listener.waitForTransform(tgt_frame, src_frame, ts, rospy.Duration(30))
             ps_src.header.frame_id = src_frame
             ps_src.header.stamp = ts
             ps_src.pose = pose_pt

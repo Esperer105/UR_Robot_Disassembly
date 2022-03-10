@@ -34,7 +34,7 @@ from prim_base import PrimBase
 from bolt_detector import BoltDetector
 
 class PrimAimTarget(PrimBase):
-    def get_tgt_pose_in_world_frame(self, all_info):
+    def get_tgt_pose_in_world_frame(self,all_info):
         tgt_pose_in_bolt_frame = geometry_msgs.msg.Pose()
         tgt_pose_in_bolt_frame.position.x = -0.5
         tgt_pose_in_bolt_frame.position.y = 0
@@ -49,7 +49,8 @@ class PrimAimTarget(PrimBase):
         tgt_pose_in_world_frame = self.transform_pose("bolt_frame",
                                                       "base",
                                                       tgt_pose_in_bolt_frame,
-                                                      all_info['timestamp'])
+                                                      all_info['timestamp']
+                                                      )
         # self.print_pose(tgt_pose_in_world_frame, 'tgt_pose_in_world_frame')
         return tgt_pose_in_world_frame
 
