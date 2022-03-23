@@ -1,3 +1,5 @@
 ./rokae/build/
 ./rokae/devel/
 *.pyc
+./.idea/
+

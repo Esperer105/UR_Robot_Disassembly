@@ -60,3 +60,11 @@ rviz:             ur10e_moveit_config   moveit_planning_execution_4_arm_world.la
 realsense:        realsense2_camera   rs_camera.launch align_depth:=true
 handeye:          easy_handeye   publish.launch      需要先将/src/easy_handeye/easy_handeye/launch/ur10e_camera_handeyecalibration_eye_on_hand.yaml文件移动到/home/zys/.ros/easy_handeye目录下
 nslanner:         /src/ur_real_robot/ur_control/scripts/nsplanner.py
+
+
+关于bolt_detector的使用：
+
+UR_Robot_Disassembly/rokae/src/ur_real_robot/ur_control/scripts/Realsense/Edge_Box_Model/model.yml
+上述文件是Edge_box方法的模型文件，是Edge_box的必需文件
+
+Edge_box生成预测框需要调整一些参数，参数我已调整的没有太大问题
