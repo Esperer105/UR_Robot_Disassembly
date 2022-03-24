@@ -72,3 +72,5 @@ Edge_box生成预测框需要调整一些参数，参数我已调整的没有太
 bolt_detector的图片保存路径为rokae/src/ur_real_robot/ur_control/scripts/Realsense/images
 
 detect_edge_box中的max_box参数越小，生成的候选框越少，运行速度越快；max_box=200,运行时间大概3s;max_box=1000,运行时间大概8s
+
+opencv-python=4.1.2.30 opencv-contrib-python=4.1.2.30
