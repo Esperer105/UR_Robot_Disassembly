@@ -123,7 +123,7 @@ def return_max(path):
 
 class BoltDetector():
     def __init__(self, roi_size=(96, 96), train_path=None,
-                 model_save_path='./Realsense/SVM_HOG_Model/SVM_HOG.pkl', hog_orientations=8,
+                 model_save_path='./Realsense/SVM_HOG_Model/new_SVM_HOG.pkl', hog_orientations=8,
                  hog_pixels_per_cell=(16, 16),
                  hog_cells_per_block=(2, 2)):
         if train_path is None:
