@@ -5,6 +5,7 @@ build/
 devel/
 train/
 images/*.jpg
+!images/1.jpg
 src/CMakeLists.txt
 .vscode/
 *.zip
