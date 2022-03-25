@@ -123,7 +123,7 @@ def return_max(path):
 
 class BoltDetector():
     def __init__(self, roi_size=(96, 96), train_path=None,
-                 model_save_path='./Realsense/SVM_HOG_Model/new_SVM_HOG.pkl', hog_orientations=8,
+                 model_save_path='./Realsense/SVM_HOG_Model/SVM_HOG_20220325.pkl', hog_orientations=8,
                  hog_pixels_per_cell=(16, 16),
                  hog_cells_per_block=(2, 2)):
         if train_path is None:
@@ -310,7 +310,7 @@ class BoltDetector():
                 orignal_circle[0] = orignal_circle[0] + rx1
                 orignal_circle[1] = orignal_circle[1] + ry1
                 bolts.append(orignal_circle)
-            if show:
+            if show or write:
                 circles = np.uint16(np.around(circles))
                 for i in circles[0, :]:
                     cv2.circle(img, (int(rx1 + i[0]), int(ry1 + i[1])), i[2], (0, 255, 0), 2)
