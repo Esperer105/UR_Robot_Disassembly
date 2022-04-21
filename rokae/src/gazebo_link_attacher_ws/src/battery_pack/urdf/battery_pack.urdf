@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="battery_pack">
+  <link
+    name="battery_pack_base_link">
+    <inertial>
+      <origin
+        xyz="0.84044 0.00074552 -0.074795"
+        rpy="0 0 0" />
+      <mass
+        value="590.19" />
+      <inertia
+        ixx="68.422"
+        ixy="0.00076184"
+        ixz="6.1688E-09"
+        iyy="184.41"
+        iyz="1.9859E-09"
+        izz="249.54" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/battery_pack_base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/battery_pack_base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="sleeve_plate_Link">
+    <inertial>
+      <origin
+        xyz="-0.00050862 0.00023684 -0.033553"
+        rpy="0 0 0" />
+      <mass
+        value="0.55816" />
+      <inertia
+        ixx="0.00063064"
+        ixy="-8.4486E-08"
+        ixz="7.1611E-07"
+        iyy="0.00062086"
+        iyz="-3.0849E-07"
+        izz="0.000857" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/sleeve_plate_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/sleeve_plate_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="sleeve_plate_Joint"
+    type="fixed">
+    <origin
+      xyz="0 -0.45 0.065"
+      rpy="0 0 0" />
+    <parent
+      link="battery_pack_base_link" />
+    <child
+      link="sleeve_plate_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+</robot>
