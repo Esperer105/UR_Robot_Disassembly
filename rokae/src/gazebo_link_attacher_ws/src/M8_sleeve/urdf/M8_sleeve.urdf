@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="M8_sleeve">
+  <link
+    name="M8_sleeve_base_link">
+    <inertial>
+      <origin
+        xyz="-0.00074003 1.5829E-17 -2.6151E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.010747" />
+      <inertia
+        ixx="8.5579E-07"
+        ixy="-4.1281E-21"
+        ixz="6.8952E-20"
+        iyy="3.5699E-06"
+        iyz="0"
+        izz="3.5699E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://M8_sleeve/meshes/M8_sleeve_base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://M8_sleeve/meshes/M8_sleeve_base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+</robot>

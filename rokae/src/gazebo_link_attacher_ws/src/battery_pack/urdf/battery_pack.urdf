@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="battery_pack">
+  <link
+    name="battery_pack_base_link">
+    <inertial>
+      <origin
+        xyz="0.840460078869128 0.000748250275173445 -0.0747991952974527"
+        rpy="0 0 0" />
+      <mass
+        value="590.168232442056" />
+      <inertia
+        ixx="68.4216428304914"
+        ixy="0.000761839613148307"
+        ixz="6.32020891220886E-09"
+        iyy="184.407037358386"
+        iyz="1.60985543868867E-09"
+        izz="249.53932694368" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/battery_pack_base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/battery_pack_base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="M6_1_Link">
+    <inertial>
+      <origin
+        xyz="-1.5781E-08 1.7199E-07 -0.013589"
+        rpy="0 0 0" />
+      <mass
+        value="0.0013212" />
+      <inertia
+        ixx="1.3904E-07"
+        ixy="-5.0602E-13"
+        ixz="5.5231E-11"
+        iyy="1.3904E-07"
+        iyz="-1.7203E-11"
+        izz="1.0587E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/M6_1_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/M6_1_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M6_1_Joint"
+    type="fixed">
+    <origin
+      xyz="0.2215 0.404 0.051"
+      rpy="0 0 0" />
+    <parent
+      link="battery_pack_base_link" />
+    <child
+      link="M6_1_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="M6_2_Link">
+    <inertial>
+      <origin
+        xyz="-1.6918E-07 -3.4772E-08 -0.013589"
+        rpy="0 0 0" />
+      <mass
+        value="0.0013212" />
+      <inertia
+        ixx="1.3904E-07"
+        ixy="7.5348E-13"
+        ixz="1.0967E-11"
+        iyy="1.3904E-07"
+        iyz="5.6799E-11"
+        izz="1.0587E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/M6_2_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/M6_2_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M6_2_Joint"
+    type="fixed">
+    <origin
+      xyz="0.2215 0.304 0.051"
+      rpy="0 0 0" />
+    <parent
+      link="battery_pack_base_link" />
+    <child
+      link="M6_2_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="M6_3_Link">
+    <inertial>
+      <origin
+        xyz="-8.6028E-09 -1.725E-07 -0.013589"
+        rpy="0 0 0" />
+      <mass
+        value="0.0013212" />
+      <inertia
+        ixx="1.3904E-07"
+        ixy="-1.573E-13"
+        ixz="-5.2257E-11"
+        iyy="1.3904E-07"
+        iyz="2.4812E-11"
+        izz="1.0587E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/M6_3_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/M6_3_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M6_3_Joint"
+    type="fixed">
+    <origin
+      xyz="0.2215 0.204 0.051"
+      rpy="0 0 0" />
+    <parent
+      link="battery_pack_base_link" />
+    <child
+      link="M6_3_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="M8_1_Link">
+    <inertial>
+      <origin
+        xyz="-2.382E-08 -1.0658E-07 -0.014181"
+        rpy="0 0 0" />
+      <mass
+        value="0.0021494" />
+      <inertia
+        ixx="2.2689E-07"
+        ixy="3.8573E-12"
+        ixz="-1.3221E-11"
+        iyy="2.2689E-07"
+        iyz="9.8346E-11"
+        izz="2.5923E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/M8_1_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/M8_1_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M8_1_Joint"
+    type="fixed">
+    <origin
+      xyz="0.2215 0.104 0.051"
+      rpy="0 0 0" />
+    <parent
+      link="battery_pack_base_link" />
+    <child
+      link="M8_1_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="M8_2_Link">
+    <inertial>
+      <origin
+        xyz="-1.0237E-07 3.8028E-08 -0.014181"
+        rpy="0 0 0" />
+      <mass
+        value="0.0021494" />
+      <inertia
+        ixx="2.2689E-07"
+        ixy="-3.7109E-12"
+        ixz="9.9231E-11"
+        iyy="2.2689E-07"
+        iyz="-2.1345E-13"
+        izz="2.5923E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/M8_2_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/M8_2_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M8_2_Joint"
+    type="fixed">
+    <origin
+      xyz="0.2215 0.004 0.051"
+      rpy="0 0 0" />
+    <parent
+      link="battery_pack_base_link" />
+    <child
+      link="M8_2_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="M8_3_Link">
+    <inertial>
+      <origin
+        xyz="-2.0193E-10 -1.0921E-07 -0.014181"
+        rpy="0 0 0" />
+      <mass
+        value="0.0021494" />
+      <inertia
+        ixx="2.2689E-07"
+        ixy="3.5042E-12"
+        ixz="-3.4181E-11"
+        iyy="2.2689E-07"
+        iyz="9.3158E-11"
+        izz="2.5923E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/M8_3_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/M8_3_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M8_3_Joint"
+    type="fixed">
+    <origin
+      xyz="0.2215 -0.096 0.051"
+      rpy="0 0 0" />
+    <parent
+      link="battery_pack_base_link" />
+    <child
+      link="M8_3_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="M10_1_Link">
+    <inertial>
+      <origin
+        xyz="1.2099E-08 1.6147E-07 -0.014551"
+        rpy="0 0 0" />
+      <mass
+        value="0.003184" />
+      <inertia
+        ixx="3.3964E-07"
+        ixy="2.984E-12"
+        ixz="-8.2695E-11"
+        iyy="3.3963E-07"
+        iyz="-1.2764E-10"
+        izz="5.4565E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/M10_1_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/M10_1_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M10_1_Joint"
+    type="fixed">
+    <origin
+      xyz="0.2215 -0.196 0.051"
+      rpy="0 0 0" />
+    <parent
+      link="battery_pack_base_link" />
+    <child
+      link="M10_1_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="M10_2_Link">
+    <inertial>
+      <origin
+        xyz="9.3207E-08 -1.3241E-07 -0.014551"
+        rpy="0 0 0" />
+      <mass
+        value="0.003184" />
+      <inertia
+        ixx="3.3963E-07"
+        ixy="9.1296E-12"
+        ixz="-1.7191E-11"
+        iyy="3.3964E-07"
+        iyz="1.5112E-10"
+        izz="5.4565E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/M10_2_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/M10_2_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M10_2_Joint"
+    type="fixed">
+    <origin
+      xyz="0.2215 -0.296 0.051"
+      rpy="0 0 0" />
+    <parent
+      link="battery_pack_base_link" />
+    <child
+      link="M10_2_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="M10_3_Link">
+    <inertial>
+      <origin
+        xyz="1.5901E-07 -3.0597E-08 -0.014551"
+        rpy="0 0 0" />
+      <mass
+        value="0.003184" />
+      <inertia
+        ixx="3.3963E-07"
+        ixy="-9.123E-13"
+        ixz="-1.1728E-10"
+        iyy="3.3965E-07"
+        iyz="9.6832E-11"
+        izz="5.4565E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/M10_3_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/M10_3_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M10_3_Joint"
+    type="fixed">
+    <origin
+      xyz="0.2215 -0.396 0.051"
+      rpy="0 0 0" />
+    <parent
+      link="battery_pack_base_link" />
+    <child
+      link="M10_3_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="sleeve_plate_Link">
+    <inertial>
+      <origin
+        xyz="-0.00051088 0.00023914 -0.033555"
+        rpy="0 0 0" />
+      <mass
+        value="0.58226" />
+      <inertia
+        ixx="0.00067784"
+        ixy="-8.9616E-08"
+        ixz="7.503E-07"
+        iyy="0.00066736"
+        iyz="-3.2443E-07"
+        izz="0.00093345" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/sleeve_plate_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack/meshes/sleeve_plate_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="sleeve_plate_Joint"
+    type="fixed">
+    <origin
+      xyz="0 -0.45 0.065"
+      rpy="0 0 0" />
+    <parent
+      link="battery_pack_base_link" />
+    <child
+      link="sleeve_plate_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+</robot>
