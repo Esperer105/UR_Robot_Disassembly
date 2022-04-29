@@ -1,0 +1,1018 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+  <!--
+    Base UR robot series xacro macro.
+
+    NOTE: this is NOT a URDF. It cannot directly be loaded by consumers
+    expecting a flattened '.urdf' file. See the top-level '.xacro' for that
+    (but note: that .xacro must still be processed by the xacro command).
+
+    For use in '.launch' files: use one of the 'load_urX.launch' convenience
+    launch files.
+
+    This file models the base kinematic chain of a UR robot, which then gets
+    parameterised by various configuration files to convert it into a UR3(e),
+    UR5(e), UR10(e) or UR16e.
+
+    NOTE: the default kinematic parameters (ie: link lengths, frame locations,
+    offets, etc) do not correspond to any particular robot. They are defaults
+    only. There WILL be non-zero offsets between the Forward Kinematics results
+    in TF (ie: robot_state_publisher) and the values reported by the Teach
+    Pendant.
+
+    For accurate (and robot-specific) transforms, the 'kinematics_parameters_file'
+    parameter MUST point to a .yaml file containing the appropriate values for
+    the targetted robot.
+
+    If using the UniversalRobots/Universal_Robots_ROS_Driver, follow the steps
+    described in the readme of that repository to extract the kinematic
+    calibration from the controller and generate the required .yaml file.
+
+    Main author of the migration to yaml configs: Ludovic Delval.
+
+    Contributors to previous versions (in no particular order):
+
+     - Felix Messmer
+     - Kelsey Hawkins
+     - Wim Meeussen
+     - Shaun Edwards
+     - Nadia Hammoudeh Garcia
+     - Dave Hershberger
+     - G. vd. Hoorn
+     - Philip Long
+     - Dave Coleman
+     - Miguel Prada
+     - Mathias Luedtke
+     - Marcel Schnirring
+     - Felix von Drigalski
+     - Felix Exner
+     - Jimmy Da Silva
+     - Ajit Krisshna N L
+     - Muhammad Asif Rana
+  -->
+
+  <xacro:include filename="$(find ur_description)/urdf/inc/ur_transmissions.xacro" />
+  <xacro:include filename="$(find ur_description)/urdf/inc/ur_common.xacro" />
+
+  <xacro:macro name="ur_robot" params="
+    prefix
+    joint_limits_parameters_file
+    kinematics_parameters_file
+    physical_parameters_file
+    visual_parameters_file
+    transmission_hw_interface:=hardware_interface/PositionJointInterface
+    safety_limits:=false
+    safety_pos_margin:=0.15
+    safety_k_position:=20"
+  >
+    <!-- Load configuration data from the provided .yaml files -->
+    <xacro:read_model_data
+      joint_limits_parameters_file="${joint_limits_parameters_file}" 
+      kinematics_parameters_file="${kinematics_parameters_file}"
+      physical_parameters_file="${physical_parameters_file}"
+      visual_parameters_file="${visual_parameters_file}"/>
+
+    <!-- Add URDF transmission elements (for ros_control) -->
+    <xacro:ur_arm_transmission prefix="${prefix}" hw_interface="${transmission_hw_interface}" />
+
+    <!-- links: main serial chain -->
+    <link name="${prefix}base_link"/>
+    <link name="${prefix}base_link_inertia">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 ${pi}"/>
+        <geometry>
+          <mesh filename="${base_visual_mesh}"/>
+        </geometry>
+        <material name="${base_visual_material_name}">
+          <color rgba="${base_visual_material_color}"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 ${pi}"/>
+        <geometry>
+          <mesh filename="${base_collision_mesh}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertial radius="${base_inertia_radius}" length="${base_inertia_length}" mass="${base_mass}">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      </xacro:cylinder_inertial>
+    </link>
+    <link name="${prefix}shoulder_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 ${pi}"/>
+        <geometry>
+          <mesh filename="${shoulder_visual_mesh}"/>
+        </geometry>
+        <material name="${shoulder_visual_material_name}">
+          <color rgba="${shoulder_visual_material_color}"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 ${pi}"/>
+        <geometry>
+          <mesh filename="${shoulder_collision_mesh}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertial radius="${shoulder_inertia_radius}" length="${shoulder_inertia_length}" mass="${shoulder_mass}">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      </xacro:cylinder_inertial>
+    </link>
+    <link name="${prefix}upper_arm_link">
+      <visual>
+        <origin xyz="0 0 ${shoulder_offset}" rpy="${pi/2} 0 ${-pi/2}"/>
+        <geometry>
+          <mesh filename="${upper_arm_visual_mesh}"/>
+        </geometry>
+        <material name="${upper_arm_visual_material_name}">
+          <color rgba="${upper_arm_visual_material_color}"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${shoulder_offset}" rpy="${pi/2} 0 ${-pi/2}"/>
+        <geometry>
+          <mesh filename="${upper_arm_collision_mesh}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertial radius="${upperarm_inertia_radius}" length="${upperarm_inertia_length}" mass="${upper_arm_mass}">
+        <origin xyz="${-0.5 * upperarm_inertia_length} 0.0 ${upper_arm_inertia_offset}" rpy="0 ${pi/2} 0" />
+      </xacro:cylinder_inertial>
+    </link>
+    <link name="${prefix}forearm_link">
+      <visual>
+        <origin xyz="0 0 ${elbow_offset}" rpy="${pi/2} 0 ${-pi/2}"/>
+        <geometry>
+          <mesh filename="${forearm_visual_mesh}"/>
+        </geometry>
+        <material name="${forearm_visual_material_name}">
+          <color rgba="${forearm_visual_material_color}"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${elbow_offset}" rpy="${pi/2} 0 ${-pi/2}"/>
+        <geometry>
+          <mesh filename="${forearm_collision_mesh}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertial radius="${forearm_inertia_radius}" length="${forearm_inertia_length}"  mass="${forearm_mass}">
+        <origin xyz="${-0.5 * forearm_inertia_length} 0.0 ${elbow_offset}" rpy="0 ${pi/2} 0" />
+      </xacro:cylinder_inertial>
+    </link>
+    <link name="${prefix}wrist_1_link">
+      <visual>
+        <!-- TODO: Move this to a parameter -->
+        <origin xyz="0 0 ${wrist_1_visual_offset}" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <mesh filename="${wrist_1_visual_mesh}"/>
+        </geometry>
+        <material name="${wrist_1_visual_material_name}">
+          <color rgba="${wrist_1_visual_material_color}"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${wrist_1_visual_offset}" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <mesh filename="${wrist_1_collision_mesh}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertial radius="${wrist_1_inertia_radius}" length="${wrist_1_inertia_length}"  mass="${wrist_1_mass}">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      </xacro:cylinder_inertial>
+    </link>
+    <link name="${prefix}wrist_2_link">
+      <visual>
+        <origin xyz="0 0 ${wrist_2_visual_offset}" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="${wrist_2_visual_mesh}"/>
+        </geometry>
+        <material name="${wrist_2_visual_material_name}">
+          <color rgba="${wrist_2_visual_material_color}"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${wrist_2_visual_offset}" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="${wrist_2_collision_mesh}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertial radius="${wrist_2_inertia_radius}" length="${wrist_2_inertia_length}"  mass="${wrist_2_mass}">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      </xacro:cylinder_inertial>
+    </link>
+    <link name="${prefix}wrist_3_link">
+      <visual>
+        <origin xyz="0 0 ${wrist_3_visual_offset}" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <mesh filename="${wrist_3_visual_mesh}"/>
+        </geometry>
+        <material name="${wrist_3_visual_material_name}">
+          <color rgba="${wrist_3_visual_material_color}"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${wrist_3_visual_offset}" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <mesh filename="${wrist_3_collision_mesh}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertial radius="${wrist_3_inertia_radius}" length="${wrist_3_inertia_length}"  mass="${wrist_3_mass}">
+        <origin xyz="0.0 0.0 ${-0.5 * wrist_3_inertia_length}" rpy="0 0 0" />
+      </xacro:cylinder_inertial>
+    </link>
+
+    <!-- joints: main serial chain -->
+    <joint name="${prefix}base_link-base_link_inertia" type="fixed">
+      <parent link="${prefix}base_link" />
+      <child link="${prefix}base_link_inertia" />
+      <!-- 'base_link' is REP-103 aligned (so X+ forward), while the internal
+           frames of the robot/controller have X+ pointing backwards.
+           Use the joint between 'base_link' and 'base_link_inertia' (a dummy
+           link/frame) to introduce the necessary rotation over Z (of pi rad).
+      -->
+      <origin xyz="0 0 0" rpy="0 0 ${pi}" />
+    </joint>
+    <joint name="${prefix}shoulder_pan_joint" type="revolute">
+      <parent link="${prefix}base_link_inertia" />
+      <child link="${prefix}shoulder_link" />
+      <origin xyz="${shoulder_x} ${shoulder_y} ${shoulder_z}" rpy="${shoulder_roll} ${shoulder_pitch} ${shoulder_yaw}" />
+      <axis xyz="0 0 1" />
+      <limit lower="${shoulder_pan_lower_limit}" upper="${shoulder_pan_upper_limit}"
+        effort="${shoulder_pan_effort_limit}" velocity="${shoulder_pan_velocity_limit}"/>
+      <xacro:if value="${safety_limits}">
+         <safety_controller soft_lower_limit="${shoulder_pan_lower_limit + safety_pos_margin}" soft_upper_limit="${shoulder_pan_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0"/>
+      </xacro:if>
+      <dynamics damping="0" friction="0"/>
+    </joint>
+    <joint name="${prefix}shoulder_lift_joint" type="revolute">
+      <parent link="${prefix}shoulder_link" />
+      <child link="${prefix}upper_arm_link" />
+      <origin xyz="${upper_arm_x} ${upper_arm_y} ${upper_arm_z}" rpy="${upper_arm_roll} ${upper_arm_pitch} ${upper_arm_yaw}" />
+      <axis xyz="0 0 1" />
+      <limit lower="${shoulder_lift_lower_limit}" upper="${shoulder_lift_upper_limit}"
+        effort="${shoulder_lift_effort_limit}" velocity="${shoulder_lift_velocity_limit}"/>
+      <xacro:if value="${safety_limits}">
+         <safety_controller soft_lower_limit="${shoulder_lift_lower_limit + safety_pos_margin}" soft_upper_limit="${shoulder_lift_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0"/>
+      </xacro:if>
+      <dynamics damping="0" friction="0"/>
+    </joint>
+    <joint name="${prefix}elbow_joint" type="revolute">
+      <parent link="${prefix}upper_arm_link" />
+      <child link="${prefix}forearm_link" />
+      <origin xyz="${forearm_x} ${forearm_y} ${forearm_z}" rpy="${forearm_roll} ${forearm_pitch} ${forearm_yaw}" />
+      <axis xyz="0 0 1" />
+      <limit lower="${elbow_joint_lower_limit}" upper="${elbow_joint_upper_limit}"
+        effort="${elbow_joint_effort_limit}" velocity="${elbow_joint_velocity_limit}"/>
+      <xacro:if value="${safety_limits}">
+         <safety_controller soft_lower_limit="${elbow_joint_lower_limit + safety_pos_margin}" soft_upper_limit="${elbow_joint_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0"/>
+      </xacro:if>
+      <dynamics damping="0" friction="0"/>
+    </joint>
+    <joint name="${prefix}wrist_1_joint" type="revolute">
+      <parent link="${prefix}forearm_link" />
+      <child link="${prefix}wrist_1_link" />
+      <origin xyz="${wrist_1_x} ${wrist_1_y} ${wrist_1_z}" rpy="${wrist_1_roll} ${wrist_1_pitch} ${wrist_1_yaw}" />
+      <axis xyz="0 0 1" />
+      <limit lower="${wrist_1_lower_limit}" upper="${wrist_1_upper_limit}"
+        effort="${wrist_1_effort_limit}" velocity="${wrist_1_velocity_limit}"/>
+      <xacro:if value="${safety_limits}">
+         <safety_controller soft_lower_limit="${wrist_1_lower_limit + safety_pos_margin}" soft_upper_limit="${wrist_1_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0"/>
+      </xacro:if>
+      <dynamics damping="0" friction="0"/>
+    </joint>
+    <joint name="${prefix}wrist_2_joint" type="revolute">
+      <parent link="${prefix}wrist_1_link" />
+      <child link="${prefix}wrist_2_link" />
+      <origin xyz="${wrist_2_x} ${wrist_2_y} ${wrist_2_z}" rpy="${wrist_2_roll} ${wrist_2_pitch} ${wrist_2_yaw}" />
+      <axis xyz="0 0 1" />
+      <limit lower="${wrist_2_lower_limit}" upper="${wrist_2_upper_limit}"
+             effort="${wrist_2_effort_limit}" velocity="${wrist_2_velocity_limit}"/>
+      <xacro:if value="${safety_limits}">
+         <safety_controller soft_lower_limit="${wrist_2_lower_limit + safety_pos_margin}" soft_upper_limit="${wrist_2_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0"/>
+      </xacro:if>
+      <dynamics damping="0" friction="0"/>
+    </joint>
+    <joint name="${prefix}wrist_3_joint" type="revolute">
+      <parent link="${prefix}wrist_2_link" />
+      <child link="${prefix}wrist_3_link" />
+      <origin xyz="${wrist_3_x} ${wrist_3_y} ${wrist_3_z}" rpy="${wrist_3_roll} ${wrist_3_pitch} ${wrist_3_yaw}" />
+      <axis xyz="0 0 1" />
+      <limit lower="${wrist_3_lower_limit}" upper="${wrist_3_upper_limit}"
+             effort="${wrist_3_effort_limit}" velocity="${wrist_3_velocity_limit}"/>
+      <xacro:if value="${safety_limits}">
+         <safety_controller soft_lower_limit="${wrist_3_lower_limit + safety_pos_margin}" soft_upper_limit="${wrist_3_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0"/>
+      </xacro:if>
+      <dynamics damping="0" friction="0"/>
+    </joint>
+
+    <!-- ROS-Industrial 'base' frame: base_link to UR 'Base' Coordinates transform -->
+    <link name="${prefix}base"/>
+    <joint name="${prefix}base_link-base_fixed_joint" type="fixed">
+      <!-- Note the rotation over Z of pi radians: as base_link is REP-103
+           aligned (ie: has X+ forward, Y+ left and Z+ up), this is needed
+           to correctly align 'base' with the 'Base' coordinate system of
+           the UR controller.
+      -->
+      <origin xyz="0 0 0" rpy="0 0 ${pi}"/>
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}base"/>
+    </joint>
+
+    <!-- ROS-Industrial 'flange' frame: attachment point for EEF models -->
+    <link name="${prefix}flange" />
+    <joint name="${prefix}wrist_3-flange" type="fixed">
+      <parent link="${prefix}wrist_3_link" />
+      <child link="${prefix}flange" />
+      <origin xyz="0 0 0" rpy="0 ${-pi/2.0} ${-pi/2.0}" />
+    </joint>
+
+    <!-- ROS-Industrial 'tool0' frame: all-zeros tool frame -->
+    <link name="${prefix}tool0"/>
+    <joint name="${prefix}flange-tool0" type="fixed">
+      <!-- default toolframe: X+ left, Y+ up, Z+ front -->
+      <origin xyz="0 0 0" rpy="${pi/2.0} 0 ${pi/2.0}"/>
+      <parent link="${prefix}flange"/>
+      <child link="${prefix}tool0"/>
+    </joint>
+     
+    <link
+    name="endeffector_base_link">
+    <inertial>
+      <origin
+        xyz="-0.0091552 -0.0017971 0.10907"
+        rpy="0 0 0" />
+      <mass
+        value="0.6995" />
+      <inertia
+        ixx="0.00093618"
+        ixy="-1.2386E-06"
+        ixz="-2.4247E-05"
+        iyy="0.0018881"
+        iyz="9.7308E-06"
+        izz="0.0012009" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://endeffector/meshes/endeffector_base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://endeffector/meshes/endeffector_base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="camera_Link">
+    <inertial>
+      <origin
+        xyz="-0.013488 -7.0938E-05 -0.013332"
+        rpy="0 0 0" />
+      <mass
+        value="0.071592" />
+      <inertia
+        ixx="2.0232E-05"
+        ixy="-4.6475E-08"
+        ixz="-5.1114E-10"
+        iyy="1.9381E-05"
+        iyz="4.5469E-09"
+        izz="3.1685E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://endeffector/meshes/camera_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://endeffector/meshes/camera_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera_Joint"
+    type="fixed">
+    <origin
+      xyz="0.18055 -0.00029745 0.071047"
+      rpy="0.00018844 -0.10472 0" />
+    <parent
+      link="endeffector_base_link" />
+    <child
+      link="camera_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+    <joint name="${prefix}tool0-endeffector_base_link" type="fixed">
+      <!-- default toolframe: X+ left, Y+ up, Z+ front -->
+      <origin xyz="0 0 0.002" rpy="0 0 ${pi/1.0}"/>
+      <parent link="${prefix}tool0"/>
+      <child link="${prefix}endeffector_base_link"/>
+    </joint>
+ 
+<!-- battery_pack -->
+
+    <link
+      name="battery_pack_base_link">
+      <inertial>
+        <origin
+          xyz="0.840460078869128 0.000748250275173445 -0.0747991952974527"
+          rpy="0 0 0" />
+        <mass
+          value="590.168232442056" />
+        <inertia
+          ixx="68.4216428304914"
+          ixy="0.000761839613148307"
+          ixz="6.32020891220886E-09"
+          iyy="184.407037358386"
+          iyz="1.60985543868867E-09"
+          izz="249.53932694368" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/battery_pack_base_link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/battery_pack_base_link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <link
+      name="M6_1_Link">
+      <inertial>
+        <origin
+          xyz="-1.5781E-08 1.7199E-07 -0.013589"
+          rpy="0 0 0" />
+        <mass
+          value="0.0013212" />
+        <inertia
+          ixx="1.3904E-07"
+          ixy="-5.0602E-13"
+          ixz="5.5231E-11"
+          iyy="1.3904E-07"
+          iyz="-1.7203E-11"
+          izz="1.0587E-08" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/M6_1_Link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/M6_1_Link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="M6_1_Joint"
+      type="fixed">
+      <origin
+        xyz="0.2215 0.404 0.051"
+        rpy="0 0 0" />
+      <parent
+        link="battery_pack_base_link" />
+      <child
+        link="M6_1_Link" />
+      <axis
+        xyz="0 0 1" />
+    </joint>
+    <link
+      name="M6_2_Link">
+      <inertial>
+        <origin
+          xyz="-1.6918E-07 -3.4772E-08 -0.013589"
+          rpy="0 0 0" />
+        <mass
+          value="0.0013212" />
+        <inertia
+          ixx="1.3904E-07"
+          ixy="7.5348E-13"
+          ixz="1.0967E-11"
+          iyy="1.3904E-07"
+          iyz="5.6799E-11"
+          izz="1.0587E-08" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/M6_2_Link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/M6_2_Link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="M6_2_Joint"
+      type="fixed">
+      <origin
+        xyz="0.2215 0.304 0.051"
+        rpy="0 0 0" />
+      <parent
+        link="battery_pack_base_link" />
+      <child
+        link="M6_2_Link" />
+      <axis
+        xyz="0 0 1" />
+    </joint>
+    <link
+      name="M6_3_Link">
+      <inertial>
+        <origin
+          xyz="-8.6028E-09 -1.725E-07 -0.013589"
+          rpy="0 0 0" />
+        <mass
+          value="0.0013212" />
+        <inertia
+          ixx="1.3904E-07"
+          ixy="-1.573E-13"
+          ixz="-5.2257E-11"
+          iyy="1.3904E-07"
+          iyz="2.4812E-11"
+          izz="1.0587E-08" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/M6_3_Link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/M6_3_Link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="M6_3_Joint"
+      type="fixed">
+      <origin
+        xyz="0.2215 0.204 0.051"
+        rpy="0 0 0" />
+      <parent
+        link="battery_pack_base_link" />
+      <child
+        link="M6_3_Link" />
+      <axis
+        xyz="0 0 1" />
+    </joint>
+    <link
+      name="M8_1_Link">
+      <inertial>
+        <origin
+          xyz="-2.382E-08 -1.0658E-07 -0.014181"
+          rpy="0 0 0" />
+        <mass
+          value="0.0021494" />
+        <inertia
+          ixx="2.2689E-07"
+          ixy="3.8573E-12"
+          ixz="-1.3221E-11"
+          iyy="2.2689E-07"
+          iyz="9.8346E-11"
+          izz="2.5923E-08" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/M8_1_Link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/M8_1_Link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="M8_1_Joint"
+      type="fixed">
+      <origin
+        xyz="0.2215 0.104 0.051"
+        rpy="0 0 0" />
+      <parent
+        link="battery_pack_base_link" />
+      <child
+        link="M8_1_Link" />
+      <axis
+        xyz="0 0 1" />
+    </joint>
+    <link
+      name="M8_2_Link">
+      <inertial>
+        <origin
+          xyz="-1.0237E-07 3.8028E-08 -0.014181"
+          rpy="0 0 0" />
+        <mass
+          value="0.0021494" />
+        <inertia
+          ixx="2.2689E-07"
+          ixy="-3.7109E-12"
+          ixz="9.9231E-11"
+          iyy="2.2689E-07"
+          iyz="-2.1345E-13"
+          izz="2.5923E-08" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/M8_2_Link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/M8_2_Link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="M8_2_Joint"
+      type="fixed">
+      <origin
+        xyz="0.2215 0.004 0.051"
+        rpy="0 0 0" />
+      <parent
+        link="battery_pack_base_link" />
+      <child
+        link="M8_2_Link" />
+      <axis
+        xyz="0 0 1" />
+    </joint>
+    <link
+      name="M8_3_Link">
+      <inertial>
+        <origin
+          xyz="-2.0193E-10 -1.0921E-07 -0.014181"
+          rpy="0 0 0" />
+        <mass
+          value="0.0021494" />
+        <inertia
+          ixx="2.2689E-07"
+          ixy="3.5042E-12"
+          ixz="-3.4181E-11"
+          iyy="2.2689E-07"
+          iyz="9.3158E-11"
+          izz="2.5923E-08" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/M8_3_Link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/M8_3_Link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="M8_3_Joint"
+      type="fixed">
+      <origin
+        xyz="0.2215 -0.096 0.051"
+        rpy="0 0 0" />
+      <parent
+        link="battery_pack_base_link" />
+      <child
+        link="M8_3_Link" />
+      <axis
+        xyz="0 0 1" />
+    </joint>
+    <link
+      name="M10_1_Link">
+      <inertial>
+        <origin
+          xyz="1.2099E-08 1.6147E-07 -0.014551"
+          rpy="0 0 0" />
+        <mass
+          value="0.003184" />
+        <inertia
+          ixx="3.3964E-07"
+          ixy="2.984E-12"
+          ixz="-8.2695E-11"
+          iyy="3.3963E-07"
+          iyz="-1.2764E-10"
+          izz="5.4565E-08" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/M10_1_Link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/M10_1_Link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="M10_1_Joint"
+      type="fixed">
+      <origin
+        xyz="0.2215 -0.196 0.051"
+        rpy="0 0 0" />
+      <parent
+        link="battery_pack_base_link" />
+      <child
+        link="M10_1_Link" />
+      <axis
+        xyz="0 0 1" />
+    </joint>
+    <link
+      name="M10_2_Link">
+      <inertial>
+        <origin
+          xyz="9.3207E-08 -1.3241E-07 -0.014551"
+          rpy="0 0 0" />
+        <mass
+          value="0.003184" />
+        <inertia
+          ixx="3.3963E-07"
+          ixy="9.1296E-12"
+          ixz="-1.7191E-11"
+          iyy="3.3964E-07"
+          iyz="1.5112E-10"
+          izz="5.4565E-08" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/M10_2_Link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/M10_2_Link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="M10_2_Joint"
+      type="fixed">
+      <origin
+        xyz="0.2215 -0.296 0.051"
+        rpy="0 0 0" />
+      <parent
+        link="battery_pack_base_link" />
+      <child
+        link="M10_2_Link" />
+      <axis
+        xyz="0 0 1" />
+    </joint>
+    <link
+      name="M10_3_Link">
+      <inertial>
+        <origin
+          xyz="1.5901E-07 -3.0597E-08 -0.014551"
+          rpy="0 0 0" />
+        <mass
+          value="0.003184" />
+        <inertia
+          ixx="3.3963E-07"
+          ixy="-9.123E-13"
+          ixz="-1.1728E-10"
+          iyy="3.3965E-07"
+          iyz="9.6832E-11"
+          izz="5.4565E-08" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/M10_3_Link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/M10_3_Link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="M10_3_Joint"
+      type="fixed">
+      <origin
+        xyz="0.2215 -0.396 0.051"
+        rpy="0 0 0" />
+      <parent
+        link="battery_pack_base_link" />
+      <child
+        link="M10_3_Link" />
+      <axis
+        xyz="0 0 1" />
+    </joint>
+    <link
+      name="sleeve_plate_Link">
+      <inertial>
+        <origin
+          xyz="-0.00051088 0.00023914 -0.033555"
+          rpy="0 0 0" />
+        <mass
+          value="0.58226" />
+        <inertia
+          ixx="0.00067784"
+          ixy="-8.9616E-08"
+          ixz="7.503E-07"
+          iyy="0.00066736"
+          iyz="-3.2443E-07"
+          izz="0.00093345" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/sleeve_plate_Link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://battery_pack/meshes/sleeve_plate_Link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="sleeve_plate_Joint"
+      type="fixed">
+      <origin
+        xyz="0 -0.45 0.065"
+        rpy="0 0 0" />
+      <parent
+        link="battery_pack_base_link" />
+      <child
+        link="sleeve_plate_Link" />
+      <axis
+        xyz="0 0 1" />
+    </joint> 
+
+    <joint name="${prefix}base_link-battery_pack_base_link" type="fixed">
+        
+        <origin xyz="0 0 0.002" rpy="0 0 ${pi/2.0}"/>
+        <parent link="${prefix}base_link"/>
+        <child link="${prefix}battery_pack_base_link"/>
+      </joint>
+
+  </xacro:macro>
+</robot>
