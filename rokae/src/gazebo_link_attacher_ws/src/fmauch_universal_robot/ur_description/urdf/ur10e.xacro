@@ -19,4 +19,5 @@
   -->
   <xacro:include filename="$(find ur_description)/urdf/inc/ur10e_macro.xacro"/>
   <xacro:ur10e_robot prefix="" />
+  
 </robot>
