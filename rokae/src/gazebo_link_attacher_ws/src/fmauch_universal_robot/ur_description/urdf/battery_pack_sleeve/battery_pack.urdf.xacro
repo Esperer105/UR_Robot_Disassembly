@@ -45,10 +45,6 @@
     </collision>
   </link>
 
-  <gazebo reference="battery_pack_base_link">
-     <material>Gazebo/Blue</material>
-  </gazebo>
-
   <link
     name="M6_1_Link">
     <inertial>
