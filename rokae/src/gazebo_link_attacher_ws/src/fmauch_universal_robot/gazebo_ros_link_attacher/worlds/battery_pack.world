@@ -106,7 +106,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/base.stl</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/base.stl</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -128,7 +128,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/battery_pack_base_link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/battery_pack_base_link.STL</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -150,7 +150,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/M10_1_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/M10_1_Link.STL</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -172,7 +172,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/M10_2_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/M10_2_Link.STL</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -194,7 +194,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/M10_3_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/M10_3_Link.STL</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -216,7 +216,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/M6_1_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/M6_1_Link.STL</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -238,7 +238,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/M6_2_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/M6_2_Link.STL</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -260,7 +260,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/M6_3_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/M6_3_Link.STL</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -282,7 +282,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/M8_1_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/M8_1_Link.STL</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -304,7 +304,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/M8_2_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/M8_2_Link.STL</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -326,7 +326,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/M8_3_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/M8_3_Link.STL</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -348,7 +348,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/sleeve_plate_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/sleeve_plate_Link.STL</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -370,7 +370,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/base.dae</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/base.dae</uri>
             </mesh>
           </geometry>
         </visual>
@@ -379,7 +379,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/battery_pack_base_link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/battery_pack_base_link.STL</uri>
             </mesh>
           </geometry>
         </visual>
@@ -388,7 +388,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/M10_1_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/M10_1_Link.STL</uri>
             </mesh>
           </geometry>
         </visual>
@@ -397,7 +397,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/M10_2_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/M10_2_Link.STL</uri>
             </mesh>
           </geometry>
         </visual>
@@ -406,7 +406,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/M10_3_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/M10_3_Link.STL</uri>
             </mesh>
           </geometry>
         </visual>
@@ -415,7 +415,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/M6_1_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/M6_1_Link.STL</uri>
             </mesh>
           </geometry>
         </visual>
@@ -424,7 +424,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/M6_2_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/M6_2_Link.STL</uri>
             </mesh>
           </geometry>
         </visual>
@@ -433,7 +433,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/M6_3_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/M6_3_Link.STL</uri>
             </mesh>
           </geometry>
         </visual>
@@ -442,7 +442,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/M8_1_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/M8_1_Link.STL</uri>
             </mesh>
           </geometry>
         </visual>
@@ -451,7 +451,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/M8_2_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/M8_2_Link.STL</uri>
             </mesh>
           </geometry>
         </visual>
@@ -460,7 +460,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/M8_3_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/M8_3_Link.STL</uri>
             </mesh>
           </geometry>
         </visual>
@@ -469,7 +469,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/battery_pack/meshes/sleeve_plate_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/battery_pack/meshes/sleeve_plate_Link.STL</uri>
             </mesh>
           </geometry>
         </visual>
@@ -500,7 +500,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/shoulder.stl</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/shoulder.stl</uri>
             </mesh>
           </geometry>
           <surface>
@@ -522,7 +522,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/shoulder.dae</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/shoulder.dae</uri>
             </mesh>
           </geometry>
           <material>
@@ -577,7 +577,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/upperarm.stl</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/upperarm.stl</uri>
             </mesh>
           </geometry>
           <surface>
@@ -599,7 +599,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/upperarm.dae</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/upperarm.dae</uri>
             </mesh>
           </geometry>
           <material>
@@ -654,7 +654,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/forearm.stl</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/forearm.stl</uri>
             </mesh>
           </geometry>
           <surface>
@@ -676,7 +676,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/forearm.dae</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/forearm.dae</uri>
             </mesh>
           </geometry>
           <material>
@@ -731,7 +731,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/wrist1.stl</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/wrist1.stl</uri>
             </mesh>
           </geometry>
           <surface>
@@ -753,7 +753,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/wrist1.dae</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/wrist1.dae</uri>
             </mesh>
           </geometry>
           <material>
@@ -808,7 +808,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/wrist2.stl</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/wrist2.stl</uri>
             </mesh>
           </geometry>
           <surface>
@@ -830,7 +830,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/wrist2.dae</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/wrist2.dae</uri>
             </mesh>
           </geometry>
           <material>
@@ -885,7 +885,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/wrist3.stl</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/collision/wrist3.stl</uri>
             </mesh>
           </geometry>
           <surface>
@@ -907,7 +907,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/endeffector/meshes/endeffector_base_link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/endeffector/meshes/endeffector_base_link.STL</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -929,7 +929,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/endeffector/meshes/camera_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/endeffector/meshes/camera_Link.STL</uri>
             </mesh>
           </geometry>
           <surface>
@@ -951,7 +951,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/wrist3.dae</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/fmauch_universal_robot/ur_description/meshes/ur10e/visual/wrist3.dae</uri>
             </mesh>
           </geometry>
           <material>
@@ -966,7 +966,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/endeffector/meshes/endeffector_base_link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/endeffector/meshes/endeffector_base_link.STL</uri>
             </mesh>
           </geometry>
         </visual>
@@ -975,7 +975,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/endeffector/meshes/camera_Link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/endeffector/meshes/camera_Link.STL</uri>
             </mesh>
           </geometry>
           <material>
@@ -1074,7 +1074,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/M10_sleeve/meshes/M10_sleeve_base_link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/M10_sleeve/meshes/M10_sleeve_base_link.STL</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -1096,7 +1096,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/M10_sleeve/meshes/M10_sleeve_base_link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/M10_sleeve/meshes/M10_sleeve_base_link.STL</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1126,7 +1126,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/M6_sleeve/meshes/M6_sleeve_base_link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/M6_sleeve/meshes/M6_sleeve_base_link.STL</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -1148,7 +1148,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/M6_sleeve/meshes/M6_sleeve_base_link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/M6_sleeve/meshes/M6_sleeve_base_link.STL</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1178,7 +1178,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/M8_sleeve/meshes/M8_sleeve_base_link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/M8_sleeve/meshes/M8_sleeve_base_link.STL</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -1200,7 +1200,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/M8_sleeve/meshes/M8_sleeve_base_link.STL</uri>
+              <uri>/home/ur/Desktop/test/UR_Robot_Disassembly/rokae/src/gazebo_link_attacher_ws/src/M8_sleeve/meshes/M8_sleeve_base_link.STL</uri>
             </mesh>
           </geometry>
         </visual>

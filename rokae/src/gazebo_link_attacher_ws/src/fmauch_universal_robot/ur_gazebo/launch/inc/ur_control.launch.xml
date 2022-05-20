@@ -22,16 +22,16 @@
 
   <!-- Gazebo parameters -->
   <arg name="gazebo_model_name" default="robot" doc="The name to give to the model in Gazebo (after spawning it)." />
-  <arg name="gazebo_world" default="$(find gazebo_ros_link_attacher)/worlds/test_attacher.world" doc="The '.world' file to load in Gazebo." />
+  <arg name="gazebo_world" default="$(find gazebo_ros_link_attacher)/worlds/battery_pack.world" doc="The '.world' file to load in Gazebo." />
   <arg name="gui" default="true" doc="If true, Gazebo UI is started. If false, only start Gazebo server." />
   <arg name="paused" default="true" doc="If true, start Gazebo in paused mode. If false, start simulation as soon as Gazebo has loaded." />
   <arg name="robot_description_param_name" default="robot_description" doc="Name of the parameter which contains the robot description (ie: URDF) which should be spawned into Gazebo." />
   <arg name="spawn_z" default="0.3" doc="At which height the model should be spawned. NOTE: lower values will cause the robot to collide with the ground plane." />
   <arg name="start_gazebo" default="true" doc="If true, Gazebo will be started. If false, Gazebo will be assumed to have been started elsewhere." />
 
-  <param name="M6_sleeve_description" textfile="$(find M6_sleeve)/urdf/M6_sleeve.urdf" />
+  <!-- <param name="M6_sleeve_description" textfile="$(find M6_sleeve)/urdf/M6_sleeve.urdf" />
   <param name="M8_sleeve_description" textfile="$(find M8_sleeve)/urdf/M8_sleeve.urdf" />
-  <param name="M10_sleeve_description" textfile="$(find M10_sleeve)/urdf/M10_sleeve.urdf" />
+  <param name="M10_sleeve_description" textfile="$(find M10_sleeve)/urdf/M10_sleeve.urdf" /> -->
 
   <!-- Load controller settings -->
   <rosparam file="$(arg controller_config_file)" command="load"/>
@@ -44,17 +44,17 @@
   </include>
 
   <!-- Spawn the model loaded earlier in the simulation just started -->
-  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model"
+  <!-- <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model"
     args="
       -urdf
       -param $(arg robot_description_param_name)
       -model $(arg gazebo_model_name)
       -z $(arg spawn_z)"
-    output="screen" respawn="false" />
+    output="screen" respawn="false" /> -->
   
-  <node pkg="gazebo_ros" type="spawn_model" name="M6_sleeve" args="-urdf -model M6_sleeve -param M6_sleeve_description"  />
+  <!-- <node pkg="gazebo_ros" type="spawn_model" name="M6_sleeve" args="-urdf -model M6_sleeve -param M6_sleeve_description"  />
   <node pkg="gazebo_ros" type="spawn_model" name="M8_sleeve" args="-urdf -model M8_sleeve -param M8_sleeve_description"  />
-  <node pkg="gazebo_ros" type="spawn_model" name="M10_sleeve" args="-urdf -model M10_sleeve -param M10_sleeve_description"  />
+  <node pkg="gazebo_ros" type="spawn_model" name="M10_sleeve" args="-urdf -model M10_sleeve -param M10_sleeve_description"  /> -->
 
   <!-- Load and start the controllers listed in the 'controllers' arg. -->
   <node name="ros_control_controller_spawner" pkg="controller_manager" type="spawner"
