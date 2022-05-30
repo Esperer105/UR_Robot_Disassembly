@@ -339,5 +339,6 @@
 
   <xacro:include filename="$(find ur_description)/urdf/battery_pack_sleeve/battery_pack.urdf.xacro" />
   <xacro:include filename="$(find ur_description)/urdf/battery_pack_sleeve/endeffector.urdf.xacro" />
-  <xacro:include filename="$(find ur_description)/urdf/sensors/sensor_kinect.urdf.xacro" />
+  <xacro:include filename="$(find ur_description)/urdf/sensors/_d435.gazebo.xacro" />
+
 </robot>
