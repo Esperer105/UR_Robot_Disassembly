@@ -8,7 +8,7 @@ This is the Gazebo URDF model for the Intel RealSense D435 camera
 -->
   
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
-    <xacro:property name="deg_to_rad" value="0.01745329251994329577" />
+<xacro:property name="deg_to_rad" value="0.01745329251994329577" />
     
     <gazebo reference="camera_gz_Link">
       <self_collide>0</self_collide>
@@ -113,7 +113,7 @@ This is the Gazebo URDF model for the Intel RealSense D435 camera
       </sensor>
     </gazebo>
 
-    <gazebo>
+    <!-- <gazebo>
       <plugin name="camera" filename="librealsense_gazebo_plugin.so">
         <prefix>camera</prefix>
         <depthUpdateRate>30.0</depthUpdateRate>
@@ -138,7 +138,7 @@ This is the Gazebo URDF model for the Intel RealSense D435 camera
         <pointCloudCutoff>0.25</pointCloudCutoff>
         <pointCloudCutoffMax>9.0</pointCloudCutoffMax>
       </plugin>
-    </gazebo>
+    </gazebo>  -->
 
-  
+ 
 </robot>
