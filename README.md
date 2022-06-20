@@ -63,29 +63,25 @@ catkin_make
 source ./devel/setup.bash
 ```
 
-#### 切换到`python2`的环境
-
-#### 首先加载 rokae_gazebo arm_world.launch
+#### (`python2`)首先加载 rokae_gazebo arm_world.launch
 
 ```bash
 roslaunch rokae_gazebo arm_world.launch
 ```
 
-#### 加载 rokae_moveit_config moveit_planning_execution_4_arm_world.launch
+#### (`python2`)加载 rokae_moveit_config moveit_planning_execution_4_arm_world.launch
 
 ```bash
 roslaunch rokae_moveit_config moveit_planning_execution_4_arm_world.launch
 ```
 
-#### 加载~/rokae/src/rokae_control/scripts/env_setup.py
+#### (`python2`)加载~/rokae/src/rokae_control/scripts/env_setup.py
 
 ```bash
 rosrun rokae_control env_setup.py
 ```
 
-#### 切换到`python3`的环境
-
-#### 加载~/rokae_robot/rokae/src/rokae_control/scripts/np_server.py
+#### (`python3`)加载~/rokae_robot/rokae/src/rokae_control/scripts/np_server.py
 
 ```bash
 rosrun rokae_control np_server.py
