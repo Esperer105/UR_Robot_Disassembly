@@ -2,4 +2,4 @@
 ./rokae/devel/
 *.pyc
 ./.idea/
-
+./.vscode/
