@@ -93,6 +93,16 @@ rosrun rokae_control np_server.py
 rosrun rokae_control nsplanner.py
 ```
 
+## UR10e 真机实验
+
+### 准备工作
+
+#### 安装 realsense SDK
+
+[安装教程](https://github.com/IntelRealSense/librealsense/blob/master/doc/distribution_linux.md#installing-the-packages)
+
+### 操作流程
+
 1. rokae 仿真：
 
 首先加载 rokae_gazebo arm_world.launch，然后加载 rokae_moveit_config moveit_planning_execution_4_arm_world.launch，再运行~/rokae_robot/rokae/src/rokae_control/scripts/env_setup.py，
