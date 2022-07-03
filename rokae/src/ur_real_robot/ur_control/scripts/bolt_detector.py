@@ -123,11 +123,11 @@ def return_max(path):
 
 class BoltDetector():
     def __init__(self, roi_size=(96, 96), train_path=None,
-                 model_save_path='./Realsense/SVM_HOG_Model/SVM_HOG_20220325.pkl', hog_orientations=8,
+                 model_save_path='src/ur_real_robot/ur_control/scripts/Realsense/SVM_HOG_Model/SVM_HOG_20220325.pkl', hog_orientations=8,
                  hog_pixels_per_cell=(16, 16),
                  hog_cells_per_block=(2, 2)):
         if train_path is None:
-            train_path = {'pos_path': "/Realsense/new_svm/1", 'neg_path': "/Realsense/new_svm/-1"}
+            train_path = {'pos_path': "src/ur_real_robot/ur_control/scripts/Realsense/new_svm/1", 'neg_path': "src/ur_real_robot/ur_control/scripts/Realsense/new_svm/-1"}
         self.train_path = train_path
         self.roi_size = roi_size
         self.model_save_path = model_save_path
@@ -246,8 +246,8 @@ class BoltDetector():
             cv2.waitKey(0)
             cv2.destroyAllWindows()
         if write:
-            i = return_max('./Realsense/images/') + 1
-            filename = os.path.join('./Realsense/images/', str(i) + '.jpg')
+            i = return_max('src/ur_real_robot/ur_control/scripts/Realsense/images/') + 1
+            filename = os.path.join('src/ur_real_robot/ur_control/scripts/Realsense/images/', str(i) + '.jpg')
             cv2.imwrite(filename, img)
         if bolts is not None:
             print 'the number of detected bolts:', len(bolts)
@@ -256,13 +256,13 @@ class BoltDetector():
             print ('no bolts are detected')
         return ret_dict
 
-    def detect_edge_box(self, img, threshold=0.995, nms_threshold=0.5, max_box=1000, alpha=0.5, gamma=2.5,
+    def detect_edge_box(self, img, threshold=0.6, nms_threshold=0.5, max_box=1000, alpha=0.5, gamma=2.5,
                         edge_min_mag=0.02, edge_merge_thr=0.5,
-                        max_aspect_ratio=1.2, show=False, write=False):
+                        max_aspect_ratio=1.2, show=False, write=False):# max_box(default=1000) threshold=0.995
         bolts = []
         ret_dict = {}
         font = cv2.FONT_HERSHEY_PLAIN
-        model = './Realsense/Edge_Box_Model/model.yml'
+        model = 'src/ur_real_robot/ur_control/scripts/Realsense/Edge_Box_Model/model.yml'
         edge_detection = cv2.ximgproc.createStructuredEdgeDetection(model)
         rgb_im = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         edges = edge_detection.detectEdges(np.float32(rgb_im) / 255.0)
@@ -322,8 +322,8 @@ class BoltDetector():
             cv2.waitKey(0)
             cv2.destroyAllWindows()
         if write:
-            i = return_max('./Realsense/images/') + 1
-            filename = os.path.join('./Realsense/images/', str(i) + '.jpg')
+            i = return_max('src/ur_real_robot/ur_control/scripts/Realsense/images/') + 1
+            filename = os.path.join('src/ur_real_robot/ur_control/scripts/Realsense/images/', str(i) + '.jpg')
             cv2.imwrite(filename, img)
         if bolts is not None:
             print 'the number of detected bolts:', len(bolts)
@@ -335,7 +335,7 @@ class BoltDetector():
 
 if __name__ == "__main__":
     detector1 = BoltDetector()
-    img = cv2.imread('./Realsense/1_Color.png')
+    img = cv2.imread('src/ur_real_robot/ur_control/scripts/Realsense/11_Color.png')
     detector1.train_SVM()
     print('completed')
     bolts = detector1.detect_edge_box(img, show=True, threshold=0.6, write=False)
