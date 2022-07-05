@@ -53,9 +53,24 @@
       -z $(arg spawn_z)"
     output="screen" respawn="false" />
   
-  <node pkg="gazebo_ros" type="spawn_model" name="M6_sleeve" args="-urdf -model M6_sleeve -param M6_sleeve_description"  />
-  <node pkg="gazebo_ros" type="spawn_model" name="M8_sleeve" args="-urdf -model M8_sleeve -param M8_sleeve_description"  />
-  <node pkg="gazebo_ros" type="spawn_model" name="M10_sleeve" args="-urdf -model M10_sleeve -param M10_sleeve_description"  />
+  <node pkg="gazebo_ros" type="spawn_model" name="M6_sleeve"  
+    args="
+      -urdf -model M6_sleeve -param M6_sleeve_description
+      -x 0.414277 -y 0.000043 -z 0.360912
+      -R -0.487594 -P 1.570484 -Y 0.916099"
+    output="screen" respawn="false"/>
+  <node pkg="gazebo_ros" type="spawn_model" name="M8_sleeve"   
+    args="
+      -urdf -model M8_sleeve -param M8_sleeve_description
+      -x 0.449942 -y -0.035743 -z 0.360922
+      -R 1.332686 -P 1.570579 -Y 2.753643"
+    output="screen" respawn="false"/>
+  <node pkg="gazebo_ros" type="spawn_model" name="M10_sleeve" 
+    args="
+      -urdf -model M10_sleeve -param M10_sleeve_description
+      -x 0.485752 -y -0.000005 -z 0.360716
+      -R 0.093485 -P 1.563880 -Y -1.347770"
+    output="screen" respawn="false" />
 
   <!-- Load and start the controllers listed in the 'controllers' arg. -->
   <node name="ros_control_controller_spawner" pkg="controller_manager" type="spawner"
