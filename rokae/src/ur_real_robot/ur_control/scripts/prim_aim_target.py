@@ -65,17 +65,17 @@ class PrimAimTarget(PrimBase):
                 return False
         print("param satified, start to do mate")
 
-        detect_ret=self.circle_detector.detect_edge_box(all_info['rgb_img'])
+        detect_ret=self.circle_detector.finish_YOLO_detect(all_info['rgb_img'])
 
 
-        if 'circles' in detect_ret.keys():
-            print('circle success')
+        if 'screw' in detect_ret.keys():
+            print('screw success')
             
-            circles = detect_ret["circles"]
+            circles = detect_ret["screw"]
             circle = self.findBestMatchCircle(circles)
 
-            x = circle[0]
-            y = circle[1]
+            x = circle[1]
+            y = circle[0]
             self.add_bolt_frame(x, y, all_info)
 
             bolt_pose = self.get_bolt_pose_in_world_frame(all_info)
