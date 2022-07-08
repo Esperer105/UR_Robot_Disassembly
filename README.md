@@ -111,19 +111,19 @@ catkin_make
 source ./devel/setup.bash
 ```
 
-#### 运行UR10e驱动文件
+#### 运行 UR10e 驱动文件
 
 ```bash
 roslaunch example_organization_ur_launch ex-ur10-1.launch
 ```
 
-#### 运行rviz
+#### 运行 rviz
 
 ```bash
 roslaunch ur10e_moveit_config moveit_planning_execution_4_arm_world.launch
 ```
 
-#### 运行realsense
+#### 运行 realsense
 
 ```bash
 roslaunch realsense2_camera rs_camera.launch align_depth:=true filters:=hole_filling
@@ -139,7 +139,7 @@ roslaunch realsense2_camera rs_camera.launch align_depth:=true filters:=hole_fil
 roslaunch easy_handeye publish.launch
 ```
 
-#### 启动`YOLOv5`服务端(新的终端Python3环境下)
+#### 启动`YOLOv5`服务端(新的终端 Python3 环境下)
 
 ```bash
 cd rokae/src/ur_real_robot/YOLO_v5_detect
@@ -151,8 +151,6 @@ python YOLO_server.py
 ```bash
 rosrun ur_control nsplanner.py
 ```
-
-
 
 1. rokae 仿真：
 
