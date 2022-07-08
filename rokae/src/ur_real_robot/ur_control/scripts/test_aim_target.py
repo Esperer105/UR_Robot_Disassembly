@@ -28,54 +28,34 @@ import random
 
 # from PIL import Image,ImageDraw
 # import numpy as np 
-
+from bolt_detector import BoltDetector
 from rigid_transform_3D import rigid_transform_3D
 from test_base import TestBase
-from bolt_detector import BoltDetector
 
 class TestAimTarget(TestBase):
     def get_tgt_pose_in_world_frame(self,all_info):
-        tgt_pose_in_bolt_frame = geometry_msgs.msg.Pose()
-        tgt_pose_in_bolt_frame.position.x = 0
-        tgt_pose_in_bolt_frame.position.y = 0
-        tgt_pose_in_bolt_frame.position.z = 0.5
+        tool_len = 0.5
+        tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
+        tgt_pose_in_real_frame.position.x = 0
+        tgt_pose_in_real_frame.position.y = 0
+        tgt_pose_in_real_frame.position.z = - tool_len
         # q = tf.transformations.quaternion_from_euler(0, 1.57, 0)
-        q = tf.transformations.quaternion_from_euler(0, 1.57, 0)
-        tgt_pose_in_bolt_frame.orientation.x = q[0]
-        tgt_pose_in_bolt_frame.orientation.y = q[1]
-        tgt_pose_in_bolt_frame.orientation.z = q[2]
-        tgt_pose_in_bolt_frame.orientation.w = q[3]
+        q = tf.transformations.quaternion_from_euler(0, 0, 0)
+        tgt_pose_in_real_frame.orientation.x = q[0]
+        tgt_pose_in_real_frame.orientation.y = q[1]
+        tgt_pose_in_real_frame.orientation.z = q[2]
+        tgt_pose_in_real_frame.orientation.w = q[3]
         # self.print_pose(tgt_pose_in_bolt_frame, 'tgt_pose_in_bolt_frame')
         tgt_pose_in_world_frame = self.transform_pose("real_bolt_frame",
-                                                      "base",
-                                                      tgt_pose_in_bolt_frame,
-                                                      all_info['timestamp']
+                                                      "base_link",
+                                                      tgt_pose_in_real_frame,
+                                                      all_info['bolt_ts']
                                                       )
         # self.print_pose(tgt_pose_in_world_frame, 'tgt_pose_in_world_frame')
+        print (tgt_pose_in_world_frame)
+        (r, p, y) = tf.transformations.euler_from_quaternion([tgt_pose_in_world_frame.orientation.x, tgt_pose_in_world_frame.orientation.y, tgt_pose_in_world_frame.orientation.z, tgt_pose_in_world_frame.orientation.w])
+        print(r,p,y)
         return tgt_pose_in_world_frame
-    
-    def adjust_bolt_frame(self, X1, all_info):
-        real_trans = geometry_msgs.msg.TransformStamped()
-        real_trans.header.stamp = rospy.Time.now()
-        all_info['real_bolt_ts']=real_trans.header.stamp
-        print("real_broadcast_tf")
-        print(real_trans.header.stamp)
-        real_trans.header.frame_id = "base"
-        real_trans.child_frame_id = "real_bolt_frame"
-        real_trans.transform.translation.x = X1[0,:]
-        real_trans.transform.translation.y = X1[1,:]
-        real_trans.transform.translation.z = X1[2,:]
-        real_trans.transform.rotation.x =X1[3,:]
-        real_trans.transform.rotation.y =X1[4,:]
-        real_trans.transform.rotation.z =X1[5,:]
-        real_trans.transform.rotation.w=X1[6,:]
-        # q = (trans.transform.rotation.x,
-        #      trans.transform.rotation.y,
-        #      trans.transform.rotation.z,
-        #      trans.transform.rotation.w)
-        # rpy = tf.transformations.euler_from_quaternion(q)
-        # print 'transform RPY (%.2f, %.2f, %.2f)'%(rpy[0],rpy[1],rpy[2])
-        self.br.sendTransform(real_trans)
 
     def action(self, all_info, pre_result_dict,kalman):
         for param in self.action_params:
@@ -84,7 +64,7 @@ class TestAimTarget(TestBase):
                 return False
         print("param satified, start to do mate")
 
-        detect_ret=(self.circle_detector.detect(all_info['rgb_img'],threshold=0.8))
+        detect_ret=self.circle_detector.detect_edge_box(all_info['rgb_img'])
 
         if 'circles' in detect_ret.keys():
             print('circle success')
@@ -100,16 +80,28 @@ class TestAimTarget(TestBase):
             real_pose=kalman.iteration(bolt_pose)
             self.adjust_bolt_frame(real_pose,all_info)
             real_bolt_pose = geometry_msgs.msg.Pose()
-            real_bolt_pose.position.x = real_pose[0,:]
-            real_bolt_pose.position.y = real_pose[1,:]
-            real_bolt_pose.position.z = real_pose[2,:]
-            real_bolt_pose.orientation.x = real_pose[3,:]
-            real_bolt_pose.orientation.y = real_pose[4,:]
-            real_bolt_pose.orientation.z = real_pose[5,:]
-            real_bolt_pose.orientation.w= real_pose[6,:]
+            real_bolt_pose.position.x = real_pose[0,0]
+            real_bolt_pose.position.y = real_pose[1,0]
+            real_bolt_pose.position.z = real_pose[2,0]
+            real_bolt_pose.orientation.x = real_pose[3,0]
+            real_bolt_pose.orientation.y = real_pose[4,0]
+            real_bolt_pose.orientation.z = real_pose[5,0]
+            real_bolt_pose.orientation.w= real_pose[6,0]
+            print(real_bolt_pose)
+            (r, p, y) = tf.transformations.euler_from_quaternion([real_bolt_pose.orientation.x, real_bolt_pose.orientation.y, real_bolt_pose.orientation.z, real_bolt_pose.orientation.w])
+            print(r,p,y)
+            curr_pose=self.group.get_current_pose(self.effector).pose
             ee_pose = self.get_tgt_pose_in_world_frame(all_info)
-        
-        if  not ee_pose is None:
+            print('aim_pose')
+            print(ee_pose)
+            (r, p, y) = tf.transformations.euler_from_quaternion([real_bolt_pose.orientation.x, real_bolt_pose.orientation.y, real_bolt_pose.orientation.z, real_bolt_pose.orientation.w])
+            print(r,p,y)
+
+            if not self.set_arm_pose(self.group, ee_pose, self.effector):
+                print('failed')
+            
+            ee_pose = curr_pose
+            
             if not self.set_arm_pose(self.group, ee_pose, self.effector):
                 ee_pose = self.group.get_current_pose(self.effector).pose
             self.print_pose(ee_pose)

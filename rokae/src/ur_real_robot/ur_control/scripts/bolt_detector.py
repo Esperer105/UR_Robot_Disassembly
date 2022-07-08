@@ -9,6 +9,7 @@ import numpy as np
 from sklearn.externals import joblib
 import sys
 import copy
+from PIL import Image
 
 
 # 满足 windowSize>stepSize
@@ -259,12 +260,15 @@ class BoltDetector():
     def detect_edge_box(self, img, threshold=0.6, nms_threshold=0.5, max_box=1000, alpha=0.5, gamma=2.5,
                         edge_min_mag=0.02, edge_merge_thr=0.5,
                         max_aspect_ratio=1.2, show=False, write=False):# max_box(default=1000) threshold=0.995
+        height=img.shape[0]
+        width =img.shape[1]
+        crop_img=img[int(0.25*height):int(0.75*height),int(0.5*(width-0.5*height)):int(0.5*(width+0.5*height))]
         bolts = []
         ret_dict = {}
         font = cv2.FONT_HERSHEY_PLAIN
         model = 'src/ur_real_robot/ur_control/scripts/Realsense/Edge_Box_Model/model.yml'
         edge_detection = cv2.ximgproc.createStructuredEdgeDetection(model)
-        rgb_im = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        rgb_im = cv2.cvtColor(crop_img, cv2.COLOR_BGR2RGB)
         edges = edge_detection.detectEdges(np.float32(rgb_im) / 255.0)
 
         orimap = edge_detection.computeOrientation(edges)
@@ -283,12 +287,13 @@ class BoltDetector():
         true_box = []
         for box in boxes:
             x, y, w, h = box
-            roi = img[y:y + h, x:x + w]
+            roi = crop_img[y:y + h, x:x + w]
             roi_feature = self.hog_extractor(roi)
             score = float(self.model.predict_proba(roi_feature)[:, 1])
             predict = self.model.predict(roi_feature)
-            if predict == 1 and score >= threshold:
-                true_box.append([x, y, x + w, y + h, score])
+
+            if predict == 1 and score >= threshold :
+                true_box.append([x+0.5*(width-0.5*height), y+0.25*height, x+0.5*(width-0.5*height) + w, y+0.25*height + h, score])
         windows = np.array(true_box)
         if len(windows) == 0:
             print("no bolts detected")
@@ -318,7 +323,7 @@ class BoltDetector():
                 cv2.rectangle(img, (int(x), int(y)), (int(x2), int(y2)), (0, 255, 255), 2)
                 cv2.putText(img, "%f" % score, (int(x), int(y)), font, 1, (0, 255, 255))
         if show:
-            cv2.imshow("img", img)
+            cv2.imshow("crop", crop_img)
             cv2.waitKey(0)
             cv2.destroyAllWindows()
         if write:
@@ -335,8 +340,8 @@ class BoltDetector():
 
 if __name__ == "__main__":
     detector1 = BoltDetector()
-    img = cv2.imread('src/ur_real_robot/ur_control/scripts/Realsense/11_Color.png')
+    img = cv2.imread('src/ur_real_robot/ur_control/scripts/Realsense/snap_Color.png')
     detector1.train_SVM()
     print('completed')
-    bolts = detector1.detect_edge_box(img, show=True, threshold=0.6, write=False)
+    bolts = detector1.detect_edge_box(img, show= True, threshold=0.6, write=False)
     print(bolts)
