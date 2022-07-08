@@ -103,6 +103,57 @@ rosrun rokae_control nsplanner.py
 
 ### 操作流程
 
+#### 导航到工作空间下，编译
+
+```bash
+cd ~/UR_Robot_Disassembly/rokae
+catkin_make
+source ./devel/setup.bash
+```
+
+#### 运行UR10e驱动文件
+
+```bash
+roslaunch example_organization_ur_launch ex-ur10-1.launch
+```
+
+#### 运行rviz
+
+```bash
+roslaunch ur10e_moveit_config moveit_planning_execution_4_arm_world.launch
+```
+
+#### 运行realsense
+
+```bash
+roslaunch realsense2_camera rs_camera.launch align_depth:=true filters:=hole_filling
+```
+
+#### 运行手眼标定程序，发布转换关系
+
+首先需要将`/src/easy_handeye/easy_handeye/launch/ur10e_camera_handeyecalibration_eye_on_hand.yaml `文件移动到`/home/user/.ros/easy_handeye `目录下
+
+之后运行
+
+```bash
+roslaunch easy_handeye publish.launch
+```
+
+#### 启动`YOLOv5`服务端(新的终端Python3环境下)
+
+```bash
+cd rokae/src/ur_real_robot/YOLO_v5_detect
+python YOLO_server.py
+```
+
+#### 运行`nsplanner.py` (进行基于神经符号学的拆解规划)
+
+```bash
+rosrun ur_control nsplanner.py
+```
+
+
+
 1. rokae 仿真：
 
 首先加载 rokae_gazebo arm_world.launch，然后加载 rokae_moveit_config moveit_planning_execution_4_arm_world.launch，再运行~/rokae_robot/rokae/src/rokae_control/scripts/env_setup.py，
