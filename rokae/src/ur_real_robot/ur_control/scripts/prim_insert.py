@@ -27,7 +27,7 @@ class PrimInsert(PrimBase):
             tgt_pose_in_effector_frame.orientation.z = q[2]
             tgt_pose_in_effector_frame.orientation.w = q[3]
             tgt_pose_in_world_frame = self.transform_pose(self.effector,
-                                                          "base",
+                                                          "base_link",
                                                           tgt_pose_in_effector_frame,
                                                           rospy.Time.now())
             if not tgt_pose_in_world_frame is None:

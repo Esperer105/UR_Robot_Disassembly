@@ -102,6 +102,7 @@ class NSPlanner:
         self.all_infos_lock = threading.Lock()
         self.prim_thread = threading.Thread(target=self.do_action)
         self.prim_execution = True
+        self.shut_down = False
         self.prim_thread.start()
 
     #规划方案
@@ -165,7 +166,7 @@ class NSPlanner:
             return True
 
     def do_action(self):
-        #建立动作元语pre集
+        #initialize primitive set
         move=PrimAction('move')
         mate=PrimAction('mate')
         push=PrimAction('push')
@@ -173,42 +174,104 @@ class NSPlanner:
         disassemble=PrimAction('disassemble')
         prim_dict={'move':move,'mate':mate,'push':push,'insert':insert,'disassemble':disassemble}
 
-        #生成规划方案
-        step_list=self.auto_plan(self.stage)
-        i=0
-
-        #执行动作
         while self.prim_execution:
-            self.action=step_list[i]
             if self.action == 'disassemble':
                 rospy.sleep(1)
                 continue
-            if self.all_infos_lock.acquire():
-                infos = copy.deepcopy(self.all_infos)
-                self.all_infos.clear()
-                self.all_infos_lock.release()
-                if self.action in prim_dict.keys():
-                    #检测pre是否满足
-                    pre_is_ok=True
-                    for pre in (prim_dict[self.action]).pre:
-                        if not self.stage[pre]==(prim_dict[self.action].pre)[pre]:
-                            pre_is_ok=False
-                            break
-                    if pre_is_ok==True:
-                        prim = self.prims[self.action]
-                        
-                        for eff in (prim_dict[self.action]).eff:
-                            self.stage[eff]=(prim_dict[self.action].eff)[eff]
-                        #更新stage
-                        self.ret_dict = prim.action(infos, self.ret_dict)
-                        if 'bolt_pose' in self.ret_dict.keys():
-                            self.bolt_pose = self.ret_dict['bolt_pose']
-                        i=i+1
-                    else:
-                        #若pre不满足，重新生成规划方案
-                        step_list=self.auto_plan(self.stage)
-                        i=0
-            rospy.sleep(1)
+            else:
+                if self.action == 'start':
+                    print('action==start do auto_plan')
+                    step_list = self.auto_plan(self.stage)
+                    i = 0
+                    self.action = step_list[i]
+                    print(self.action)
+                if self.all_infos_lock.acquire():
+                    infos = copy.deepcopy(self.all_infos)
+                    self.all_infos.clear()
+                    self.all_infos_lock.release()
+                    if self.action in prim_dict.keys():
+                        # 检测pre是否满足
+                        pre_is_ok = True
+                        for pre in (prim_dict[self.action]).pre:
+                            if not self.stage[pre] == (prim_dict[self.action].pre)[pre]:
+                                pre_is_ok = False
+                                break
+                        if pre_is_ok == True:
+                            prim = self.prims[self.action]
+                            #execute primitive
+                            infos['planner_handler']=self
+                            self.ret_dict = prim.action(infos, self.ret_dict)
+                            if 'bolt_pose' in self.ret_dict.keys():
+                                self.bolt_pose = self.ret_dict['bolt_pose']
+                            #update effect
+                            for eff in (prim_dict[self.action]).eff:
+                                self.stage[eff] = (prim_dict[self.action].eff)[eff]
+                            i = i + 1
+                            self.action=step_list[i]
+                        else:
+                            #若pre不满足，重新生成规划方案
+                            step_list=self.auto_plan(self.stage)
+                            i=0
+                            self.action=step_list[i]
+                    rospy.sleep(1)
+
+    # def do_action(self):
+    #     #建立动作元语pre集
+    #     move=PrimAction('move')
+    #     mate=PrimAction('mate')
+    #     push=PrimAction('push')
+    #     insert=PrimAction('insert')
+    #     disassemble=PrimAction('disassemble')
+    #     prim_dict={'move':move,'mate':mate,'push':push,'insert':insert,'disassemble':disassemble}
+    #
+    #     #生成规划方案
+    #     step_list=self.auto_plan(self.stage)
+    #     i=0
+    #
+    #     #执行动作
+    #     while self.prim_execution:
+    #         self.action=step_list[i]
+    #         if self.action == 'disassemble':
+    #             rospy.sleep(1)
+    #             continue
+    #         if self.all_infos_lock.acquire():
+    #             infos = copy.deepcopy(self.all_infos)
+    #             self.all_infos.clear()
+    #             self.all_infos_lock.release()
+    #             if self.action in prim_dict.keys():
+    #                 #检测pre是否满足
+    #                 pre_is_ok=True
+    #                 for pre in (prim_dict[self.action]).pre:
+    #                     if not self.stage[pre]==(prim_dict[self.action].pre)[pre]:
+    #                         pre_is_ok=False
+    #                         break
+    #                 if pre_is_ok==True:
+    #                     prim = self.prims[self.action]
+    #
+    #                     for eff in (prim_dict[self.action]).eff:
+    #                         self.stage[eff]=(prim_dict[self.action].eff)[eff]
+    #                     #更新stage
+    #                     self.ret_dict = prim.action(infos, self.ret_dict)
+    #                     if 'bolt_pose' in self.ret_dict.keys():
+    #                         self.bolt_pose = self.ret_dict['bolt_pose']
+    #                     i=i+1
+    #                 else:
+    #                     #若pre不满足，重新生成规划方案
+    #                     step_list=self.auto_plan(self.stage)
+    #                     i=0
+    #         input('finish one primitive')
+    #         rospy.sleep(1)
+    #         if self.shut_down:
+    #             break
+    def get_latest_infos(self):
+        print('get_latest_infos')
+        if self.all_infos_lock.acquire():
+            infos = copy.deepcopy(self.all_infos)
+            self.all_infos.clear()
+            self.all_infos_lock.release()
+            return infos
+        else:
+            return null
 
     def cam_info_cb(self, msg):
         self.camera_model.fromCameraInfo(msg)
@@ -246,12 +309,12 @@ class NSPlanner:
 
     def reset_arm(self):
         joints = {}
-        joints["elbow_joint"] = math.pi/4.
-        joints["shoulder_lift_joint"] = -math.pi/2.
-        joints["shoulder_pan_joint"] = math.pi/2.
-        joints["wrist_1_joint"] = -math.pi/4.
-        joints["wrist_2_joint"] = -math.pi/2.
-        joints["wrist_3_joint"] = 0.
+        joints["joint1"] = 0
+        joints["joint2"] = 0
+        joints["joint3"] = 0
+        joints["joint4"] = 0
+        joints["joint5"] = 0
+        joints["joint6"] = 0
         self.group.set_joint_value_target(joints)
         plan = self.group.plan()
         if len(plan.joint_trajectory.points) > 0:
@@ -270,11 +333,21 @@ if __name__ == '__main__':
 
         planner = NSPlanner('camera', '/camera/color/image_raw', '/camera/aligned_depth_to_color/image_raw', '/camera/color/camera_info')
  
-        quat = tf.transformations.quaternion_from_euler(-3.14, 0, 0)
         pose_target = geometry_msgs.msg.Pose()
-        pose_target.position.x = -0.17
-        pose_target.position.y = 0.52
-        pose_target.position.z = 1.00
+        #for ILC
+        # quat = tf.transformations.quaternion_from_euler(-3.14, 0, 0)
+        # pose_target.position.x = 0.53
+        # pose_target.position.y = 0
+        # pose_target.position.z = 0.60
+        # pose_target.orientation.x = quat[0]
+        # pose_target.orientation.y = quat[1]
+        # pose_target.orientation.z = quat[2]
+        # pose_target.orientation.w = quat[3]
+        #for SJTU
+        quat = tf.transformations.quaternion_from_euler(-3.14, 0, 0)
+        pose_target.position.x = 0.30
+        pose_target.position.y = 0.50
+        pose_target.position.z = 0.85
         pose_target.orientation.x = quat[0]
         pose_target.orientation.y = quat[1]
         pose_target.orientation.z = quat[2]
@@ -283,6 +356,8 @@ if __name__ == '__main__':
 
         while not rospy.is_shutdown():
             rospy.spin()
+        
+        del planner
 
     except rospy.ROSInterruptException:
         print("Shutting down")

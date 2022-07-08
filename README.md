@@ -116,7 +116,7 @@ rosrun rokae_control nsplanner.py
 
 robot: example_organization_ur_launch ex-ur10-1.launch
 rviz: ur10e_moveit_config moveit_planning_execution_4_arm_world.launch
-realsense: realsense2_camera rs_camera.launch align_depth:=true
+realsense: realsense2_camera rs_camera.launch align_depth:=true filters:=hole_filling
 handeye: easy_handeye publish.launch 需要先将/src/easy_handeye/easy_handeye/launch/ur10e_camera_handeyecalibration_eye_on_hand.yaml 文件移动到/home/zys/.ros/easy_handeye 目录下
 nslanner: /src/ur_real_robot/ur_control/scripts/nsplanner.py
 
