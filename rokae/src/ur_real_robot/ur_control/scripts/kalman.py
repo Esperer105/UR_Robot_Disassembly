@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import geometry_msgs.msg
 import tf
 import math
+import eigenpy
 
 class Kalman:
 
@@ -77,8 +78,12 @@ class Kalman:
             if(self.itr_time==self.itr_num):
                 self.finished=True
             else:
-                dist=math.sqrt(pow(X1[0,:]-Xi[0,:],2)+pow(X1[1,:]-Xi[1,:],2)+pow(X1[2,:]-Xi[2,:],2))
-                if (dist<0.005):
+                dist=math.sqrt(pow(X1[0,0]-Xi[0,0],2)+pow(X1[1,0]-Xi[1,0],2)+pow(X1[2,0]-Xi[2,0],2))
+                (r, p, y) = tf.transformations.euler_from_quaternion([X1[3,0], X1[4,0], X1[5,0], X1[6,0]])
+                (x1,y1,z1,w1)= (-Xi[3,0], -Xi[4,0], -Xi[5,0], Xi[6,0])
+                (x2,y2,z2,w2)=(X1[3,0], X1[4,0], X1[5,0], X1[6,0])
+                ang_dist=2*np.arccos(w1*w2-x1*x2-y1*y2-z1*z2)
+                if (dist<0.003) and ((ang_dist<0.087) or (ang_dist>6.196)):
                     self.finished=True
             return X1
 
@@ -89,31 +94,31 @@ class Kalman:
     def plot(self):
         if (self.itr_time!=0):
             fig = plt.figure()
-            ax1 = fig.add_subplot(3, 1, 1)
-            ax2 = fig.add_subplot(3, 1, 2)
-            ax3 = fig.add_subplot(3, 1, 3)
-            # ax4 = fig.add_subplot(7, 1, 4)
-            # ax5 = fig.add_subplot(7, 1, 5)
-            # ax6 = fig.add_subplot(7, 1, 6)
-            # ax7 = fig.add_subplot(7, 1, 7)
+            ax1 = fig.add_subplot(7, 1, 1)
+            ax2 = fig.add_subplot(7, 1, 2)
+            ax3 = fig.add_subplot(7, 1, 3)
+            ax4 = fig.add_subplot(7, 1, 4)
+            ax5 = fig.add_subplot(7, 1, 5)
+            ax6 = fig.add_subplot(7, 1, 6)
+            ax7 = fig.add_subplot(7, 1, 7)
 
             print('plot is working')
 
             ax1.plot(self.X1_np[0, :], 'go--', label="x_Kalman Filter")
             ax2.plot(self.X1_np[1, :], 'go--', label="y_Kalman Filter")
             ax3.plot(self.X1_np[2, :], 'go--', label="z_Kalman Filter")
-            # ax4.plot(self.X1_np[3, :], 'go--', label="xx_Kalman Filter")
-            # ax5.plot(self.X1_np[4, :], 'go--', label="yy_Kalman Filter")
-            # ax6.plot(self.X1_np[5, :], 'go--', label="zz_Kalman Filter")
-            # ax7.plot(self.X1_np[6, :], 'go--', label="w_Kalman Filter")
+            ax4.plot(self.X1_np[3, :], 'go--', label="xx_Kalman Filter")
+            ax5.plot(self.X1_np[4, :], 'go--', label="yy_Kalman Filter")
+            ax6.plot(self.X1_np[5, :], 'go--', label="zz_Kalman Filter")
+            ax7.plot(self.X1_np[6, :], 'go--', label="w_Kalman Filter")
 
             step=self.itr_sum
             ax1.scatter(np.arange(step), self.Z1_np[0,:].reshape(step,1), label="x_Observation", marker='*')
             ax2.scatter(np.arange(step), self.Z1_np[1,:].reshape(step,1), label="y_Observation", marker='*')
             ax3.scatter(np.arange(step), self.Z1_np[2,:].reshape(step,1), label="z_Observation", marker='*')
-            # ax4.scatter(np.arange(step), self.Z1_np[3,:].reshape(step,1), label="xx_Observation", marker='*')        
-            # ax5.scatter(np.arange(step), self.Z1_np[4,:].reshape(step,1), label="yy_Observation", marker='*')
-            # ax6.scatter(np.arange(step), self.Z1_np[5,:].reshape(step,1), label="zz_Observation", marker='*')
-            # ax7.scatter(np.arange(step), self.Z1_np[6,:].reshape(step,1), label="w_Observation", marker='*')
+            ax4.scatter(np.arange(step), self.Z1_np[3,:].reshape(step,1), label="xx_Observation", marker='*')        
+            ax5.scatter(np.arange(step), self.Z1_np[4,:].reshape(step,1), label="yy_Observation", marker='*')
+            ax6.scatter(np.arange(step), self.Z1_np[5,:].reshape(step,1), label="zz_Observation", marker='*')
+            ax7.scatter(np.arange(step), self.Z1_np[6,:].reshape(step,1), label="w_Observation", marker='*')
              
             print(plt.show())
