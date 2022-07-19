@@ -25,7 +25,9 @@ import tf2_ros
 import geometry_msgs.msg
 import traceback
 import random
+import math
 
+from PIL import Image
 # from PIL import Image,ImageDraw
 # import numpy as np 
 from bolt_detector import BoltDetector
@@ -34,23 +36,21 @@ from test_base import TestBase
 
 class TestAimTarget(TestBase):
     def get_tgt_pose_in_world_frame(self,all_info):
-        tool_len = 0.5
+        tool_len = 0.435
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
         tgt_pose_in_real_frame.position.x = 0
         tgt_pose_in_real_frame.position.y = 0
-        tgt_pose_in_real_frame.position.z = - tool_len
-        # q = tf.transformations.quaternion_from_euler(0, 1.57, 0)
+        tgt_pose_in_real_frame.position.z = - tool_len-0.15
+
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
         tgt_pose_in_real_frame.orientation.x = q[0]
         tgt_pose_in_real_frame.orientation.y = q[1]
         tgt_pose_in_real_frame.orientation.z = q[2]
         tgt_pose_in_real_frame.orientation.w = q[3]
-        # self.print_pose(tgt_pose_in_bolt_frame, 'tgt_pose_in_bolt_frame')
         tgt_pose_in_world_frame = self.transform_pose("real_bolt_frame",
                                                       "base_link",
                                                       tgt_pose_in_real_frame,
-                                                      all_info['bolt_ts']
-                                                      )
+                                                      all_info['bolt_ts'] )
         # self.print_pose(tgt_pose_in_world_frame, 'tgt_pose_in_world_frame')
         print (tgt_pose_in_world_frame)
         (r, p, y) = tf.transformations.euler_from_quaternion([tgt_pose_in_world_frame.orientation.x, tgt_pose_in_world_frame.orientation.y, tgt_pose_in_world_frame.orientation.z, tgt_pose_in_world_frame.orientation.w])
@@ -62,55 +62,71 @@ class TestAimTarget(TestBase):
             if not param in all_info.keys():
                 print(param, 'must give')
                 return False
-        print("param satified, start to do mate")
-        raw_img=all_info['rgb_img']
-        height=raw_img.shape[0]
-        width =raw_img.shape[1]
-        crop_img=raw_img
-        # crop_img=raw_img[int(0.25*height):int(0.75*height),int(0.5*(width-0.5*height)):int(0.5*(width+0.5*height))]
-        detect_ret=yolo.finish_YOLO_detect(crop_img)
+        print("param satified, start to mate")
+        planner = all_info['planner_handler']
+        while not kalman.finished:
+            latest_infos = planner.get_latest_infos()
+            # print (latest_infos.keys())        
+            raw_img=latest_infos['rgb_img']
+            # height=raw_img.shape[0]
+            # width =raw_img.shape[1]
+            # print(height,width)
+            crop_img= cv2.copyMakeBorder(raw_img,(1080-480)/2,(1080-480)/2,(1920-640)/2,(1920-640)/2,cv2.BORDER_CONSTANT,value=0)
+            # crop_img=raw_img[int(0.25*height):int(0.75*height),int(0.5*(width-0.5*height)):int(0.5*(width+0.5*height))]
+            # crop_img=raw_img[:,int(0.5*(width-height)):int(0.5*(width+height))]
+            detect_ret=yolo.finish_YOLO_detect(crop_img)
+            s=kalman.itr_sum
+            if 'screw' in detect_ret.keys():
+                print('screw success')
 
-        if 'screw' in detect_ret.keys():
-            print('screw success')
-            
-            circles = detect_ret["screw"]
-            circle = self.findBestMatchCircle(circles)
+                circles = detect_ret["screw"]
+                #circle = self.findBestMatchCircle(circles)
 
-            # x = circle[1]+int(0.5*(width-0.5*height))
-            # y = circle[0]+int(0.25*height)
-            x=circle[1]
-            y=circle[0]
-            self.add_bolt_frame(x, y, all_info)
-
-            bolt_pose = self.get_bolt_pose_in_world_frame(all_info)
-            real_pose=kalman.iteration(bolt_pose)
-            self.adjust_bolt_frame(real_pose,all_info)
-            real_bolt_pose = geometry_msgs.msg.Pose()
-            real_bolt_pose.position.x = real_pose[0,0]
-            real_bolt_pose.position.y = real_pose[1,0]
-            real_bolt_pose.position.z = real_pose[2,0]
-            real_bolt_pose.orientation.x = real_pose[3,0]
-            real_bolt_pose.orientation.y = real_pose[4,0]
-            real_bolt_pose.orientation.z = real_pose[5,0]
-            real_bolt_pose.orientation.w= real_pose[6,0]
-            print(real_bolt_pose)
-            (r, p, y) = tf.transformations.euler_from_quaternion([real_bolt_pose.orientation.x, real_bolt_pose.orientation.y, real_bolt_pose.orientation.z, real_bolt_pose.orientation.w])
+                # x = circle[1]+int(0.5*(width-0.5*height))
+                # y = circle[0]+int(0.25*height)
+                # x=circle[1]+int(0.5*(width-height))
+                # y=circle[0]
+                if (s==0):
+                    circle = self.findBestMatchCircle(circles)                
+                    x=circle[1]-(1920-640)/2
+                    y=circle[0]-(1080-480)/2
+                    self.add_bolt_frame(x, y, latest_infos)
+                    bolt_pose = self.get_bolt_pose_in_world_frame(latest_infos)
+                    real_pose=kalman.iteration(bolt_pose)
+                    self.adjust_bolt_frame(real_pose,latest_infos)
+                    ee_pose=self.get_tgt_pose_in_world_frame(latest_infos)
+                    curr_pose= self.group.get_current_pose(self.effector).pose
+                    if not self.set_arm_pose(self.group, ee_pose, self.effector):
+                        print("failed")
+                        print(curr_pose)
+                else:
+                    min_diff=100
+                    for screw in circles:
+                        self.add_bolt_frame(screw[1]-(1920-640)/2, screw[0]-(1080-480)/2, latest_infos)
+                        screw_pose=self.get_bolt_pose_in_world_frame(latest_infos)
+                        former_pose=kalman.get_former_pose()
+                        temp_diff=math.sqrt(pow(screw_pose.position.x - former_pose.position.x ,2)+pow(screw_pose.position.y - former_pose.position.y ,2)+pow(screw_pose.position.z- former_pose.position.z,2))            
+                        if (temp_diff<min_diff):
+                            min_diff=temp_diff
+                            near_pose=screw_pose
+                    if (min_diff < 0.05):
+                        real_pose=kalman.iteration(near_pose)
+                        self.adjust_bolt_frame(real_pose,latest_infos)
+                        ee_pose=self.get_tgt_pose_in_world_frame(latest_infos)
+                        curr_pose= self.group.get_current_pose(self.effector).pose
+                        if not self.set_arm_pose(self.group, ee_pose, self.effector):
+                            print("failed")
+                            print(curr_pose)
+                    else:
+                        if not self.set_arm_pose(self.group, curr_pose, self.effector):
+                            print("recovery failed")
+        if not real_pose is None:
+            print('real pose')
+            print(real_pose)
+            (r, p, y) = tf.transformations.euler_from_quaternion([real_pose.orientation.x, real_pose.orientation.y, real_pose.orientation.z, real_pose.orientation.w])
             print(r,p,y)
-            curr_pose=self.group.get_current_pose(self.effector).pose
-            ee_pose = self.get_tgt_pose_in_world_frame(all_info)
-            print('aim_pose')
-            print(ee_pose)
-            (r, p, y) = tf.transformations.euler_from_quaternion([real_bolt_pose.orientation.x, real_bolt_pose.orientation.y, real_bolt_pose.orientation.z, real_bolt_pose.orientation.w])
-            print(r,p,y)
-
-            if not self.set_arm_pose(self.group, ee_pose, self.effector):
-                print('failed')
             
-            ee_pose = curr_pose
-            
-            if not self.set_arm_pose(self.group, ee_pose, self.effector):
-                ee_pose = self.group.get_current_pose(self.effector).pose
-            self.print_pose(ee_pose)
-            return {'success': True, 'bolt_pose': real_bolt_pose}  
-        
-        return {'success': False}
+            return {'success': True, 'bolt_pose': real_pose}            
+        else:
+            print ('location failed')
+            return {'success': False}

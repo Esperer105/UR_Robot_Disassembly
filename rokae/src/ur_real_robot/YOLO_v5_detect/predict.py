@@ -26,6 +26,11 @@ if __name__ == "__main__":
                 print('Open Error! Try again!')
                 # continue
             else:
+                # here
+                new_image=Image.new('RGB',(1920,1080),(128,128,128))
+                new_image.paste(image,((1920-640)//2,(1080-480)//2))
+                # changed
+
                 r_image, result = yolo.detect_image(
                     image, crop=crop, count=count)
                 print(result)

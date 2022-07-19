@@ -172,7 +172,7 @@ class TSTPlanner:
 
     def do_action(self):
         #执行动作
-        filter=Kalman(5)
+        filter=Kalman(10)
         move=PrimAction('move')
         mate=PrimAction('mate')
         push=PrimAction('push')
@@ -186,6 +186,7 @@ class TSTPlanner:
                 continue
             else:
                 if self.action == 'start':
+                    
                     print('action==start do auto_plan')
                     step_list = self.auto_plan(self.stage)
                     i = 0
@@ -194,6 +195,7 @@ class TSTPlanner:
                 if self.all_infos_lock.acquire():
                     infos = copy.deepcopy(self.all_infos)
                     self.all_infos.clear()
+                    # print('clear in prim')
                     self.all_infos_lock.release()
                     if self.action in prim_dict.keys():
                         #检测pre是否满足
@@ -204,22 +206,20 @@ class TSTPlanner:
                                 break
                         if pre_is_ok==True:
                             prim = self.prims[self.action]
-                            #execute primitive
-                            if (filter.finished==False):              
-                                infos['planner_handler']=self
-                                self.ret_dict = prim.action(infos, self.ret_dict,filter,self.bolt_detector)
-                            else:
-                                print('prim_is_finished')
-                                print(filter.itr_time)
-                                filter.plot()
-                                filter.reset()
-                                if 'bolt_pose' in self.ret_dict.keys():
-                                    self.bolt_pose = self.ret_dict['bolt_pose']
-                                #update effect
-                                for eff in (prim_dict[self.action]).eff:
-                                    self.stage[eff]=(prim_dict[self.action].eff)[eff]
-                                i = i + 1
-                                self.action=step_list[i]
+                            #execute primitive       
+                            infos['planner_handler']=self
+                            self.ret_dict = prim.action(infos, self.ret_dict,filter,self.bolt_detector)
+                            print(self.action+"_is_finished")
+                            print ("iterated %d times"%(filter.itr_time))
+                            filter.plot()
+                            filter.reset()
+                            if 'bolt_pose' in self.ret_dict.keys():
+                                self.bolt_pose = self.ret_dict['bolt_pose']
+                            #update effect
+                            for eff in (prim_dict[self.action]).eff:
+                                self.stage[eff]=(prim_dict[self.action].eff)[eff]
+                            i = i + 1
+                            self.action=step_list[i]
                         else:
                             #若pre不满足，重新生成规划方案
                             step_list=self.auto_plan(self.stage)
@@ -229,10 +229,14 @@ class TSTPlanner:
 
     def get_latest_infos(self):
         print('get_latest_infos')
+        rospy.sleep(0.1)
         if self.all_infos_lock.acquire():
             infos = copy.deepcopy(self.all_infos)
+            #print(self.all_infos.keys())
             self.all_infos.clear()
+            #print('clear in get latest')
             self.all_infos_lock.release()
+            #print(infos)
             return infos
         else:
             return null
@@ -250,10 +254,12 @@ class TSTPlanner:
             img = self.bridge.imgmsg_to_cv2(rgb_msg, "bgr8")
             depth_img = self.bridge.imgmsg_to_cv2(depth_msg, '16UC1')
             ts = rospy.Time.now()
-            #rospy.loginfo('receiving image')
+            # rospy.loginfo('receiving image')
             if self.all_infos_lock.acquire():
+                # print("lock")
                 self.all_infos = {'rgb_img': img, 'depth_img': depth_img,
                                   'camera_model': self.camera_model, 'timestamp': ts}
+                #print(self.all_infos.keys())
                 self.all_infos_lock.release()
 
         except Exception, err:
@@ -294,11 +300,16 @@ if __name__ == '__main__':
         rospy.init_node('tstplanner-moveit', anonymous=True)
 
         planner = TSTPlanner('camera', '/camera/color/image_raw', '/camera/aligned_depth_to_color/image_raw', '/camera/color/camera_info')
-        quat = tf.transformations.quaternion_from_euler(-math.pi, 0, math.pi)
+        quat = tf.transformations.quaternion_from_euler(-math.pi, 0, -0.5*math.pi)
         pose_target = geometry_msgs.msg.Pose()
-        pose_target.position.x = 0.30
-        pose_target.position.y = 0.38
-        pose_target.position.z = 0.60
+        # pose_target.position.x = 0.30
+        # pose_target.position.y = 0.38
+        # pose_target.position.z = 0.65
+
+        pose_target.position.x = 0.15
+        pose_target.position.y = 0.40
+        pose_target.position.z = 0.65
+
         pose_target.orientation.x = quat[0]
         pose_target.orientation.y = quat[1]
         pose_target.orientation.z = quat[2]

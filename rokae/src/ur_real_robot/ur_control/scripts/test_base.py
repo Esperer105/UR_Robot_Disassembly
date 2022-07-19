@@ -119,16 +119,23 @@ class TestBase(object):
         tgt_pose_in_bolt_frame.position.z = 0
         # q = tf.transformations.quaternion_from_euler(0, 1.57, 0)
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
-        tgt_pose_in_bolt_frame.orientation.x = q[0]
-        tgt_pose_in_bolt_frame.orientation.y = q[1]
-        tgt_pose_in_bolt_frame.orientation.z = q[2]
-        tgt_pose_in_bolt_frame.orientation.w = q[3]
+        # tgt_pose_in_bolt_frame.orientation.x = q[0]
+        # tgt_pose_in_bolt_frame.orientation.y = q[1]
+        # tgt_pose_in_bolt_frame.orientation.z = q[2]
+        # tgt_pose_in_bolt_frame.orientation.w = q[3]
         # self.print_pose(tgt_pose_in_bolt_frame, 'tgt_pose_in_bolt_frame')
         #SJTU
         tgt_pose_in_world_frame = self.transform_pose("bolt_frame",
                                                       "base_link",
                                                       tgt_pose_in_bolt_frame,
                                                       all_info['bolt_ts'])
+
+
+        tgt_pose_in_world_frame.orientation.x = 1
+        tgt_pose_in_world_frame.orientation.y = 0
+        tgt_pose_in_world_frame.orientation.z = 0
+        tgt_pose_in_world_frame.orientation.w =0
+
         print (tgt_pose_in_world_frame)
         (r, p, y) = tf.transformations.euler_from_quaternion([tgt_pose_in_world_frame.orientation.x, tgt_pose_in_world_frame.orientation.y, tgt_pose_in_world_frame.orientation.z, tgt_pose_in_world_frame.orientation.w])
         print(r,p,y)
@@ -139,6 +146,7 @@ class TestBase(object):
         #                                               all_info['bolt_ts'])
         # self.print_pose(tgt_pose_in_world_frame, 'tgt_pose_in_world_frame')
         return tgt_pose_in_world_frame
+
 
 
     def set_arm_pose(self, group, pose, effector):
@@ -231,17 +239,19 @@ class TestBase(object):
         trans.transform.translation.x = t[0]
         trans.transform.translation.y = t[1]
         trans.transform.translation.z = t[2]
+
         trans.transform.rotation.x = R_quat[0]
         trans.transform.rotation.y = R_quat[1]
         trans.transform.rotation.z = R_quat[2]
         trans.transform.rotation.w = R_quat[3]
 
-        # q = (trans.transform.rotation.x,
-        #      trans.transform.rotation.y,
-        #      trans.transform.rotation.z,
-        #      trans.transform.rotation.w)
-        # rpy = tf.transformations.euler_from_quaternion(q)
-        # print 'transform RPY (%.2f, %.2f, %.2f)'%(rpy[0],rpy[1],rpy[2])
+        
+        q = (trans.transform.rotation.x,
+             trans.transform.rotation.y,
+             trans.transform.rotation.z,
+             trans.transform.rotation.w)
+        rpy = tf.transformations.euler_from_quaternion(q)
+        print ('transform RPY (%.2f, %.2f, %.2f)'%(rpy[0],rpy[1],rpy[2]))
 
         self.br.sendTransform(trans)
 
@@ -291,7 +301,7 @@ class TestBase(object):
         print(t)
         self.broadcast_tf(R_quat, t, all_info)
 
-    def adjust_bolt_frame(self, X1, all_info):
+    def adjust_bolt_frame(self, X1_pose, all_info):
         real_trans = geometry_msgs.msg.TransformStamped()
         
         real_trans.header.stamp = rospy.Time.now()
@@ -300,13 +310,17 @@ class TestBase(object):
         print(real_trans.header.stamp)
         real_trans.header.frame_id = "base_link"
         real_trans.child_frame_id = "real_bolt_frame"
-        real_trans.transform.translation.x = X1[0,0]
-        real_trans.transform.translation.y = X1[1,0]
-        real_trans.transform.translation.z = X1[2,0]
-        real_trans.transform.rotation.x =X1[3,0]
-        real_trans.transform.rotation.y =X1[4,0]
-        real_trans.transform.rotation.z =X1[5,0]
-        real_trans.transform.rotation.w=X1[6,0]
+        real_trans.transform.translation.x = X1_pose.position.x
+        real_trans.transform.translation.y = X1_pose.position.y
+        real_trans.transform.translation.z = X1_pose.position.z
+        real_trans.transform.rotation.x =X1_pose.orientation.x
+        real_trans.transform.rotation.y =X1_pose.orientation.y
+        real_trans.transform.rotation.z =X1_pose.orientation.z
+        real_trans.transform.rotation.w=X1_pose.orientation.w
+
+        print (real_trans.transform)
+        (r, p, y) = tf.transformations.euler_from_quaternion([real_trans.transform.rotation.x, real_trans.transform.rotation.y, real_trans.transform.rotation.z, real_trans.transform.rotation.w])
+        print(r,p,y)
         # q = (trans.transform.rotation.x,
         #      trans.transform.rotation.y,
         #      trans.transform.rotation.z,
