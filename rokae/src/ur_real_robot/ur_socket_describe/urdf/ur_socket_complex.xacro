@@ -6,7 +6,7 @@
   <xacro:include filename="$(find socket_describe)/urdf/socket_jacket.xacro" />
 
   <joint name="ur_socket_joint" type="fixed">
-    <origin xyz="0 0 -0.007" rpy="0  0  0 " />
+    <origin xyz="0 0 -0.007" rpy="0  0   0  " />
     <parent link="tool0"/>
     <child link="pneumatic_base_link"/>
   </joint>
