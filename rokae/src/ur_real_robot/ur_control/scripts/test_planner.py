@@ -32,6 +32,8 @@ from test_clear_obstacle import TestClearObstacle
 from test_insert import TestInsert
 from prim_action import PrimAction
 from kalman import Kalman
+from YOLO_client import YOLO_SendImg
+
 import tf2_ros
 import geometry_msgs.msg
 #  新增import
@@ -85,7 +87,8 @@ class TSTPlanner:
         moveit_commander.roscpp_initialize(sys.argv)
         self.group = moveit_commander.MoveGroupCommander("manipulator")
         self.group.set_planner_id("RRTConnectkConfigDefault")
-    
+
+        self.bolt_detector=YOLO_SendImg()
 
         self.stage={'have_coarse_pose':False, 'above_bolt':False,'target_aim':False, 'target_clear':False,'cramped':False,'disassembled':False}
 
@@ -204,7 +207,7 @@ class TSTPlanner:
                             #execute primitive
                             if (filter.finished==False):              
                                 infos['planner_handler']=self
-                                self.ret_dict = prim.action(infos, self.ret_dict,filter)
+                                self.ret_dict = prim.action(infos, self.ret_dict,filter,self.bolt_detector)
                             else:
                                 print('prim_is_finished')
                                 print(filter.itr_time)

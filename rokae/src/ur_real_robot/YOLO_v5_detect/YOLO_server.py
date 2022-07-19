@@ -1,3 +1,5 @@
+
+
 import os
 import pickle
 import socket
@@ -9,14 +11,15 @@ from yolo import YOLO
 from PIL import Image
 import select
 
-
 def unpack_image(conn):
     recv_data = b""
     data = b""
     print("unpack_image")
     payload_size = struct.calcsize(">l")
     while len(data) < payload_size:
+        print ('payload_size')
         recv_data += conn.recv(4096)
+        # print (recv_data)
         if not recv_data:
             return None
         data += recv_data
@@ -31,7 +34,7 @@ def unpack_image(conn):
 
     frame_data = data[:msg_size]
     frame = pickle.loads(frame_data, fix_imports=True, encoding="bytes")
-    frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
+    # frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
 
     # print('cv2')
     return frame

@@ -105,7 +105,7 @@ class TestInsert(TestBase):
             print ("trajectory collected")
         return trajectory
     
-    def action(self, all_info, pre_result_dict,kalman):
+    def action(self, all_info, pre_result_dict,kalman,yolo):
         for param in self.action_params:
             if not param in all_info.keys():
                 print(param, 'must give')

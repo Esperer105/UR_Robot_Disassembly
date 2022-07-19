@@ -32,6 +32,7 @@ import moveit_commander
 # from PIL import Image,ImageDraw
 # import numpy as np 
 from bolt_detector import BoltDetector
+from YOLO_client import YOLO_SendImg
 from rigid_transform_3D import rigid_transform_3D
 from kalman import Kalman
 
@@ -40,8 +41,9 @@ class TestBase(object):
     def __init__(self, group_):
         self.tf_listener = tf.TransformListener()
         self.action_params = ['rgb_img', 'depth_img', 'camera_model', 'timestamp']
-        self.circle_detector = BoltDetector()
-        self.circle_detector.train_SVM()
+        # self.circle_detector = BoltDetector()
+        # self.circle_detector.train_SVM()
+        # self.circle_detector =YOLO_SendImg()
         self.group = group_
         self.effector = sys.argv[1] if len(sys.argv) > 1 else 'tool0'
         self.clamp = lambda n, minn, maxn: max(min(maxn, n), minn)
@@ -313,5 +315,5 @@ class TestBase(object):
         # print 'transform RPY (%.2f, %.2f, %.2f)'%(rpy[0],rpy[1],rpy[2])
         self.br.sendTransform(real_trans)
 
-    def action(self, all_info, pre_result_dict,kalman):
+    def action(self, all_info, pre_result_dict,kalman,yolo):
         raise NotImplementedError

@@ -7,6 +7,9 @@ import math
 import geometry_msgs.msg
 import tf
 import rospy
+import cv2
+import numpy as np
+
 
 class TestClearObstacle(TestBase):
     def get_circle_trajectory(self, all_info):
@@ -15,13 +18,9 @@ class TestClearObstacle(TestBase):
         scale_angle = delta_angle * math.pi / 180
         #SJTU origininal=0.012
         radius = 0.015
-        #ILC
-        # radius = 0.04
-        #SJTU origininal=0.302
+
         tool_len = 0.5
-        #ILC
-        # tool_len = 0.185
-        # robot move following vector
+
         print('get_circle_trajectory')
         for i in range(360 / delta_angle + 1):
 
@@ -32,6 +31,7 @@ class TestClearObstacle(TestBase):
             tgt_pose_in_real_frame.position.x = radius * math.cos(tamp_angle)
             tgt_pose_in_real_frame.position.y = radius * math.sin(tamp_angle)
             tgt_pose_in_real_frame.position.z = -tool_len
+
             # q = tf.transformations.quaternion_from_euler(0, 1.57, 0)
             q = tf.transformations.quaternion_from_euler(0, 0, 0)
             tgt_pose_in_real_frame.orientation.x = q[0]
@@ -47,30 +47,6 @@ class TestClearObstacle(TestBase):
             print (tgt_pose_in_world_frame)
             (r, p, y) = tf.transformations.euler_from_quaternion([tgt_pose_in_world_frame.orientation.x, tgt_pose_in_world_frame.orientation.y, tgt_pose_in_world_frame.orientation.z, tgt_pose_in_world_frame.orientation.w])
             print(r,p,y)
-            # ILC
-
-            # tgt_pose_in_bolt_frame = geometry_msgs.msg.Pose()
-            # tgt_pose_in_bolt_frame.position.x = x_in_bolt_frame
-            # tgt_pose_in_bolt_frame.position.y = y_in_bolt_frame
-            # tgt_pose_in_bolt_frame.position.z = z_in_bolt_frame
-            # # q = tf.transformations.quaternion_from_euler(0, 1.57, 0)
-            # q = tf.transformations.quaternion_from_euler(0, 0, -1.57)
-            # tgt_pose_in_bolt_frame.orientation.x = q[0]
-            # tgt_pose_in_bolt_frame.orientation.y = q[1]
-            # tgt_pose_in_bolt_frame.orientation.z = q[2]
-            # tgt_pose_in_bolt_frame.orientation.w = q[3]
-
-            # tgt_pose_in_world_frame = self.transform_pose("bolt_frame",
-            #                                               "world",
-            #                                               tgt_pose_in_bolt_frame,
-            #                                               all_info['bolt_ts'])
-            # input("trajectory %d:"%(i))
-
-            # ps = geometry_msgs.msg.PoseStamped()
-            # ps.header.frame_id = "world"
-            # ps.header.stamp = rospy.Time.now()
-            # ps.pose = tgt_pose_in_world_frame
-            # self.bolt_pos_pub.publish(ps)
 
             if not tgt_pose_in_world_frame is None:
                 # self.print_pose(tgt_pose_in_world_frame, 'get_circle_trajectory %d' % i)
@@ -81,24 +57,32 @@ class TestClearObstacle(TestBase):
             print ("trajectory collected")
         return trajectory
 
-    def action(self, all_info, pre_result_dict,kalman):
+    def action(self, all_info, pre_result_dict,kalman,yolo):
         for param in self.action_params:
             if not param in all_info.keys():
                 print(param, 'must give')
                 return False
         print("param satified, start to do clear obstacle")
+        raw_img=all_info['rgb_img']
+        height=raw_img.shape[0]
+        width =raw_img.shape[1]
+        print(height,width)
+        crop_img=raw_img
+        # crop_img=raw_img[int(0.25*height):int(0.75*height),int(0.5*(width-0.5*height)):int(0.5*(width+0.5*height))]
+        # crop_img=raw_img[:,int(0.5*(width-height)):int(0.5*(width+height))]
+        detect_ret=yolo.finish_YOLO_detect(crop_img)
 
-        #detect_ret = self.circle_detector.detect(all_info['rgb_img'],threshold=0.8)
-        detect_ret = self.circle_detector.detect_edge_box(all_info['rgb_img'])
-
-        if 'circles' in detect_ret.keys():
-            print('circle success')
+        if 'screw' in detect_ret.keys():
+            print('screw success')
             
-            circles = detect_ret["circles"]
+            circles = detect_ret["screw"]
             circle = self.findBestMatchCircle(circles)
-
-            x = circle[0]
-            y = circle[1]
+            x=circle[1]
+            y=circle[0]
+            # x = circle[1]+int(0.5*(width-0.5*height))
+            # y = circle[0]+int(0.25*height)
+            # x=circle[1]+int(0.5*(width-height))
+            # y=circle[0]
             self.add_bolt_frame(x, y, all_info)
 
             bolt_pose = self.get_bolt_pose_in_world_frame(all_info)

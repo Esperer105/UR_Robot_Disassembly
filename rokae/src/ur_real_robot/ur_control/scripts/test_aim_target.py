@@ -57,23 +57,29 @@ class TestAimTarget(TestBase):
         print(r,p,y)
         return tgt_pose_in_world_frame
 
-    def action(self, all_info, pre_result_dict,kalman):
+    def action(self, all_info, pre_result_dict,kalman,yolo):
         for param in self.action_params:
             if not param in all_info.keys():
                 print(param, 'must give')
                 return False
         print("param satified, start to do mate")
+        raw_img=all_info['rgb_img']
+        height=raw_img.shape[0]
+        width =raw_img.shape[1]
+        crop_img=raw_img
+        # crop_img=raw_img[int(0.25*height):int(0.75*height),int(0.5*(width-0.5*height)):int(0.5*(width+0.5*height))]
+        detect_ret=yolo.finish_YOLO_detect(crop_img)
 
-        detect_ret=self.circle_detector.detect_edge_box(all_info['rgb_img'])
-
-        if 'circles' in detect_ret.keys():
-            print('circle success')
+        if 'screw' in detect_ret.keys():
+            print('screw success')
             
-            circles = detect_ret["circles"]
+            circles = detect_ret["screw"]
             circle = self.findBestMatchCircle(circles)
 
-            x = circle[0]
-            y = circle[1]
+            # x = circle[1]+int(0.5*(width-0.5*height))
+            # y = circle[0]+int(0.25*height)
+            x=circle[1]
+            y=circle[0]
             self.add_bolt_frame(x, y, all_info)
 
             bolt_pose = self.get_bolt_pose_in_world_frame(all_info)

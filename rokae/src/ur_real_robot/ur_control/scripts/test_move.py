@@ -12,7 +12,7 @@ class TestMove(TestBase):
         super(TestMove, self).__init__(group_)
         self.request_params = ['coarse_pose']
 
-    def action(self, all_info, pre_result_dict, kalman):
+    def action(self, all_info, pre_result_dict, kalman,yolo):
         for param in self.request_params:
             if not param in pre_result_dict.keys():
                 print(param, 'must give')

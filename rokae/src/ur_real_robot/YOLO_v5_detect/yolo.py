@@ -1,3 +1,4 @@
+
 import colorsys
 import os
 
@@ -122,7 +123,9 @@ class YOLO(object):
         # ---------------------------------------------------------#
         image_data = np.expand_dims(np.transpose(preprocess_input(
             np.array(image_data, dtype='float32')), (2, 0, 1)), 0)
-
+        
+        bbox_collect = {}
+        
         with torch.no_grad():
             images = torch.from_numpy(image_data)
             if self.cuda:
@@ -140,7 +143,7 @@ class YOLO(object):
                                                          nms_thres=self.nms_iou)
 
             if results[0] is None:
-                return image
+                return image,bbox_collect
 
             top_label = np.array(results[0][:, 6], dtype='int32')
             top_conf = results[0][:, 4] * results[0][:, 5]
@@ -184,7 +187,7 @@ class YOLO(object):
         # ---------------------------------------------------------#
         #   图像绘制
         # ---------------------------------------------------------#
-        bbox_collect = {}
+        # bbox_collect = {}
         for i, c in list(enumerate(top_label)):
             predicted_class = self.class_names[int(c)]
             box = top_boxes[i]
