@@ -68,10 +68,12 @@ class TestAimTarget(TestBase):
             latest_infos = planner.get_latest_infos()
             # print (latest_infos.keys())        
             raw_img=latest_infos['rgb_img']
-            # height=raw_img.shape[0]
-            # width =raw_img.shape[1]
+            height=raw_img.shape[0]
+            width =raw_img.shape[1]
+            r_height=540
+            r_width =960
             # print(height,width)
-            crop_img= cv2.copyMakeBorder(raw_img,(1080-480)/2,(1080-480)/2,(1920-640)/2,(1920-640)/2,cv2.BORDER_CONSTANT,value=0)
+            crop_img= cv2.copyMakeBorder(raw_img,(r_height-height)/2,(r_height-height)/2,(r_width-width)/2,(r_width-width)/2,cv2.BORDER_CONSTANT,value=0)
             # crop_img=raw_img[int(0.25*height):int(0.75*height),int(0.5*(width-0.5*height)):int(0.5*(width+0.5*height))]
             # crop_img=raw_img[:,int(0.5*(width-height)):int(0.5*(width+height))]
             detect_ret=yolo.finish_YOLO_detect(crop_img)
@@ -88,8 +90,8 @@ class TestAimTarget(TestBase):
                 # y=circle[0]
                 if (s==0):
                     circle = self.findBestMatchCircle(circles)                
-                    x=circle[1]-(1920-640)/2
-                    y=circle[0]-(1080-480)/2
+                    x=circle[1]-(r_width-width)/2
+                    y=circle[0]-(r_height-height)/2
                     self.add_bolt_frame(x, y, latest_infos)
                     bolt_pose = self.get_bolt_pose_in_world_frame(latest_infos)
                     real_pose=kalman.iteration(bolt_pose)
@@ -102,7 +104,7 @@ class TestAimTarget(TestBase):
                 else:
                     min_diff=100
                     for screw in circles:
-                        self.add_bolt_frame(screw[1]-(1920-640)/2, screw[0]-(1080-480)/2, latest_infos)
+                        self.add_bolt_frame(screw[1]-(r_width-width)/2, screw[0]-(r_height-height)/2, latest_infos)
                         screw_pose=self.get_bolt_pose_in_world_frame(latest_infos)
                         former_pose=kalman.get_former_pose()
                         temp_diff=math.sqrt(pow(screw_pose.position.x - former_pose.position.x ,2)+pow(screw_pose.position.y - former_pose.position.y ,2)+pow(screw_pose.position.z- former_pose.position.z,2))            

@@ -30,6 +30,7 @@ from test_aim_target import TestAimTarget
 from test_move import TestMove
 from test_clear_obstacle import TestClearObstacle
 from test_insert import TestInsert
+from test_disassemble import TestDisassemble
 from prim_action import PrimAction
 from kalman import Kalman
 from YOLO_client import YOLO_SendImg
@@ -97,11 +98,13 @@ class TSTPlanner:
         self.aim_target_prim = TestAimTarget(self.group)
         self.clear_obstacle_prim=TestClearObstacle(self.group)
         self.insert_prim=TestInsert(self.group)
+        self.disassemble_prim=TestDisassemble(self.group)
         self.prims = {'mate': self.aim_target_prim,
                       'push': self.clear_obstacle_prim,
                       'insert': self.insert_prim,
-                      'move': self.move_prim}
-        self.action = 'disassemble'
+                      'move': self.move_prim,
+                      'disassemble':self.disassemble_prim}
+        self.action = 'sleep'
         self.all_infos = {}
         self.ret_dict = {}
         self.bolt_pose = None
@@ -158,7 +161,7 @@ class TSTPlanner:
         return path_list[0]
 
     def start(self,  pose):
-        if self.action != 'disassemble':
+        if self.action != 'sleep':
             print("Please start after previous task was done!")
             return False
         else:
@@ -181,7 +184,7 @@ class TSTPlanner:
         prim_dict={'move':move,'mate':mate,'push':push,'insert':insert,'disassemble':disassemble}
         
         while self.prim_execution:
-            if self.action == 'disassemble':
+            if self.action== 'sleep':
                 rospy.sleep(1)
                 continue
             else:

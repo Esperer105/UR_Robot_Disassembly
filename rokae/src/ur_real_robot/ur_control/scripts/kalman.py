@@ -20,6 +20,7 @@ class Kalman:
         self.itr_time=0
         self.itr_sum=0
         self.finished=False
+        self.plt_time=0
         # self.A = np.diag([1,1,1,1,1,1,1])
         self.A=np.diag([1,1,1])
         self.B = 0
@@ -168,12 +169,14 @@ class Kalman:
             # ax7.plot(self.X1_np[6, :], 'go--', label="w_Kalman Filter")
 
             step=self.itr_sum
-            ax1.scatter(np.arange(step), self.Z1_np[0,:].reshape(step,1), label="x_Observation", marker='*')
-            ax2.scatter(np.arange(step), self.Z1_np[1,:].reshape(step,1), label="y_Observation", marker='*')
-            ax3.scatter(np.arange(step), self.Z1_np[2,:].reshape(step,1), label="z_Observation", marker='*')
+            ax1.scatter(np.arange(step), self.Z1_np[0,:].reshape(step,1), label="x_Observation", marker='o')
+            ax2.scatter(np.arange(step), self.Z1_np[1,:].reshape(step,1), label="y_Observation", marker='o')
+            ax3.scatter(np.arange(step), self.Z1_np[2,:].reshape(step,1), label="z_Observation", marker='o')
             # ax4.scatter(np.arange(step), self.Z1_np[3,:].reshape(step,1), label="xx_Observation", marker='*')        
             # ax5.scatter(np.arange(step), self.Z1_np[4,:].reshape(step,1), label="yy_Observation", marker='*')
             # ax6.scatter(np.arange(step), self.Z1_np[5,:].reshape(step,1), label="zz_Observation", marker='*')
             # ax7.scatter(np.arange(step), self.Z1_np[6,:].reshape(step,1), label="w_Observation", marker='*')
-             
-            print(plt.show())
+            
+            plt.savefig("kalman_"+str(self.plt_time+1)+".png")
+            self.plt_time+=1
+            # print(plt.show())

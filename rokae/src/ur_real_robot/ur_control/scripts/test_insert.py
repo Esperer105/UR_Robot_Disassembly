@@ -29,6 +29,7 @@ class TestInsert(TestBase):
     def get_insert_trajectory(self,real_pose,all_info):
 
         trajectory =  [] 
+        radius=0.0015
         delta_angle = 30
         scale_angle = delta_angle * math.pi / 180
         scale_depth= 0.002
@@ -36,13 +37,13 @@ class TestInsert(TestBase):
         tool_len = 0.435
         print('get_insert_trajectory')
         for i in range(180 / delta_angle + 1):
-
-            tamp_angle = scale_angle * i
+            tamp_radius=radius*(1-i*delta_angle/180)
+            tamp_angle = -scale_angle * i
             tamp_depth=scale_depth * i
             # SJTU HERE CHANGED ori: z x y
             tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-            tgt_pose_in_real_frame.position.x = 0
-            tgt_pose_in_real_frame.position.y = 0.004
+            tgt_pose_in_real_frame.position.x = tamp_radius * math.cos(tamp_angle)
+            tgt_pose_in_real_frame.position.y = 0.004+ tamp_radius * math.sin(tamp_angle)
             tgt_pose_in_real_frame.position.z = -tool_len+tamp_depth
             q = tf.transformations.quaternion_from_euler(0, 0, tamp_angle)
             tgt_pose_in_real_frame.orientation.x = q[0]
@@ -66,10 +67,10 @@ class TestInsert(TestBase):
         return trajectory
     
     def get_tgt_pose_in_world_frame(self,all_info):
-        tool_len = 0.43
+        tool_len = 0.435
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
         tgt_pose_in_real_frame.position.x = 0
-        tgt_pose_in_real_frame.position.y = 0
+        tgt_pose_in_real_frame.position.y = 0.004
         tgt_pose_in_real_frame.position.z = -tool_len
 
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
