@@ -134,12 +134,15 @@ def reset_arm(group):
         return False
 
 def print_pose(pose):
-    q = (pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w)
-    rpy = tf.transformations.euler_from_quaternion(q)
-    print '%s: position (%.2f %.2f %.2f) orientation (%.2f %.2f %.2f %.2f) RPY (%.2f %.2f %.2f)' % \
-        (effector, pose.position.x, pose.position.y, pose.position.z, \
-        pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w, \
-        rpy[0], rpy[1], rpy[2])
+    # q = (pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w)
+    # rpy = tf.transformations.euler_from_quaternion(q)
+    # print '%s: position (%.2f %.2f %.2f) orientation (%.2f %.2f %.2f %.2f) RPY (%.2f %.2f %.2f)' % \
+    #     (effector, pose.position.x, pose.position.y, pose.position.z, \
+    #     pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w, \
+    #     rpy[0], rpy[1], rpy[2])
+    print (pose)
+    (r, p, y) = tf.transformations.euler_from_quaternion([pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w])
+    print(r,p,y)
 
 if __name__=="__main__":
     effector = sys.argv[1] if len(sys.argv) > 1 else 'tool0'
@@ -156,7 +159,7 @@ if __name__=="__main__":
     print_pose(ee_pose)
     # camera = Camera('camera', '/camera/color/image_raw', '/camera/depth/image_raw',
     #                 '/camera/color/camera_info')
-    all_delta=0.01
+    all_delta=0.001
     z_delta=all_delta
     x_delta=all_delta
     y_delta=all_delta

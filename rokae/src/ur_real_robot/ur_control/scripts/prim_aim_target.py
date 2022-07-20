@@ -35,23 +35,21 @@ from bolt_detector import BoltDetector
 
 class PrimAimTarget(PrimBase):
     def get_tgt_pose_in_world_frame(self,all_info):
-        tool_len = 0.65
-        tgt_pose_in_bolt_frame = geometry_msgs.msg.Pose()
-        tgt_pose_in_bolt_frame.position.x = 0
-        tgt_pose_in_bolt_frame.position.y = 0
-        tgt_pose_in_bolt_frame.position.z = - tool_len
-        # q = tf.transformations.quaternion_from_euler(0, 1.57, 0)
+        tool_len = 0.45
+        tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
+        tgt_pose_in_real_frame.position.x = 0
+        tgt_pose_in_real_frame.position.y = 0
+        tgt_pose_in_real_frame.position.z = -tool_len-0.15
+
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
-        tgt_pose_in_bolt_frame.orientation.x = q[0]
-        tgt_pose_in_bolt_frame.orientation.y = q[1]
-        tgt_pose_in_bolt_frame.orientation.z = q[2]
-        tgt_pose_in_bolt_frame.orientation.w = q[3]
-        # self.print_pose(tgt_pose_in_bolt_frame, 'tgt_pose_in_bolt_frame')
-        tgt_pose_in_world_frame = self.transform_pose("bolt_frame",
-                                                      "base_link",
-                                                      tgt_pose_in_bolt_frame,
-                                                      all_info['bolt_ts']
-                                                      )
+        tgt_pose_in_real_frame.orientation.x = q[0]
+        tgt_pose_in_real_frame.orientation.y = q[1]
+        tgt_pose_in_real_frame.orientation.z = q[2]
+        tgt_pose_in_real_frame.orientation.w = q[3]
+        tgt_pose_in_world_frame = self.transform_pose("real_bolt_frame",
+                            "base_link",
+                            tgt_pose_in_real_frame,
+                            all_info['bolt_ts'])        
         # self.print_pose(tgt_pose_in_world_frame, 'tgt_pose_in_world_frame')
         print (tgt_pose_in_world_frame)
         (r, p, y) = tf.transformations.euler_from_quaternion([tgt_pose_in_world_frame.orientation.x, tgt_pose_in_world_frame.orientation.y, tgt_pose_in_world_frame.orientation.z, tgt_pose_in_world_frame.orientation.w])
