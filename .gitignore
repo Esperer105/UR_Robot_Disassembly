@@ -1,5 +1,7 @@
 ./rokae/build/
 ./rokae/devel/
+./rokae/ur_env/
+./rokae/ur_py3_env/
 *.pyc
 ./.idea/
 .vscode/
