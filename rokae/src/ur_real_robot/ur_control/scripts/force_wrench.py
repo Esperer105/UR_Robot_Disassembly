@@ -125,6 +125,7 @@ def load_collision_battery_pack_box():
     box_pose = geometry_msgs.msg.PoseStamped()
     scene.remove_world_object("battery_pack")
     box_pose.header.frame_id = robot.get_planning_frame()
+    print (box_pose.header.frame_id )
     box_pose.pose.position.x = 0.3
     box_pose.pose.position.y =0.88
     box_pose.pose.position.z = 0.27

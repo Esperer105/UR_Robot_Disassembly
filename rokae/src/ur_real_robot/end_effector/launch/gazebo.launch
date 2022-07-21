@@ -10,7 +10,7 @@
     name="spawn_model"
     pkg="gazebo_ros"
     type="spawn_model"
-    args="-file $(find socket_jacket_)/urdf/socket_jacket_.urdf -urdf -model socket_jacket_"
+    args="-file $(find end_effector)/urdf/end_effector.urdf -urdf -model end_effector"
     output="screen" />
   <node
     name="fake_joint_calibration"

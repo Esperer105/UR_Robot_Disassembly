@@ -15,7 +15,7 @@
 
   <param if="$(arg load_robot_description)" name="$(arg robot_description)" command="xacro  '$(find ur_socket_describe)/urdf/ur_socket_complex.xacro'"/>
 
-  <param name="$(arg robot_description)_semantic" textfile="$(find ur10e_moveit_config)/config/ur10e_socket_edit.srdf" /> 
+  <param name="$(arg robot_description)_semantic" textfile="$(find ur10e_moveit_config)/config/ur10e.srdf" /> 
 
 
 

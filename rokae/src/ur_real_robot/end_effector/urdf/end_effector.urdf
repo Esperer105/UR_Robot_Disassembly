@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="end_effector">
+  <link
+    name="pneumatic_base_link">
+    <inertial>
+      <origin
+        xyz="0.1249 -4.7993E-05 0.0089791"
+        rpy="0 0 0" />
+      <mass
+        value="0.77161" />
+      <inertia
+        ixx="0.00049513"
+        ixy="-7.8018E-08"
+        ixz="-2.0905E-06"
+        iyy="0.00089931"
+        iyz="-1.037E-07"
+        izz="0.00073233" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://end_effector/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://end_effector/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+</robot>
