@@ -86,6 +86,58 @@
       <elevation>0</elevation>
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
+    <model name='M10_sleeve'>
+      <link name='M10_sleeve_base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0.000367 0 -0 0 -0 0</pose>
+          <mass>0.010807</mass>
+          <inertia>
+            <ixx>9.0447e-07</ixx>
+            <ixy>-5.476e-21</ixy>
+            <ixz>9.2286e-20</ixz>
+            <iyy>3.7372e-06</iyy>
+            <iyz>2.1176e-22</iyz>
+            <izz>3.7372e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='M10_sleeve_base_link_collision'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/ur10e_1_ws/src/M10_sleeve/meshes/M10_sleeve_base_link.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='M10_sleeve_base_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/ur10e_1_ws/src/M10_sleeve/meshes/M10_sleeve_base_link.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+    </model>
     <model name='M6_sleeve'>
       <link name='M6_sleeve_base_link'>
         <pose frame=''>0 0 0 0 -0 0</pose>
@@ -129,6 +181,58 @@
             <mesh>
               <scale>1 1 1</scale>
               <uri>/home/ur/ur10e_1_ws/src/M6_sleeve/meshes/M6_sleeve_base_link.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+    </model>
+    <model name='M8_sleeve'>
+      <link name='M8_sleeve_base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0.00074 0 -0 0 -0 0</pose>
+          <mass>0.010747</mass>
+          <inertia>
+            <ixx>8.5579e-07</ixx>
+            <ixy>-4.1281e-21</ixy>
+            <ixz>6.8952e-20</ixz>
+            <iyy>3.5699e-06</iyy>
+            <iyz>0</iyz>
+            <izz>3.5699e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='M8_sleeve_base_link_collision'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/ur10e_1_ws/src/M8_sleeve/meshes/M8_sleeve_base_link.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='M8_sleeve_base_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/ur/ur10e_1_ws/src/M8_sleeve/meshes/M8_sleeve_base_link.STL</uri>
             </mesh>
           </geometry>
         </visual>
@@ -1349,7 +1453,7 @@
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
         <gravity>1</gravity>
-        <sensor name='camera color' type='camera'>
+        <sensor name='cameracolor' type='camera'>
           <camera name='camera'>
             <horizontal_fov>1.21126</horizontal_fov>
             <image>
@@ -1372,7 +1476,7 @@
           <visualize>1</visualize>
           <pose frame=''>-0.18055 0.000297 0.073047 -1.57259 -1.46608 0.001803</pose>
         </sensor>
-        <sensor name='camera ired1' type='camera'>
+        <sensor name='cameraired1' type='camera'>
           <camera name='camera'>
             <horizontal_fov>1.48702</horizontal_fov>
             <image>
@@ -1395,7 +1499,7 @@
           <visualize>0</visualize>
           <pose frame=''>-0.18055 0.000297 0.073047 -1.57259 -1.46608 0.001803</pose>
         </sensor>
-        <sensor name='camera ired2' type='camera'>
+        <sensor name='cameraired2' type='camera'>
           <camera name='camera'>
             <horizontal_fov>1.48702</horizontal_fov>
             <image>
@@ -1418,7 +1522,7 @@
           <visualize>0</visualize>
           <pose frame=''>-0.18055 0.000297 0.073047 -1.57259 -1.46608 0.001803</pose>
         </sensor>
-        <sensor name='camera depth' type='depth'>
+        <sensor name='cameradepth' type='depth'>
           <camera name='camera'>
             <horizontal_fov>1.48702</horizontal_fov>
             <image>
@@ -1474,10 +1578,10 @@
         <infrared1CameraInfoTopicName>infra1/camera_info</infrared1CameraInfoTopicName>
         <infrared2TopicName>infra2/image_raw</infrared2TopicName>
         <infrared2CameraInfoTopicName>infra2/camera_info</infrared2CameraInfoTopicName>
-        <colorOpticalframeName>camera_Link</colorOpticalframeName>
-        <depthOpticalframeName>camera_Link</depthOpticalframeName>
-        <infrared1OpticalframeName>camera_Link</infrared1OpticalframeName>
-        <infrared2OpticalframeName>camera_Link</infrared2OpticalframeName>
+        <colorOpticalframeName>camera_color_optical_frame</colorOpticalframeName>
+        <depthOpticalframeName>camera_depth_optical_frame</depthOpticalframeName>
+        <infrared1OpticalframeName>camera_left_ir_optical_frame</infrared1OpticalframeName>
+        <infrared2OpticalframeName>camera_right_ir_optical_frame</infrared2OpticalframeName>
         <rangeMinDepth>0.2</rangeMinDepth>
         <rangeMaxDepth>10.0</rangeMaxDepth>
         <pointCloud>1</pointCloud>
@@ -1492,143 +1596,39 @@
       </plugin>
       <pose frame=''>0 0 0.3 0 -0 0</pose>
     </model>
-    <model name='M10_sleeve'>
-      <link name='M10_sleeve_base_link'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
-        <inertial>
-          <pose frame=''>-0.000367 0 -0 0 -0 0</pose>
-          <mass>0.010807</mass>
-          <inertia>
-            <ixx>9.0447e-07</ixx>
-            <ixy>-5.476e-21</ixy>
-            <ixz>9.2286e-20</ixz>
-            <iyy>3.7372e-06</iyy>
-            <iyz>2.1176e-22</iyz>
-            <izz>3.7372e-06</izz>
-          </inertia>
-        </inertial>
-        <collision name='M10_sleeve_base_link_collision'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/M10_sleeve/meshes/M10_sleeve_base_link.STL</uri>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='M10_sleeve_base_link_visual'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/M10_sleeve/meshes/M10_sleeve_base_link.STL</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-      <pose frame=''>0 0 0 0 -0 0</pose>
-    </model>
-    <model name='M8_sleeve'>
-      <link name='M8_sleeve_base_link'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
-        <inertial>
-          <pose frame=''>-0.00074 0 -0 0 -0 0</pose>
-          <mass>0.010747</mass>
-          <inertia>
-            <ixx>8.5579e-07</ixx>
-            <ixy>-4.1281e-21</ixy>
-            <ixz>6.8952e-20</ixz>
-            <iyy>3.5699e-06</iyy>
-            <iyz>0</iyz>
-            <izz>3.5699e-06</izz>
-          </inertia>
-        </inertial>
-        <collision name='M8_sleeve_base_link_collision'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/M8_sleeve/meshes/M8_sleeve_base_link.STL</uri>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='M8_sleeve_base_link_visual'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <scale>1 1 1</scale>
-              <uri>/home/ur/ur10e_1_ws/src/M8_sleeve/meshes/M8_sleeve_base_link.STL</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-      <pose frame=''>0 0 0 0 -0 0</pose>
-    </model>
     <state world_name='default'>
-      <sim_time>150 578000000</sim_time>
-      <real_time>744 677285908</real_time>
-      <wall_time>1653553847 701453744</wall_time>
-      <iterations>74651</iterations>
+      <sim_time>49 1000000</sim_time>
+      <real_time>410 688895576</real_time>
+      <wall_time>1655101557 389265956</wall_time>
+      <iterations>49001</iterations>
       <model name='M10_sleeve'>
-        <pose frame=''>0.485787 6e-05 0.360929 0.790714 1.5707 1.66134</pose>
+        <pose frame=''>0.485492 -4.8e-05 0.360793 1.29826 1.56781 -0.38732</pose>
         <scale>1 1 1</scale>
         <link name='M10_sleeve_base_link'>
-          <pose frame=''>0.485787 6e-05 0.360929 0.790714 1.5707 1.66134</pose>
-          <velocity>-1.8e-05 3e-06 2e-06 -0.000126 -0.000797 -0.001969</velocity>
-          <acceleration>0.069815 0.002643 0.004441 3.09238 0.051458 -3.11578</acceleration>
-          <wrench>0.000754 2.9e-05 4.8e-05 0 -0 0</wrench>
+          <pose frame=''>0.485492 -4.8e-05 0.360793 1.29826 1.56781 -0.38732</pose>
+          <velocity>0.00088 0.014296 -0.01039 -0.306475 0.081744 0.446499</velocity>
+          <acceleration>-0.066934 -0.189724 0.044085 1.08983 -1.22885 -1.21486</acceleration>
+          <wrench>-0.000723 -0.00205 0.000476 0 -0 0</wrench>
         </link>
       </model>
       <model name='M6_sleeve'>
-        <pose frame=''>0.414217 -4.9e-05 0.360913 -2.73416 1.57037 -1.75107</pose>
+        <pose frame=''>0.414288 3.2e-05 0.360913 -1.13437 1.57028 0.269265</pose>
         <scale>1 1 1</scale>
         <link name='M6_sleeve_base_link'>
-          <pose frame=''>0.414217 -4.9e-05 0.360913 -2.73416 1.57037 -1.75107</pose>
-          <velocity>-0 0 0 -1e-06 -8e-06 1.7e-05</velocity>
-          <acceleration>-0.00036 7e-05 1.4e-05 -0.000279 -0.008421 0.070543</acceleration>
-          <wrench>-4e-06 1e-06 0 0 -0 0</wrench>
+          <pose frame=''>0.414288 3.2e-05 0.360913 -1.13437 1.57028 0.269265</pose>
+          <velocity>-6e-06 2.5e-05 1.6e-05 -0.000713 0.000113 -0.001833</velocity>
+          <acceleration>0.001995 -0.003181 -0.00123 0.024218 -0.042196 1.18963</acceleration>
+          <wrench>2.1e-05 -3.4e-05 -1.3e-05 0 -0 0</wrench>
         </link>
       </model>
       <model name='M8_sleeve'>
-        <pose frame=''>0.45 -0.035826 0.360924 1.10386 1.5703 -1.39245</pose>
+        <pose frame=''>0.449955 -0.035733 0.360921 0.920409 1.57067 2.32932</pose>
         <scale>1 1 1</scale>
         <link name='M8_sleeve_base_link'>
-          <pose frame=''>0.45 -0.035826 0.360924 1.10386 1.5703 -1.39245</pose>
-          <velocity>-0 0 0 0 -0 0</velocity>
-          <acceleration>-0 1e-06 2e-06 7e-06 1.6e-05 -1.4e-05</acceleration>
-          <wrench>-0 0 0 0 -0 0</wrench>
+          <pose frame=''>0.449955 -0.035733 0.360921 0.920409 1.57067 2.32932</pose>
+          <velocity>9.6e-05 8.8e-05 3e-06 -0.003292 0.004361 0.014205</velocity>
+          <acceleration>0.067234 0.066209 -0.005903 2.57502 0.15097 0.657133</acceleration>
+          <wrench>0.000723 0.000712 -6.3e-05 0 -0 0</wrench>
         </link>
       </model>
       <model name='ground_plane'>
@@ -1642,49 +1642,49 @@
         </link>
       </model>
       <model name='robot'>
-        <pose frame=''>-0 0 0.3 -0 -0 -0</pose>
+        <pose frame=''>0 -0 0.3 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='base_link'>
-          <pose frame=''>-0 0 0.3 -0 -0 -0</pose>
-          <velocity>-0 0 0 -0 -0 -0</velocity>
-          <acceleration>0 -0 0 0 -1e-06 0</acceleration>
-          <wrench>2e-06 -2.9e-05 0.000119 0 -0 0</wrench>
+          <pose frame=''>0 -0 0.3 0 -0 0</pose>
+          <velocity>-1e-06 0 8e-06 -6e-06 -9e-06 0</velocity>
+          <acceleration>-2e-06 -8e-06 -1.3e-05 2.9e-05 4.8e-05 -1e-05</acceleration>
+          <wrench>-0.001205 -0.004423 -0.007071 0 -0 0</wrench>
         </link>
         <link name='forearm_link'>
-          <pose frame=''>-0.214485 -0.08635 1.0481 -1.57082 -0.126228 -2.7589</pose>
-          <velocity>-0.000215 -0.000301 -0.000127 0.000115 -0.000285 0.000862</velocity>
-          <acceleration>-0 -0 -0 0 -0 0</acceleration>
-          <wrench>-0 -0 -0 0 -0 0</wrench>
+          <pose frame=''>-0.218683 -0.085256 1.04667 -1.57082 -0.124197 -2.76989</pose>
+          <velocity>-0.000738 -0.000366 -0.002963 -0.002483 -0.002094 -0.001307</velocity>
+          <acceleration>0.000729 0.003705 0.004237 0.013407 0.00914 -0.003123</acceleration>
+          <wrench>0.00282 0.014338 0.016395 0 -0 0</wrench>
         </link>
         <link name='shoulder_link'>
-          <pose frame=''>0 -0 0.4807 2.3e-05 1.3e-05 0.382699</pose>
-          <velocity>-0 -0 -0 0 -0 0.000862</velocity>
-          <acceleration>0 0 -0 0 -0 0</acceleration>
-          <wrench>0 0 -0 0 -0 0</wrench>
+          <pose frame=''>-0 0 0.4807 -1e-06 7e-06 0.371699</pose>
+          <velocity>1.1e-05 2e-06 3.6e-05 -0.000282 -0.001818 -0.000334</velocity>
+          <acceleration>-7e-06 -3e-06 -4.5e-05 0.001203 0.004602 0.0008</acceleration>
+          <wrench>-5.4e-05 -2.7e-05 -0.000351 0 -0 0</wrench>
         </link>
         <link name='upper_arm_link'>
-          <pose frame=''>1e-06 -0 0.480699 1.57085 1.18384 0.382741</pose>
-          <velocity>0 0 -0 0.000206 -0.000511 0.000862</velocity>
-          <acceleration>-0 0 -0 -1e-06 -1e-06 0</acceleration>
-          <wrench>-0 0 -0 0 -0 0</wrench>
+          <pose frame=''>-1e-06 -1e-06 0.4807 1.57082 1.17766 0.371735</pose>
+          <velocity>0.000112 8.2e-05 -0.000174 0.001667 -0.000492 -0.002314</velocity>
+          <acceleration>-0.000289 0.002075 0.00175 0.001623 0.002156 -0.00654</acceleration>
+          <wrench>-0.00374 0.026827 0.022628 0 -0 0</wrench>
         </link>
         <link name='wrist_1_link'>
-          <pose frame=''>0.376533 -0.036172 0.976139 -1.574 -1.56374 -2.7557</pose>
-          <velocity>-0.000238 0.000216 4.7e-05 -0.000781 0.001941 0.000862</velocity>
-          <acceleration>-0 -0 -0 0 -0 0</acceleration>
-          <wrench>-0 -0 -0 0 -0 0</wrench>
+          <pose frame=''>0.372986 -0.041523 0.975877 1.56336 -1.56412 0.379153</pose>
+          <velocity>-0.000579 -0.001295 -0.004084 0.011263 0.002742 -0.002789</velocity>
+          <acceleration>0.000602 0.003182 0.006071 -0.022599 -0.005224 0.003465</acceleration>
+          <wrench>0.00118 0.006237 0.011899 0 -0 0</wrench>
         </link>
         <link name='wrist_2_link'>
-          <pose frame=''>0.487711 0.00858 0.976986 -1.56374 -0.019533 -1.18825</pose>
-          <velocity>-0.000275 0.000312 -0.000204 -0.000584 0.00202 0.000863</velocity>
-          <acceleration>-0 -0 -0 0 -0 0</acceleration>
-          <wrench>-0 -0 -0 0 -0 0</wrench>
+          <pose frame=''>0.484648 0.002007 0.975093 -1.57737 -0.015925 -1.19898</pose>
+          <velocity>-0.00046 -0.001614 -0.006921 0.00553 0.021421 -0.002831</velocity>
+          <acceleration>0.000526 0.003043 0.009894 -0.005941 -0.039371 -0.002261</acceleration>
+          <wrench>0.00103 0.005965 0.019393 0 -0 0</wrench>
         </link>
         <link name='wrist_3_link'>
-          <pose frame=''>0.489324 0.006776 0.860461 -3.12827 -0.01594 -1.53749</pose>
-          <velocity>-0.000509 0.000246 -0.000206 -0.000584 0.00202 0.000849</velocity>
-          <acceleration>-0 -0 -0 0 0 -1e-06</acceleration>
-          <wrench>-0 -0 -0 0 -0 0</wrench>
+          <pose frame=''>0.48461 1e-05 0.858572 -3.12415 -0.000293 3.12406</pose>
+          <velocity>-0.003289 -0.002892 -0.008948 0.044403 -0.019036 -0.002364</velocity>
+          <acceleration>0.003629 -0.009988 0.014168 -0.749337 0.246203 -0.007823</acceleration>
+          <wrench>0.003531 -0.009719 0.013787 0 -0 0</wrench>
         </link>
       </model>
       <light name='sun'>
@@ -1693,7 +1693,7 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>1.19239 -0.615858 0.562702 0 0.099643 2.61619</pose>
+        <pose frame=''>0.523764 -0.410919 0.754144 0 0.083642 1.47219</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>

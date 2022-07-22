@@ -3,21 +3,21 @@
      Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 <robot
-  name="battery_pack">
+  name="battery_pack_3">
   <link
     name="battery_pack_base_link">
     <inertial>
       <origin
-        xyz="-0.95 0 -0.1"
+        xyz="-0.95 0 -0.0999999999999996"
         rpy="0 0 0" />
       <mass
         value="552" />
       <inertia
-        ixx="68.08"
-        ixy="-7.8419E-15"
-        ixz="4.0486E-16"
+        ixx="68.0799999999999"
+        ixy="-7.84187529726902E-15"
+        ixz="-1.07543603652023E-15"
         iyy="245.18"
-        iyz="6.6498E-16"
+        iyz="1.32995466491555E-16"
         izz="309.58" />
     </inertial>
     <visual>
@@ -26,14 +26,12 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://battery_pack/meshes/battery_pack_base_link.dae" />
+          filename="package://battery_pack_3/meshes/battery_pack_base_link.dae" />
       </geometry>
       <material
         name="battery">
         <color
           rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/battery.png" />
       </material>
     </visual>
     <collision>
@@ -42,25 +40,25 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://battery_pack/meshes/battery_pack_base_link.dae" />
+          filename="package://battery_pack_3/meshes/battery_pack_base_link.dae" />
       </geometry>
     </collision>
   </link>
   <link
-    name="sleeve_plate_link">
+    name="M6_gasket_1_link">
     <inertial>
       <origin
-        xyz="0.0005113 -0.00023823 -0.033555"
+        xyz="-5.55111512312578E-17 1.11022302462516E-16 -0.000499999999999723"
         rpy="0 0 0" />
       <mass
-        value="0.58226" />
+        value="8.82772243861937E-05" />
       <inertia
-        ixx="0.00067784"
-        ixy="-7.0925E-08"
-        ixz="-7.5087E-07"
-        iyy="0.00066736"
-        iyz="3.231E-07"
-        izz="0.00093345" />
+        ixx="1.24959661693432E-09"
+        ixy="-2.58493941422821E-26"
+        ixz="7.02201084753254E-41"
+        iyy="1.24959661693432E-09"
+        iyz="-1.65030964290011E-40"
+        izz="2.48456062424061E-09" />
     </inertial>
     <visual>
       <origin
@@ -68,14 +66,12 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://battery_pack/meshes/sleeve_plate_link.dae" />
+          filename="package://battery_pack_3/meshes/M6_gasket_1_link.dae" />
       </geometry>
       <material
-        name="battery">
+        name="bolt">
         <color
           rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/battery.png" />
       </material>
     </visual>
     <collision>
@@ -84,7 +80,378 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://battery_pack/meshes/sleeve_plate_link.dae" />
+          filename="package://battery_pack_3/meshes/M6_gasket_1_link.dae" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M6_gasket_1_joint"
+    type="fixed">
+    <origin
+      xyz="-0.5215 -0.404 0.0525"
+      rpy="3.1416 0 -2.7485" />
+    <parent
+      link="battery_pack_base_link" />
+    <child
+      link="M6_gasket_1_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="M6_gasket_2_link">
+    <inertial>
+      <origin
+        xyz="0 0 -0.000499999999999723"
+        rpy="0 0 0" />
+      <mass
+        value="8.82772243861937E-05" />
+      <inertia
+        ixx="1.24959661693432E-09"
+        ixy="-1.29246970711411E-25"
+        ixz="1.50034156156908E-42"
+        iyy="1.24959661693432E-09"
+        iyz="6.8771134273246E-43"
+        izz="2.48456062424061E-09" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_3/meshes/M6_gasket_2_link.dae" />
+      </geometry>
+      <material
+        name="bolt">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_3/meshes/M6_gasket_2_link.dae" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M6_gasket_2_joint"
+    type="fixed">
+    <origin
+      xyz="-0.5215 -0.304 0.0525"
+      rpy="3.1416 0 -2.7485" />
+    <parent
+      link="battery_pack_base_link" />
+    <child
+      link="M6_gasket_2_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="M8_gasket_1_link">
+    <inertial>
+      <origin
+        xyz="0 0 -0.000499999999999945"
+        rpy="0 0 0" />
+      <mass
+        value="0.00010550204865667" />
+      <inertia
+        ixx="2.08686937076162E-09"
+        ixy="5.16987882845642E-26"
+        ixz="1.7437435717737E-42"
+        iyy="2.08686937076162E-09"
+        iyz="2.84281637081175E-43"
+        izz="4.15625098855316E-09" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_3/meshes/M8_gasket_1_link.dae" />
+      </geometry>
+      <material
+        name="bolt">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_3/meshes/M8_gasket_1_link.dae" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M8_gasket_1_joint"
+    type="fixed">
+    <origin
+      xyz="-0.5215 -0.104 0.0525"
+      rpy="3.1416 0 -2.7485" />
+    <parent
+      link="battery_pack_base_link" />
+    <child
+      link="M8_gasket_1_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="M8_gasket_2_link">
+    <inertial>
+      <origin
+        xyz="0 0 -0.000499999999999945"
+        rpy="0 0 0" />
+      <mass
+        value="0.00010550204865667" />
+      <inertia
+        ixx="2.08686937076162E-09"
+        ixy="5.16987882845642E-26"
+        ixz="1.7437435717737E-42"
+        iyy="2.08686937076162E-09"
+        iyz="2.84281637081175E-43"
+        izz="4.15625098855316E-09" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_3/meshes/M8_gasket_2_link.dae" />
+      </geometry>
+      <material
+        name="bolt">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_3/meshes/M8_gasket_2_link.dae" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M8_gasket_2_joint"
+    type="fixed">
+    <origin
+      xyz="-0.521499999999999 -0.00400000000000011 0.0525"
+      rpy="3.14159265358979 0 -2.74849784316327" />
+    <parent
+      link="battery_pack_base_link" />
+    <child
+      link="M8_gasket_2_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="M10_gasket_1_link">
+    <inertial>
+      <origin
+        xyz="2.77555756156289E-17 0 -0.000499999999999723"
+        rpy="0 0 0" />
+      <mass
+        value="0.000122726872927147" />
+      <inertia
+        ixx="3.24064827055894E-09"
+        ixy="2.06795153138257E-25"
+        ixz="2.26664384148777E-42"
+        iyy="3.24064827055894E-09"
+        iyz="9.39925665401376E-43"
+        izz="6.46095364480573E-09" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_3/meshes/M10_gasket_1_link.dae" />
+      </geometry>
+      <material
+        name="bolt">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_3/meshes/M10_gasket_1_link.dae" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M10_gasket_1_joint"
+    type="fixed">
+    <origin
+      xyz="-0.5215 0.196 0.0525"
+      rpy="3.1416 0 -2.7485" />
+    <parent
+      link="battery_pack_base_link" />
+    <child
+      link="M10_gasket_1_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="M10_gasket_2_link">
+    <inertial>
+      <origin
+        xyz="0 0 -0.000499999999999723"
+        rpy="0 0 0" />
+      <mass
+        value="0.000122726872927147" />
+      <inertia
+        ixx="3.24064827055894E-09"
+        ixy="3.10192729707385E-25"
+        ixz="3.07565550259243E-42"
+        iyy="3.24064827055894E-09"
+        iyz="1.27540440712647E-42"
+        izz="6.46095364480573E-09" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_3/meshes/M10_gasket_2_link.dae" />
+      </geometry>
+      <material
+        name="bolt">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_3/meshes/M10_gasket_2_link.dae" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="M10_gasket_2_joint"
+    type="fixed">
+    <origin
+      xyz="-0.5215 0.296 0.0525"
+      rpy="3.1416 0 -2.7485" />
+    <parent
+      link="battery_pack_base_link" />
+    <child
+      link="M10_gasket_2_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="battery_link">
+    <inertial>
+      <origin
+        xyz="-0.812291820172866 0.499989787693561 0"
+        rpy="0 0 0" />
+      <mass
+        value="125.983329440983" />
+      <inertia
+        ixx="10.5619007949744"
+        ixy="0.00102256355122022"
+        ixz="-6.62078457904823E-17"
+        iyy="26.1288590387794"
+        iyz="-7.60212567544936E-17"
+        izz="36.5573338075084" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_3/meshes/battery_link.dae" />
+      </geometry>
+      <material
+        name="platform">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_3/meshes/battery_link.dae" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="battery_joint"
+    type="fixed">
+    <origin
+      xyz="-0.504 -0.504 0.04"
+      rpy="0 0 0" />
+    <parent
+      link="battery_pack_base_link" />
+    <child
+      link="battery_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="sleeve_plate_link">
+    <inertial>
+      <origin
+        xyz="0.00113097715919352 -3.3682133098914E-05 -0.0349023059379383"
+        rpy="0 0 0" />
+      <mass
+        value="0.511536238561189" />
+      <inertia
+        ixx="0.000603156714858973"
+        ixy="-5.3851411491421E-06"
+        ixz="-2.31790936572696E-06"
+        iyy="0.000600786005457109"
+        iyz="2.44570964889537E-07"
+        izz="0.000838401878607603" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_3/meshes/sleeve_plate_link.dae" />
+      </geometry>
+      <material
+        name="battery">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://battery_pack_3/meshes/sleeve_plate_link.dae" />
       </geometry>
     </collision>
   </link>
@@ -98,1051 +465,6 @@
       link="battery_pack_base_link" />
     <child
       link="sleeve_plate_link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="M6_bolt_1_link">
-    <inertial>
-      <origin
-        xyz="-1.0665E-07 -1.3585E-07 -0.011089"
-        rpy="0 0 0" />
-      <mass
-        value="0.0013212" />
-      <inertia
-        ixx="1.3904E-07"
-        ixy="1.1478E-12"
-        ixz="-2.8329E-11"
-        iyy="1.3904E-07"
-        iyz="5.0437E-11"
-        izz="1.0587E-08" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M6_bolt_1_link.dae" />
-      </geometry>
-      <material
-        name="bolt">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/bolt_color.jpg" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M6_bolt_1_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M6_bolt_1_joint"
-    type="fixed">
-    <origin
-      xyz="-0.5215 -0.404 0.0485"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="M6_bolt_1_link" />
-    <axis
-      xyz="0 0 1" />
-  </joint>
-  <link
-    name="M6_gasket_1_link">
-    <inertial>
-      <origin
-        xyz="1.1102E-16 -1.1102E-16 -0.003"
-        rpy="0 0 0" />
-      <mass
-        value="9.9286E-05" />
-      <inertia
-        ixx="1.3185E-09"
-        ixy="-1.4343E-25"
-        ixz="-6.2918E-27"
-        iyy="1.3185E-09"
-        iyz="3.9097E-29"
-        izz="2.6204E-09" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M6_gasket_1_link.dae" />
-      </geometry>
-      <material
-        name="bolt">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/bolt_color.jpg" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M6_gasket_1_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M6_gasket_1_joint"
-    type="fixed">
-    <origin
-      xyz="-0.5215 -0.404 0.0485"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="M6_gasket_1_link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="M6_bolt_2_link">
-    <inertial>
-      <origin
-        xyz="-1.2416E-07 -1.2007E-07 -0.011089"
-        rpy="0 0 0" />
-      <mass
-        value="0.0013212" />
-      <inertia
-        ixx="1.3904E-07"
-        ixy="1.2595E-12"
-        ixz="-2.1199E-11"
-        iyy="1.3904E-07"
-        iyz="5.3824E-11"
-        izz="1.0587E-08" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M6_bolt_2_link.dae" />
-      </geometry>
-      <material
-        name="bolt">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/bolt_color.jpg" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M6_bolt_2_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M6_bolt_2_joint"
-    type="fixed">
-    <origin
-      xyz="-0.5215 -0.304 0.0485"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="M6_bolt_2_link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="M6_gasket_2_link">
-    <inertial>
-      <origin
-        xyz="2.2204E-16 -4.4409E-16 -0.003"
-        rpy="0 0 0" />
-      <mass
-        value="9.9286E-05" />
-      <inertia
-        ixx="1.3185E-09"
-        ixy="-1.4343E-25"
-        ixz="-6.2918E-27"
-        iyy="1.3185E-09"
-        iyz="3.9097E-29"
-        izz="2.6204E-09" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M6_gasket_2_link.dae" />
-      </geometry>
-      <material
-        name="bolt">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/bolt_color.jpg" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M6_gasket_2_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M6_gasket_2_joint"
-    type="fixed">
-    <origin
-      xyz="-0.5215 -0.304 0.0485"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="M6_gasket_2_link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="M6_bolt_3_link">
-    <inertial>
-      <origin
-        xyz="-9.4899E-08 -1.4431E-07 -0.011089"
-        rpy="0 0 0" />
-      <mass
-        value="0.0013212" />
-      <inertia
-        ixx="1.3904E-07"
-        ixy="1.0362E-12"
-        ixz="-3.2454E-11"
-        iyy="1.3904E-07"
-        iyz="4.7886E-11"
-        izz="1.0587E-08" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M6_bolt_3_link.dae" />
-      </geometry>
-      <material
-        name="bolt">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/bolt_color.jpg" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M6_bolt_3_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M6_bolt_3_joint"
-    type="fixed">
-    <origin
-      xyz="-0.5215 -0.204 0.0485"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="M6_bolt_3_link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="M6_gasket_3_link">
-    <inertial>
-      <origin
-        xyz="5.5511E-17 0 -0.003"
-        rpy="0 0 0" />
-      <mass
-        value="9.9286E-05" />
-      <inertia
-        ixx="1.3185E-09"
-        ixy="-1.4343E-25"
-        ixz="-6.2918E-27"
-        iyy="1.3185E-09"
-        iyz="3.9097E-29"
-        izz="2.6204E-09" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M6_gasket_3_link.dae" />
-      </geometry>
-      <material
-        name="bolt">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/bolt_color.jpg" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M6_gasket_3_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M6_gasket_3_joint"
-    type="fixed">
-    <origin
-      xyz="-0.5215 -0.204 0.0485"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="M6_gasket_3_link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="M8_bolt_1_link">
-    <inertial>
-      <origin
-        xyz="-1.7339E-08 -1.0782E-07 -0.011681"
-        rpy="0 0 0" />
-      <mass
-        value="0.0021494" />
-      <inertia
-        ixx="2.2689E-07"
-        ixy="3.8314E-12"
-        ixz="-1.9137E-11"
-        iyy="2.2689E-07"
-        iyz="9.7368E-11"
-        izz="2.5923E-08" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M8_bolt_1_link.dae" />
-      </geometry>
-      <material
-        name="bolt">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/bolt_color.jpg" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M8_bolt_1_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M8_bolt_1_joint"
-    type="fixed">
-    <origin
-      xyz="-0.5215 -0.104 0.0485"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="M8_bolt_1_link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="M8_gasket_1_link">
-    <inertial>
-      <origin
-        xyz="5.5511E-17 -5.5511E-17 -0.003"
-        rpy="0 0 0" />
-      <mass
-        value="0.00011965" />
-      <inertia
-        ixx="2.232E-09"
-        ixy="-8.1899E-26"
-        ixz="-5.8695E-27"
-        iyy="2.232E-09"
-        iyz="-2.6964E-27"
-        izz="4.4442E-09" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M8_gasket_1_link.dae" />
-      </geometry>
-      <material
-        name="bolt">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/bolt_color.jpg" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M8_gasket_1_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M8_gasket_1_joint"
-    type="fixed">
-    <origin
-      xyz="-0.5215 -0.104 0.0485"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="M8_gasket_1_link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="M8_bolt_2_link">
-    <inertial>
-      <origin
-        xyz="3.1115E-08 -1.0468E-07 -0.011681"
-        rpy="0 0 0" />
-      <mass
-        value="0.0021494" />
-      <inertia
-        ixx="2.2689E-07"
-        ixy="2.0426E-12"
-        ixz="-5.9454E-11"
-        iyy="2.2689E-07"
-        iyz="7.9448E-11"
-        izz="2.5923E-08" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M8_bolt_2_link.dae" />
-      </geometry>
-      <material
-        name="bolt">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/bolt_color.jpg" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M8_bolt_2_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M8_bolt_2_joint"
-    type="fixed">
-    <origin
-      xyz="-0.5215 -0.004 0.0485"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="M8_bolt_2_link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="M8_gasket_2_link">
-    <inertial>
-      <origin
-        xyz="8.3267E-17 -2.2204E-16 -0.003"
-        rpy="0 0 0" />
-      <mass
-        value="0.00011965" />
-      <inertia
-        ixx="2.232E-09"
-        ixy="-8.1899E-26"
-        ixz="-3.8783E-27"
-        iyy="2.232E-09"
-        iyz="-1.8707E-27"
-        izz="4.4442E-09" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M8_gasket_2_link.dae" />
-      </geometry>
-      <material
-        name="bolt">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/bolt_color.jpg" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M8_gasket_2_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M8_gasket_2_joint"
-    type="fixed">
-    <origin
-      xyz="-0.5215 -0.004 0.0485"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="M8_gasket_2_link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="M8_bolt_3_link">
-    <inertial>
-      <origin
-        xyz="1.7872E-08 -1.0774E-07 -0.011681"
-        rpy="0 0 0" />
-      <mass
-        value="0.0021494" />
-      <inertia
-        ixx="2.2689E-07"
-        ixy="2.7861E-12"
-        ixz="-4.9126E-11"
-        iyy="2.2689E-07"
-        iyz="8.6217E-11"
-        izz="2.5923E-08" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M8_bolt_3_link.dae" />
-      </geometry>
-      <material
-        name="bolt">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/bolt_color.jpg" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M8_bolt_3_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M8_bolt_3_joint"
-    type="fixed">
-    <origin
-      xyz="-0.5215 0.096 0.0485"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="M8_bolt_3_link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="M8_gasket_3_link">
-    <inertial>
-      <origin
-        xyz="2.7756E-17 -1.1102E-16 -0.003"
-        rpy="0 0 0" />
-      <mass
-        value="0.00011965" />
-      <inertia
-        ixx="2.232E-09"
-        ixy="-8.1899E-26"
-        ixz="-3.8783E-27"
-        iyy="2.232E-09"
-        iyz="-1.8707E-27"
-        izz="4.4442E-09" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M8_gasket_3_link.dae" />
-      </geometry>
-      <material
-        name="bolt">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/bolt_color.jpg" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M8_gasket_3_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M8_gasket_3_joint"
-    type="fixed">
-    <origin
-      xyz="-0.5215 0.096 0.0485"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="M8_gasket_3_link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="M10_bolt_1_link">
-    <inertial>
-      <origin
-        xyz="6.7137E-08 -1.4735E-07 -0.012051"
-        rpy="0 0 0" />
-      <mass
-        value="0.003184" />
-      <inertia
-        ixx="3.3964E-07"
-        ixy="8.9575E-12"
-        ixz="1.1026E-11"
-        iyy="3.3963E-07"
-        iyz="1.5169E-10"
-        izz="5.4565E-08" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M10_bolt_1_link.dae" />
-      </geometry>
-      <material
-        name="bolt">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/bolt_color.jpg" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M10_bolt_1_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M10_bolt_1_joint"
-    type="fixed">
-    <origin
-      xyz="-0.5215 0.196 0.0485"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="M10_bolt_1_link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="M10_gasket_1_link">
-    <inertial>
-      <origin
-        xyz="0 -2.7756E-17 -0.003"
-        rpy="0 0 0" />
-      <mass
-        value="0.00014002" />
-      <inertia
-        ixx="3.5046E-09"
-        ixy="1.9301E-25"
-        ixz="-1.2888E-26"
-        iyy="3.5046E-09"
-        iyz="-8.9587E-27"
-        izz="6.986E-09" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M10_gasket_1_link.dae" />
-      </geometry>
-      <material
-        name="bolt">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/bolt_color.jpg" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M10_gasket_1_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M10_gasket_1_joint"
-    type="fixed">
-    <origin
-      xyz="-0.5215 0.196 0.0485"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="M10_gasket_1_link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="M10_bolt_2_link">
-    <inertial>
-      <origin
-        xyz="1.6074E-07 -1.955E-08 -0.012051"
-        rpy="0 0 0" />
-      <mass
-        value="0.003184" />
-      <inertia
-        ixx="3.3963E-07"
-        ixy="-2.1662E-12"
-        ixz="-1.2369E-10"
-        iyy="3.3964E-07"
-        iyz="8.8507E-11"
-        izz="5.4565E-08" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M10_bolt_2_link.dae" />
-      </geometry>
-      <material
-        name="bolt">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/bolt_color.jpg" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M10_bolt_2_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M10_bolt_2_joint"
-    type="fixed">
-    <origin
-      xyz="-0.5215 0.296 0.0485"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="M10_bolt_2_link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="M10_gasket_2_link">
-    <inertial>
-      <origin
-        xyz="5.5511E-17 -2.7756E-17 -0.003"
-        rpy="0 0 0" />
-      <mass
-        value="0.00014002" />
-      <inertia
-        ixx="3.5046E-09"
-        ixy="3.033E-25"
-        ixz="-1.4983E-26"
-        iyy="3.5046E-09"
-        iyz="-1.1844E-26"
-        izz="6.986E-09" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M10_gasket_2_link.dae" />
-      </geometry>
-      <material
-        name="bolt">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/bolt_color.jpg" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M10_gasket_2_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M10_gasket_2_joint"
-    type="fixed">
-    <origin
-      xyz="-0.5215 0.296 0.0485"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="M10_gasket_2_link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="M10_bolt_3_link">
-    <inertial>
-      <origin
-        xyz="1.2249E-07 -1.0591E-07 -0.012051"
-        rpy="0 0 0" />
-      <mass
-        value="0.003184" />
-      <inertia
-        ixx="3.3963E-07"
-        ixy="7.476E-12"
-        ixz="-5.3259E-11"
-        iyy="3.3964E-07"
-        iyz="1.4246E-10"
-        izz="5.4565E-08" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M10_bolt_3_link.dae" />
-      </geometry>
-      <material
-        name="bolt">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/bolt_color.jpg" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M10_bolt_3_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M10_bolt_3_joint"
-    type="fixed">
-    <origin
-      xyz="-0.5215 0.396 0.0485"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="M10_bolt_3_link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="M10_gasket_3_link">
-    <inertial>
-      <origin
-        xyz="5.5511E-17 1.7347E-17 -0.003"
-        rpy="0 0 0" />
-      <mass
-        value="0.00014002" />
-      <inertia
-        ixx="3.5046E-09"
-        ixy="3.033E-25"
-        ixz="-1.4983E-26"
-        iyy="3.5046E-09"
-        iyz="-1.1844E-26"
-        izz="6.986E-09" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M10_gasket_3_link.dae" />
-      </geometry>
-      <material
-        name="bolt">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/bolt_color.jpg" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/M10_gasket_3_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M10_gasket_3_joint"
-    type="fixed">
-    <origin
-      xyz="-0.5215 0.396 0.0485"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="M10_gasket_3_link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="battery_link">
-    <inertial>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <mass
-        value="0" />
-      <inertia
-        ixx="0"
-        ixy="0"
-        ixz="0"
-        iyy="0"
-        iyz="0"
-        izz="0" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/battery_link.dae" />
-      </geometry>
-      <material
-        name="platform">
-        <color
-          rgba="1 1 1 1" />
-        <texture
-          filename="package://battery_pack/textures/platform.png" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://battery_pack/meshes/battery_link.dae" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="battery_joint"
-    type="fixed">
-    <origin
-      xyz="-0.504 -0.504 0.035"
-      rpy="0 0 0" />
-    <parent
-      link="battery_pack_base_link" />
-    <child
-      link="battery_link" />
     <axis
       xyz="0 0 0" />
   </joint>

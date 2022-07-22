@@ -33,6 +33,15 @@
   <param name="M6_sleeve_description" textfile="$(find M6_sleeve)/urdf/M6_sleeve.urdf" />
   <param name="M8_sleeve_description" textfile="$(find M8_sleeve)/urdf/M8_sleeve.urdf" />
   <param name="M10_sleeve_description" textfile="$(find M10_sleeve)/urdf/M10_sleeve.urdf" />
+  <param name="hexagon_sleeve_description" textfile="$(find hexagon_sleeve)/urdf/hexagon_sleeve.urdf" />
+  <param name="star_sleeve_description" textfile="$(find star_sleeve)/urdf/star_sleeve.urdf" />
+  <param name="cross_sleeve_description" textfile="$(find cross_sleeve)/urdf/cross_sleeve.urdf" />
+  <param name="hexagon_bolt_description" textfile="$(find hexagon_bolt)/urdf/hexagon_bolt.urdf" />
+  <param name="M6_bolt_description" textfile="$(find M6_bolt)/urdf/M6_bolt.urdf" />
+  <param name="M8_bolt_description" textfile="$(find M8_bolt)/urdf/M8_bolt.urdf" />
+  <param name="M10_bolt_description" textfile="$(find M10_bolt)/urdf/M10_bolt.urdf" />
+  <param name="star_bolt_description" textfile="$(find star_bolt)/urdf/star_bolt.urdf" />
+  <param name="cross_bolt_description" textfile="$(find cross_bolt)/urdf/cross_bolt.urdf" />
 
   <!-- Load controller settings -->
   <rosparam file="$(arg controller_config_file)" command="load"/>
@@ -56,20 +65,92 @@
   <node pkg="gazebo_ros" type="spawn_model" name="M6_sleeve"  
     args="
       -urdf -model M6_sleeve -param M6_sleeve_description
-      -x 0.414277 -y 0.000043 -z 0.360912
-      -R -0.487594 -P 1.570484 -Y 0.916099"
+      -x 0.450000 -y -0.035743 -z 0.361520
+      -R -3.070011 -P 1.569173 -Y -1.318157"
     output="screen" respawn="false"/>
   <node pkg="gazebo_ros" type="spawn_model" name="M8_sleeve"   
     args="
       -urdf -model M8_sleeve -param M8_sleeve_description
-      -x 0.449942 -y -0.035743 -z 0.360922
-      -R 1.332686 -P 1.570579 -Y 2.753643"
+      -x 0.475287 -y -0.025291 -z 0.361323
+      -R 2.371931 -P 1.568935 -Y 1.662290"
     output="screen" respawn="false"/>
   <node pkg="gazebo_ros" type="spawn_model" name="M10_sleeve" 
     args="
       -urdf -model M10_sleeve -param M10_sleeve_description
-      -x 0.485752 -y -0.000005 -z 0.360716
-      -R 0.093485 -P 1.563880 -Y -1.347770"
+      -x 0.485757 -y -0.000001 -z 0.361106
+      -R -0.176915 -P 1.569842 -Y 0.513549"
+    output="screen" respawn="false" />
+    <node pkg="gazebo_ros" type="spawn_model" name="hexagon_sleeve_sleeve"  
+    args="
+      -urdf -model hexagon_sleeve -param hexagon_sleeve_description
+      -x 0.424660 -y 0.025289 -z 0.356438
+      -R -0.411018 -P 1.566303 -Y 3.107694"
+    output="screen" respawn="false"/>
+  <node pkg="gazebo_ros" type="spawn_model" name="star_sleeve_sleeve"   
+    args="
+      -urdf -model star_sleeve -param star_sleeve_description
+      -x 0.414244 -y -0.000032 -z 0.357269
+      -R 1.146761 -P 1.567547 -Y -1.365673"
+    output="screen" respawn="false"/>
+  <node pkg="gazebo_ros" type="spawn_model" name="cross_sleeve_sleeve" 
+    args="
+      -urdf -model cross_sleeve -param cross_sleeve_description
+      -x 0.424778 -y -0.025328 -z 0.347731
+      -R 2.224413 -P 1.567029 -Y -0.550571"
+    output="screen" respawn="false" />
+    <node pkg="gazebo_ros" type="spawn_model" name="hexagon_bolt" 
+    args="
+      -urdf -model hexagon_bolt -param hexagon_bolt_description
+      -x 0.396753 -y 0.521242 -z 0.343655
+      -R 1.949890 -P 1.570616 -Y 0.468642"
+    output="screen" respawn="false" />
+    <node pkg="gazebo_ros" type="spawn_model" name="M6_bolt_1" 
+    args="
+      -urdf -model M6_bolt_1 -param M6_bolt_description
+      -x -0.403971 -y 0.521573 -z 0.346916
+      -R -3.140464 -P 0.000033 -Y 2.833937"
+    output="screen" respawn="false" />
+    <!-- <node pkg="gazebo_ros" type="spawn_model" name="M6_bolt_2" 
+    args="
+      -urdf -model M6_bolt_2 -param M6_bolt_description
+      -x -0.304001 -y 0.521582 -z 0.346912
+     -R 3.141462 -P 0.000335 -Y 1.399991"
+    output="screen" respawn="false" /> -->
+    <node pkg="gazebo_ros" type="spawn_model" name="M8_bolt_1" 
+    args="
+      -urdf -model M8_bolt_1 -param M8_bolt_description
+      -x -0.103997 -y 0.521421 -z 0.346910
+      -R -3.141432 -P -0.000113 -Y 1.412325"
+    output="screen" respawn="false" />
+    <!-- <node pkg="gazebo_ros" type="spawn_model" name="M8_bolt_2" 
+    args="
+      -urdf -model M8_bolt_2 -param M8_bolt_description
+      -x -0.004044 -y 0.521484 -z 0.346319
+      -R 3.141511 -P -0.000037 -Y 0.431430"
+    output="screen" respawn="false" /> -->
+    <node pkg="gazebo_ros" type="spawn_model" name="M10_bolt_1" 
+    args="
+      -urdf -model M10_bolt_1 -param M10_bolt_description
+      -x 0.196006 -y 0.521508 -z 0.345949
+      -R 3.141565 -P -0.000092 -Y -0.133533"
+    output="screen" respawn="false" />
+    <!-- <node pkg="gazebo_ros" type="spawn_model" name="M10_bolt_2" 
+    args="
+      -urdf -model M10_bolt_2 -param M10_bolt_description
+      -x 0.296006 -y 0.521508 -z 0.345949
+      -R 3.141565 -P -0.000092 -Y -0.133533"
+    output="screen" respawn="false" /> -->
+    <node pkg="gazebo_ros" type="spawn_model" name="cross_bolt" 
+    args="
+      -urdf -model cross_bolt -param cross_bolt_description
+      -x -0.203720 -y 0.521460 -z 0.350499
+      -R 3.070033 -P 1.570673 -Y -0.251191"
+    output="screen" respawn="false" />
+    <node pkg="gazebo_ros" type="spawn_model" name="star_bolt" 
+    args="
+      -urdf -model star_bolt -param star_bolt_description
+      -x 0.095408 -y 0.521450 -z 0.341331
+      -R 1.713656 -P 1.569896 -Y -2.756235"
     output="screen" respawn="false" />
 
   <!-- Load and start the controllers listed in the 'controllers' arg. -->
