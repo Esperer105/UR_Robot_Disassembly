@@ -72,8 +72,8 @@ class PrimAimTarget(PrimBase):
             circles = detect_ret["screw"]
             circle = self.findBestMatchCircle(circles)
 
-            x = circle[1]
-            y = circle[0]
+            x = circle[0]
+            y = circle[1]
             self.add_bolt_frame(x, y, all_info)
 
             bolt_pose = self.get_bolt_pose_in_world_frame(all_info)
