@@ -113,8 +113,8 @@ class TestClearObstacle(TestBase):
                 # y=circle[0]
                 if (s==0):
                     circle = self.findBestMatchCircle(circles)                
-                    x=circle[1]-(r_width-width)/2
-                    y=circle[0]-(r_height-height)/2
+                    x=circle[0]-(r_width-width)/2
+                    y=circle[1]-(r_height-height)/2
                     self.add_bolt_frame(x, y, latest_infos)
                     bolt_pose = self.get_bolt_pose_in_world_frame(latest_infos)
                     real_pose=kalman.iteration(bolt_pose)

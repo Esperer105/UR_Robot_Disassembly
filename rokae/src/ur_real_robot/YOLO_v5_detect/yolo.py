@@ -208,13 +208,13 @@ class YOLO(object):
             # 这里是检测框的结果
             # print(str(label, 'utf-8').split(' '), top, left, bottom, right)
             label_det = label.decode('utf-8').split(' ')[0]
-            # bbox的中心是(y,x)
+            # bbox的中心是(x,y)
             if label_det not in bbox_collect.keys():
                 bbox_collect[label_det] = [
-                    (int((top+bottom)/2), int((left+right)/2))]
+                    (int((left+right)/2),int((top+bottom)/2))]
             else:
                 bbox_collect[label_det].append(
-                    (int((top+bottom)/2), int((left+right)/2)))
+                    (int((left+right)/2),int((top+bottom)/2)))
             # print(bbox_collect)
             if top - label_size[1] >= 0:
                 text_origin = np.array([left, top - label_size[1]])
