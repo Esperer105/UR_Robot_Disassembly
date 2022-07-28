@@ -104,11 +104,6 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          camera_Link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
           flange:
             Alpha: 1
             Show Axes: false
@@ -129,11 +124,6 @@ Visualization Manager:
             Show Trail: false
             Value: true
           shoulder_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          sleeve_Link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -220,11 +210,6 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          camera_Link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
           flange:
             Alpha: 1
             Show Axes: false
@@ -245,11 +230,6 @@ Visualization Manager:
             Show Trail: false
             Value: true
           shoulder_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          sleeve_Link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -354,7 +334,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: base
+    Fixed Frame: base_link
     Frame Rate: 30
   Name: root
   Tools:

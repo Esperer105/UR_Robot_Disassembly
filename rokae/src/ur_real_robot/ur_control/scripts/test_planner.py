@@ -189,11 +189,11 @@ class TSTPlanner:
                 continue
             else:
                 if self.action == 'start':
-                    
                     print('action==start do auto_plan')
                     step_list = self.auto_plan(self.stage)
                     i = 0
                     self.action = step_list[i]
+                    # self.action = 'insert'
                     print(self.action)
                 if self.all_infos_lock.acquire():
                     infos = copy.deepcopy(self.all_infos)
