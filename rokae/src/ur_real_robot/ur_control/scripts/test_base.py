@@ -279,7 +279,7 @@ class TestBase(object):
         tl_x = self.clamp(int(x) - 1, 0, all_info['depth_img'].shape[1])
         br_x = self.clamp(int(x) + 1, 0, all_info['depth_img'].shape[1])
         tl_y = self.clamp(int(y) - 1, 0, all_info['depth_img'].shape[0])
-        br_y = self.clamp(int(y) + 1, 0, all_info['depth_img'].shape[0])
+        br_y = self.clamp(int(y) + 1, 0, all_info['depth_img'].shape[0]) 
 
         print((x, y), (tl_x, tl_y, br_x, br_y))
         roi = all_info['depth_img'][tl_y:br_y, tl_x:br_x]
