@@ -78,10 +78,10 @@ class TestAimTarget(TestBase):
             # crop_img=raw_img[:,int(0.5*(width-height)):int(0.5*(width+height))]
             detect_ret=yolo.finish_YOLO_detect(crop_img)
             s=kalman.itr_sum
-            if 'screw' in detect_ret.keys():
+            if 'screw' in detect_ret[1].keys():
                 print('screw success')
 
-                circles = detect_ret["screw"]
+                circlesbox = detect_ret[1]["screw"]
                 #circle = self.findBestMatchCircle(circles)
 
                 # x = circle[1]+int(0.5*(width-0.5*height))
@@ -89,10 +89,15 @@ class TestAimTarget(TestBase):
                 # x=circle[1]+int(0.5*(width-height))
                 # y=circle[0]
                 if (s==0):
-                    circle = self.findBestMatchCircle(circles)                
-                    x=circle[0]-(r_width-width)/2
-                    y=circle[1]-(r_height-height)/2
-                    self.add_bolt_frame(x, y, latest_infos)
+                    circlebox = self.findBestMatchCircle(circlesbox)                
+                    # x=circle[0]-(r_width-width)/2
+                    # y=circle[1]-(r_height-height)/2
+                    # self.add_bolt_frame(x, y, latest_infos)
+                    circlebox[0] = circlebox[0]-(r_width-width)/2
+                    circlebox[2] = circlebox[2]-(r_width-width)/2
+                    circlebox[1] = circlebox[1]-(r_height-height)/2
+                    circlebox[3] = circlebox[3]-(r_height-height)/2
+                    self.add_bolt_frameV2(circlebox, latest_infos)
                     bolt_pose = self.get_bolt_pose_in_world_frame(latest_infos)
                     real_pose=kalman.iteration(bolt_pose)
                     self.adjust_bolt_frame(real_pose,latest_infos)
@@ -103,8 +108,13 @@ class TestAimTarget(TestBase):
                         print(curr_pose)
                 else:
                     min_diff=100
-                    for screw in circles:
-                        self.add_bolt_frame(screw[1]-(r_width-width)/2, screw[0]-(r_height-height)/2, latest_infos)
+                    for screw in circlesbox:
+                        # self.add_bolt_frame(screw[1]-(r_width-width)/2, screw[0]-(r_height-height)/2, latest_infos)
+                        screw[0] = screw[0]-(r_width-width)/2
+                        screw[2] = screw[2]-(r_width-width)/2
+                        screw[1] = screw[1]-(r_height-height)/2
+                        screw[3] = screw[3]-(r_height-height)/2
+                        self.add_bolt_frameV2(screw, latest_infos)
                         screw_pose=self.get_bolt_pose_in_world_frame(latest_infos)
                         former_pose=kalman.get_former_pose()
                         temp_diff=math.sqrt(pow(screw_pose.position.x - former_pose.position.x ,2)+pow(screw_pose.position.y - former_pose.position.y ,2)+pow(screw_pose.position.z- former_pose.position.z,2))            

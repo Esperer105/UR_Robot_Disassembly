@@ -125,6 +125,7 @@ class YOLO(object):
             np.array(image_data, dtype='float32')), (2, 0, 1)), 0)
         
         bbox_collect = {}
+        bbox_center_collect = {}
         
         with torch.no_grad():
             images = torch.from_numpy(image_data)
@@ -209,13 +210,18 @@ class YOLO(object):
             # print(str(label, 'utf-8').split(' '), top, left, bottom, right)
             label_det = label.decode('utf-8').split(' ')[0]
             # bbox的中心是(x,y)
-            if label_det not in bbox_collect.keys():
-                bbox_collect[label_det] = [
-                    (int((left+right)/2),int((top+bottom)/2))]
+            if label_det not in bbox_center_collect.keys():
+                bbox_center_collect[label_det] = [
+                    [int((left+right)/2), int((top+bottom)/2)]]
             else:
-                bbox_collect[label_det].append(
-                    (int((left+right)/2),int((top+bottom)/2)))
+                bbox_center_collect[label_det].append(
+                    [int((left+right)/2), int((top+bottom)/2)])
             # print(bbox_collect)
+            # bbox是(xmin,ymin,xmax,ymax)
+            if label_det not in bbox_collect.keys():
+                bbox_collect[label_det] = [[left, top, right, bottom]]
+            else:
+                bbox_collect[label_det].append([left, top, right, bottom])
             if top - label_size[1] >= 0:
                 text_origin = np.array([left, top - label_size[1]])
             else:
@@ -230,4 +236,4 @@ class YOLO(object):
                       fill=(0, 0, 0), font=font)
             del draw
         # print(bbox_collect)
-        return image, bbox_collect
+        return image, (bbox_center_collect, bbox_collect)

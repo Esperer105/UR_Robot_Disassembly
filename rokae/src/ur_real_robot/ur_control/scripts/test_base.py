@@ -35,7 +35,7 @@ from bolt_detector import BoltDetector
 from YOLO_client import YOLO_SendImg
 from rigid_transform_3D import rigid_transform_3D
 from kalman import Kalman
-
+from RANSAC_plane import cal_bolt_plane
  
 class TestBase(object):
     def __init__(self, group_):
@@ -297,6 +297,17 @@ class TestBase(object):
         coord_z = d
         print("coord (%f, %f, %f)" % (coord_x, coord_y, coord_z))
         R_quat, t = self.calc_transform(x, y, d, all_info)
+        print(R_quat)
+        print(t)
+        self.broadcast_tf(R_quat, t, all_info)
+
+    def add_bolt_frameV2(self, bbox, all_info):
+        tl_x = self.clamp(bbox[0], 0, all_info['depth_img'].shape[1])
+        br_x = self.clamp(bbox[2], 0, all_info['depth_img'].shape[1])
+        tl_y = self.clamp(bbox[1], 0, all_info['depth_img'].shape[0])
+        br_y = self.clamp(bbox[3], 0, all_info['depth_img'].shape[0])
+        print('nihao', tl_x, br_x, tl_y, br_y)
+        R_quat, t = cal_bolt_plane(tl_x, tl_y, br_x, br_y, all_info)
         print(R_quat)
         print(t)
         self.broadcast_tf(R_quat, t, all_info)
