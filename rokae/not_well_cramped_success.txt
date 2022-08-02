@@ -1,0 +1,290 @@
+tool0: position (0.15 0.40 0.65) orientation (-0.71 0.71 -0.00 0.00) RPY (-3.14 -0.00 -1.57)
+action==start do auto_plan
+start to plan
+['move', 'push', 'mate', 'insert', 'disassemble']
+insert
+param satified, start to insert
+real bolt detected
+real pose
+position: 
+  x: -0.0635
+  y: 0.5048
+  z: 0.2312
+orientation: 
+  x: 1
+  y: 0
+  z: 0
+  w: 0
+(3.141592653589793, -0.0, 0.0)
+real_broadcast_tf
+1658912907636913061
+translation: 
+  x: -0.0635
+  y: 0.5048
+  z: 0.2312
+rotation: 
+  x: 1
+  y: 0
+  z: 0
+  w: 0
+(3.141592653589793, -0.0, 0.0)
+position: 
+  x: -0.0635
+  y: 0.5008
+  z: 0.6662000000000001
+orientation: 
+  x: 1.0000000000000002
+  y: 0.0
+  z: 0.0
+  w: 0.0
+(3.141592653589793, -0.0, 0.0)
+ori-wrench: ver-force:-1.571, hor-force:4.841, x-force:4.7801, y-force:0.7672
+get_insert_trajectory
+position: 
+  x: -0.062
+  y: 0.5008
+  z: 0.6662000000000001
+orientation: 
+  x: 1.0000000000000002
+  y: 0.0
+  z: 0.0
+  w: 0.0
+(3.141592653589793, -0.0, 0.0)
+position: 
+  x: -0.062200961894323344
+  y: 0.50005
+  z: 0.6642000000000001
+orientation: 
+  x: 0.9659258262890683
+  y: -0.25881904510252085
+  z: 0.0
+  w: 0.0
+(3.141592653589793, -0.0, -0.523598775598299)
+position: 
+  x: -0.06275
+  y: 0.49950096189432336
+  z: 0.6622000000000001
+orientation: 
+  x: 0.8660254037844387
+  y: -0.5
+  z: 0.0
+  w: 0.0
+(3.141592653589793, -0.0, -1.0471975511965979)
+position: 
+  x: -0.0635
+  y: 0.4993
+  z: 0.6602000000000001
+orientation: 
+  x: 0.7071067811865476
+  y: -0.7071067811865478
+  z: 0.0
+  w: 0.0
+(3.141592653589793, -0.0, -1.570796326794897)
+position: 
+  x: -0.06425
+  y: 0.49950096189432336
+  z: 0.6582000000000001
+orientation: 
+  x: -0.5000000000000001
+  y: 0.8660254037844387
+  z: 0.0
+  w: 0.0
+(3.141592653589793, 0.0, -2.0943951023931953)
+position: 
+  x: -0.06479903810567667
+  y: 0.50005
+  z: 0.6562000000000001
+orientation: 
+  x: -0.25881904510252096
+  y: 0.9659258262890684
+  z: 0.0
+  w: 0.0
+(3.141592653589793, 0.0, -2.617993877991494)
+position: 
+  x: -0.0635
+  y: 0.5008
+  z: 0.6542000000000001
+orientation: 
+  x: -6.123233995736767e-17
+  y: 1.0000000000000002
+  z: 0.0
+  w: 0.0
+(3.141592653589793, 0.0, -3.141592653589793)
+trajectory collected
+x+
+position: 
+  x: -0.06584538643065518
+  y: 0.5001552738230229
+  z: 0.6541389284663395
+orientation: 
+  x: -0.0006816905323402898
+  y: 0.9999979703272242
+  z: -0.0003951588020456071
+  w: -0.001854316308313064
+x-
+position: 
+  x: -0.06281014484431771
+  y: 0.5001478667308238
+  z: 0.654154570029064
+orientation: 
+  x: -0.0006210179597194106
+  y: 0.9999979879494943
+  z: -0.00034669149454637606
+  w: -0.001875696847613843
+y+
+position: 
+  x: -0.06431299323856395
+  y: 0.5016426197364878
+  z: 0.654140620242779
+orientation: 
+  x: -0.0006228247616485379
+  y: 0.9999980209842164
+  z: -0.0003865992606570484
+  w: -0.0018495020893665984
+y-
+position: 
+  x: -0.064274454903324
+  y: 0.49864764401505546
+  z: 0.6541620531602657
+orientation: 
+  x: -0.0005918142850557191
+  y: 0.9999980669958455
+  z: -0.00036918248741153433
+  w: -0.0018383320471331791
+pure-wrench: ver-force:-4.513, hor-force:-2.565, x-force:-3.0651, y-force:-2.2639,
+pure-wrench: ver-force:-5.553, hor-force:1.378, x-force:0.4327, y-force:-4.1596,
+pure-wrench: ver-force:-5.132, hor-force:-1.185, x-force:-1.4628, y-force:-2.3051,
+pure-wrench: ver-force:-4.691, hor-force:-2.396, x-force:-2.4824, y-force:-1.6032,
+Near cramped!
+Near cramped!
+Near cramped!
+Near cramped!
+test finished
+get_search_trajectory
+the 0-th trajectory
+the 1-th trajectory
+the 2-th trajectory
+the 3-th trajectory
+the 4-th trajectory
+the 5-th trajectory
+the 6-th trajectory
+the 7-th trajectory
+the 8-th trajectory
+the 9-th trajectory
+the 10-th trajectory
+the 11-th trajectory
+the 6-th trajectory
+the 7-th trajectory
+the 8-th trajectory
+the 9-th trajectory
+the 10-th trajectory
+the 11-th trajectory
+the 12-th trajectory
+the 13-th trajectory
+the 14-th trajectory
+the 15-th trajectory
+the 16-th trajectory
+the 17-th trajectory
+the 12-th trajectory
+the 13-th trajectory
+the 14-th trajectory
+the 15-th trajectory
+the 16-th trajectory
+the 17-th trajectory
+the 18-th trajectory
+the 19-th trajectory
+the 20-th trajectory
+the 21-th trajectory
+the 22-th trajectory
+the 23-th trajectory
+the 18-th trajectory
+the 19-th trajectory
+the 20-th trajectory
+the 21-th trajectory
+the 22-th trajectory
+the 23-th trajectory
+the 24-th trajectory
+the 25-th trajectory
+the 26-th trajectory
+the 27-th trajectory
+the 28-th trajectory
+the 29-th trajectory
+the 24-th trajectory
+the 25-th trajectory
+the 26-th trajectory
+the 27-th trajectory
+the 28-th trajectory
+the 29-th trajectory
+the 30-th trajectory
+the 31-th trajectory
+the 32-th trajectory
+the 33-th trajectory
+the 34-th trajectory
+the 35-th trajectory
+trajectory collected
+pure-wrench: ver-force:-3.843, hor-force:-1.093, x-force:-1.7026, y-force:-2.9067,
+pure-wrench: ver-force:-4.042, hor-force:-0.928, x-force:-1.0477, y-force:-1.9443,
+pure-wrench: ver-force:-4.116, hor-force:0.554, x-force:0.3080, y-force:-2.5620,
+pure-wrench: ver-force:-4.070, hor-force:1.231, x-force:0.8821, y-force:-2.9613,
+pure-wrench: ver-force:-4.346, hor-force:-1.165, x-force:-1.4687, y-force:-2.3635,
+pure-wrench: ver-force:-3.930, hor-force:-0.715, x-force:-1.2802, y-force:-2.9521,
+pure-wrench: ver-force:-4.046, hor-force:0.160, x-force:-0.3888, y-force:-3.1609,
+pure-wrench: ver-force:-4.225, hor-force:0.056, x-force:-0.5683, y-force:-3.2657,
+pure-wrench: ver-force:-4.223, hor-force:-1.168, x-force:-1.3998, y-force:-2.2054,
+pure-wrench: ver-force:-3.910, hor-force:-0.190, x-force:-0.6243, y-force:-2.8568,
+pure-wrench: ver-force:-4.079, hor-force:-0.727, x-force:-1.0551, y-force:-2.5134,
+pure-wrench: ver-force:-4.834, hor-force:1.057, x-force:0.7510, y-force:-2.8146,
+pure-wrench: ver-force:-3.637, hor-force:-0.868, x-force:-1.8505, y-force:-3.4507,
+x+
+position: 
+  x: -0.06898478832437199
+  y: 0.5008020082079694
+  z: 0.6541506359190337
+orientation: 
+  x: -0.0014320936618017963
+  y: 0.9999909685222681
+  z: -0.0006577820338090209
+  w: -0.003947062760589794
+x-
+position: 
+  x: -0.06605892374524994
+  y: 0.5009271051216027
+  z: 0.654137722211014
+orientation: 
+  x: -0.0013603915090629672
+  y: 0.9999906804808607
+  z: -0.0006536872783421232
+  w: -0.0040448707406872
+y+
+position: 
+  x: -0.06761336877512841
+  y: 0.5024576279243236
+  z: 0.654140125256657
+orientation: 
+  x: -0.001353354186996219
+  y: 0.9999905128766621
+  z: -0.0006767137597035135
+  w: -0.0040846845168861015
+y-
+position: 
+  x: -0.06759757029693468
+  y: 0.49945973061368976
+  z: 0.6541473291207395
+orientation: 
+  x: -0.0013019503008898572
+  y: 0.9999904517526309
+  z: -0.000670300928304692
+  w: -0.004117283770691793
+pure-wrench: ver-force:-4.647, hor-force:-2.192, x-force:-2.2691, y-force:0.0776,
+pure-wrench: ver-force:-5.336, hor-force:9.564, x-force:7.4132, y-force:-8.4373,
+pure-wrench: ver-force:-6.753, hor-force:12.963, x-force:7.8381, y-force:-13.3283,
+pure-wrench: ver-force:-3.852, hor-force:-2.603, x-force:-3.0329, y-force:-2.1667,
+Near cramped!
+Near cramped!
+Cramped!
+test finished
+search success
+plot is working
+None
+insert_is_finished
+

@@ -147,7 +147,8 @@ class Kalman:
     
     def plot(self):
         if (self.itr_time!=0):
-            fig = plt.figure()
+            fig = plt.figure(figsize=(16,9)  , dpi=120)
+
             # ax1 = fig.add_subplot(7, 1, 1)
             # ax2 = fig.add_subplot(7, 1, 2)
             # ax3 = fig.add_subplot(7, 1, 3)
@@ -158,6 +159,7 @@ class Kalman:
             ax1 = fig.add_subplot(3, 1, 1)
             ax2 = fig.add_subplot(3, 1, 2)
             ax3 = fig.add_subplot(3, 1, 3)
+
             print('plot is working')
 
             ax1.plot(self.X1_np[0, :], 'go--', label="x_Kalman Filter")
@@ -170,13 +172,17 @@ class Kalman:
 
             step=self.itr_sum
             ax1.scatter(np.arange(step), self.Z1_np[0,:].reshape(step,1), label="x_Observation", marker='o')
+            ax1.legend()
             ax2.scatter(np.arange(step), self.Z1_np[1,:].reshape(step,1), label="y_Observation", marker='o')
+            ax2.legend()
             ax3.scatter(np.arange(step), self.Z1_np[2,:].reshape(step,1), label="z_Observation", marker='o')
+            ax3.legend()
             # ax4.scatter(np.arange(step), self.Z1_np[3,:].reshape(step,1), label="xx_Observation", marker='*')        
             # ax5.scatter(np.arange(step), self.Z1_np[4,:].reshape(step,1), label="yy_Observation", marker='*')
             # ax6.scatter(np.arange(step), self.Z1_np[5,:].reshape(step,1), label="zz_Observation", marker='*')
             # ax7.scatter(np.arange(step), self.Z1_np[6,:].reshape(step,1), label="w_Observation", marker='*')
-            
+            plt.legend()
+            plt.suptitle('Result of Kalman Filter')            
             plt.savefig("kalman_"+str(self.plt_time+1)+".png")
             self.plt_time+=1
             # print(plt.show())

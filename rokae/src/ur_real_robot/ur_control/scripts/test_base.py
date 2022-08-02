@@ -261,15 +261,15 @@ class TestBase(object):
         '''
         ps_src = geometry_msgs.msg.PoseStamped()
         try:
-            print ('transform pose') 
-            print (ts)
+            # print ('transform pose') 
+            # print (ts)
             self.tf_listener.waitForTransform(tgt_frame, src_frame, ts, rospy.Duration(3))
             ps_src.header.frame_id = src_frame
             ps_src.header.stamp = ts
             ps_src.pose = pose_pt
 
             ps_tgt = self.tf_listener.transformPose(tgt_frame, ps_src)
-            print('success')
+            # print('success')
             return ps_tgt.pose
         except:
             traceback.print_exc()

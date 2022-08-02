@@ -19,7 +19,7 @@ class TestDisassemble(TestBase):
 
         trajectory =  [] 
         scale_depth= 0.025
-        print('get_insert_trajectory')
+        print('get_return_trajectory')
         for i in range(2):
             tamp_depth=scale_depth *(i+1)
             # SJTU HERE CHANGED ori: z x y
@@ -53,7 +53,7 @@ class TestDisassemble(TestBase):
         except rospy.ServiceException as e:
             print ("Service call failed: %s"%(e))
 
-    def callback(self, data):
+    def state_callback(self, data):
         try:
             self.switch=data.digital_out_states[0].state
         except Exception, err:
@@ -83,7 +83,7 @@ class TestDisassemble(TestBase):
                 return False
         print("param satified, start to disassemble")
         print("testing io-interface")
-        rospy.Subscriber("/ur_hardware_interface/io_states", IOStates, self.callback)
+        rospy.Subscriber("/ur_hardware_interface/io_states", IOStates, self.state_callback)
         rospy.wait_for_service('/ur_hardware_interface/set_io')
         global set_io
         set_io = rospy.ServiceProxy('/ur_hardware_interface/set_io', SetIO)
