@@ -152,6 +152,8 @@ python YOLO_server.py
 rosrun ur_control nsplanner.py
 ```
 
+git 测试
+
 1. rokae 仿真：
 
 首先加载 rokae_gazebo arm_world.launch，然后加载 rokae_moveit_config moveit_planning_execution_4_arm_world.launch，再运行~/rokae_robot/rokae/src/rokae_control/scripts/env_setup.py，
