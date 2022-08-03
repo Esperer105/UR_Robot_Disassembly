@@ -13,7 +13,11 @@ from visualization_msgs.msg import Marker
 from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image, CameraInfo
 from tf import TransformListener, transformations
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
+
 # from  bolt_position_detector
 import copy
 import tf2_ros
@@ -41,9 +45,9 @@ class TestInsert(TestBase):
         radius=0.0015
         delta_angle = 30
         scale_angle = delta_angle * math.pi / 180
-        scale_depth= 0.002
+        scale_depth= 0.0025
 
-        tool_len = 0.435
+        tool_len = 0.42
         print('get_insert_trajectory')
         for i in range(180 / delta_angle + 1):
             tamp_radius=radius*(1-i*delta_angle/180)
@@ -51,8 +55,8 @@ class TestInsert(TestBase):
             tamp_depth=scale_depth * i
             # SJTU HERE CHANGED ori: z x y
             tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-            tgt_pose_in_real_frame.position.x = tamp_radius * math.cos(tamp_angle)
-            tgt_pose_in_real_frame.position.y = 0.004+ tamp_radius * math.sin(tamp_angle)
+            tgt_pose_in_real_frame.position.x = -0.006+tamp_radius * math.cos(tamp_angle)
+            tgt_pose_in_real_frame.position.y = 0.004+tamp_radius * math.sin(tamp_angle)
             tgt_pose_in_real_frame.position.z = -tool_len+tamp_depth
             q = tf.transformations.quaternion_from_euler(0, 0, tamp_angle)
             tgt_pose_in_real_frame.orientation.x = q[0]
@@ -64,9 +68,9 @@ class TestInsert(TestBase):
                                                           "base_link",
                                                           tgt_pose_in_real_frame,
                                                           all_info['bolt_ts'])
-            print (tgt_pose_in_world_frame)
-            (r, p, y) = tf.transformations.euler_from_quaternion([tgt_pose_in_world_frame.orientation.x, tgt_pose_in_world_frame.orientation.y, tgt_pose_in_world_frame.orientation.z, tgt_pose_in_world_frame.orientation.w])
-            print(r,p,y)
+            # print (tgt_pose_in_world_frame)
+            # (r, p, y) = tf.transformations.euler_from_quaternion([tgt_pose_in_world_frame.orientation.x, tgt_pose_in_world_frame.orientation.y, tgt_pose_in_world_frame.orientation.z, tgt_pose_in_world_frame.orientation.w])
+            # print(r,p,y)
 
             if not tgt_pose_in_world_frame is None:
                 trajectory.append(tgt_pose_in_world_frame)
@@ -237,9 +241,9 @@ class TestInsert(TestBase):
         return trajectory        
 
     def get_tgt_pose_in_world_frame(self,all_info):
-        tool_len = 0.435
+        tool_len = 0.42
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-        tgt_pose_in_real_frame.position.x = 0
+        tgt_pose_in_real_frame.position.x = -0.006
         tgt_pose_in_real_frame.position.y = 0.004
         tgt_pose_in_real_frame.position.z = -tool_len
 

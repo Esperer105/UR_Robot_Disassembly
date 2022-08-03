@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
+
 import geometry_msgs.msg
 import tf
 import math
@@ -135,16 +139,23 @@ class Kalman:
         # Xi_pose.orientation.y = Xi[4,0]
         # Xi_pose.orientation.z = Xi[5,0]
         # Xi_pose.orientation.w= Xi[6,0]
-        Xi_pose.orientation.x = 1
-        Xi_pose.orientation.y = 0
-        Xi_pose.orientation.z = 0
-        Xi_pose.orientation.w= 0
+
+        q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
+
+        Xi_pose.orientation.x = q[0]
+        Xi_pose.orientation.y = q[1]
+        Xi_pose.orientation.z = q[2]
+        Xi_pose.orientation.w= q[3]
         return Xi_pose
 
     def reset(self):
         self.finished=False
         self.itr_time=0
     
+    def release(self):
+        del self
+
+
     def plot(self):
         if (self.itr_time!=0):
             fig = plt.figure(figsize=(16,9)  , dpi=120)

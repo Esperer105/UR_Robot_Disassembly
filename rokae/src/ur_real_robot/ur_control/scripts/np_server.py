@@ -14,17 +14,9 @@ import json
 import torch
 from PIL import Image
 from torchvision import transforms
-import matplotlib.pyplot as plt
 # from model import vgg
 
-import torch
 from module import VGG
-from PIL import Image
-from torchvision import transforms
-import matplotlib.pyplot as plt
-import json
-import os
-import random
 import  torchvision.models
 
 
@@ -37,7 +29,7 @@ def img_primitive(img):
     #      transforms.Resize((224, 224)),
     #      transforms.ToTensor(),
     #      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-    data_transform = transforms.Compose([transforms.CenterCrop(480), transforms.resize((224,224)),
+    data_transform = transforms.Compose([transforms.CenterCrop(480), transforms.Resize((224,224)),
                                          transforms.ToTensor(),
                                          transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
@@ -47,10 +39,10 @@ def img_primitive(img):
     align_json_path = './class_indices.json'
     align_weights_path='./VGG_640.pth'
 
-    # obstacle_weights_path = "/home/nuc/.cache/torch/checkpoints/-397923af.pth"
+    # obstacle_weights_path = "/home/nuc/.cache/torch/checkpoints/vgg16-397923af.pth"
     # align_weights_path = "/home/nuc/.cache/torch/checkpoints/vgg16-397923af.pth"
     obstacle_json_path = './class_indices.json'
-    obstacle_weights_path='./VGG.pth'
+    obstacle_weights_path='./VGG_640.pth'
     
     json_path_sets = [align_json_path, obstacle_json_path]
     weights_path_sets = [align_weights_path, obstacle_weights_path]
@@ -197,7 +189,8 @@ if __name__ == '__main__':
                     print("client request stop")
                     break
 
-                class_primitive = img_primitive(frame)
+                frame_im = Image.fromarray(np.array(frame))
+                class_primitive = img_primitive(frame_im)
                 print(class_primitive)
                 array_str = pickle.dumps(class_primitive, protocol=2)
                 conn.sendall(array_str)

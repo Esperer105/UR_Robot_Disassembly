@@ -10,7 +10,9 @@ src/CMakeLists.txt
 .vscode/
 *.zip
 .catkin_workspace
-
+*.pth
+*.png
+*.txt
 
 src/test/tensorflow_vgg_classify/rokae_image/
 tmp/

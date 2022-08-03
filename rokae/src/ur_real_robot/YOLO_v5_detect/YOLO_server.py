@@ -17,7 +17,7 @@ def unpack_image(conn):
     print("unpack_image")
     payload_size = struct.calcsize(">l")
     while len(data) < payload_size:
-        print ('payload_size')
+        # print ('payload_size')
         recv_data += conn.recv(4096)
         # print (recv_data)
         if not recv_data:
@@ -56,6 +56,7 @@ while True:
             if frame is None:
                 print("client request stop")
                 break
+            
             frame_im = Image.fromarray(np.array(frame))
             result, yolo_detect = yolo.detect_image(frame_im)
             result.show()

@@ -36,11 +36,11 @@ from test_base import TestBase
 
 class TestAimTarget(TestBase):
     def get_tgt_pose_in_world_frame(self,all_info):
-        tool_len = 0.435
+        tool_len = 0.42
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
         tgt_pose_in_real_frame.position.x = 0
         tgt_pose_in_real_frame.position.y = 0
-        tgt_pose_in_real_frame.position.z = - tool_len-0.15
+        tgt_pose_in_real_frame.position.z = - tool_len-0.05
 
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
         tgt_pose_in_real_frame.orientation.x = q[0]
@@ -64,6 +64,7 @@ class TestAimTarget(TestBase):
                 return False
         print("param satified, start to mate")
         planner = all_info['planner_handler']
+        np_collected=False
         while not kalman.finished:
             latest_infos = planner.get_latest_infos()
             # print (latest_infos.keys())        
@@ -89,6 +90,19 @@ class TestAimTarget(TestBase):
                 # x=circle[1]+int(0.5*(width-height))
                 # y=circle[0]
                 if (s==0):
+<<<<<<< HEAD
+                    # circle = self.findBestMatchCircle(circles) 
+                    min_dist=100
+                    curr_pose= self.group.get_current_pose(self.effector).pose
+                    for screw in circles:
+                        self.add_bolt_frame(screw[1]-(r_width-width)/2, screw[0]-(r_height-height)/2, latest_infos)
+                        screw_pose=self.get_bolt_pose_in_world_frame(latest_infos)
+                        temp_dist=math.sqrt(pow(screw_pose.position.x - curr_pose.position.x ,2)+pow(screw_pose.position.y - curr_pose.position.y ,2))            
+                        if (temp_dist<min_dist):
+                            min_dist=temp_dist
+                            conv_pose=screw_pose
+                    real_pose=kalman.iteration(conv_pose)
+=======
                     circlebox = self.findBestMatchCircle(circlesbox)                
                     # x=circle[0]-(r_width-width)/2
                     # y=circle[1]-(r_height-height)/2
@@ -100,9 +114,10 @@ class TestAimTarget(TestBase):
                     self.add_bolt_frameV2(circlebox, latest_infos)
                     bolt_pose = self.get_bolt_pose_in_world_frame(latest_infos)
                     real_pose=kalman.iteration(bolt_pose)
+>>>>>>> e2266850d266a7a3a7ff290f680f6248af1bb961
                     self.adjust_bolt_frame(real_pose,latest_infos)
                     ee_pose=self.get_tgt_pose_in_world_frame(latest_infos)
-                    curr_pose= self.group.get_current_pose(self.effector).pose
+
                     if not self.set_arm_pose(self.group, ee_pose, self.effector):
                         print("failed")
                         print(curr_pose)
@@ -121,7 +136,22 @@ class TestAimTarget(TestBase):
                         if (temp_diff<min_diff):
                             min_diff=temp_diff
                             near_pose=screw_pose
-                    if (min_diff < 0.05):
+                        if(temp_diff > 0.05) and (np_collected==False):
+                            coarse_pose = geometry_msgs.msg.Pose()
+                            coarse_pose.position.x = screw_pose.position.x-0.02
+                            coarse_pose.position.y = screw_pose.position.y-0.02
+                            coarse_pose.position.z = 0.70
+
+                            q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
+                            coarse_pose.orientation.x = q[0]
+                            coarse_pose.orientation.y = q[1]
+                            coarse_pose.orientation.z = q[2]
+                            coarse_pose.orientation.w = q[3]
+
+                            planner.next_pose=coarse_pose
+                            np_collected=True
+
+                    if (min_diff < 0.015):
                         real_pose=kalman.iteration(near_pose)
                         self.adjust_bolt_frame(real_pose,latest_infos)
                         ee_pose=self.get_tgt_pose_in_world_frame(latest_infos)
@@ -132,6 +162,13 @@ class TestAimTarget(TestBase):
                     else:
                         if not self.set_arm_pose(self.group, curr_pose, self.effector):
                             print("recovery failed")
+            else:
+                if (s==0):
+                    curr_pose= self.group.get_current_pose(self.effector).pose
+                if not self.set_arm_pose(self.group, curr_pose, self.effector):
+                    print("recovery failed")
+                    # curr_pose= self.group.get_current_pose(self.effector).pose
+                    # print(curr_pose)                
         if not real_pose is None:
             print('real pose')
             print(real_pose)
