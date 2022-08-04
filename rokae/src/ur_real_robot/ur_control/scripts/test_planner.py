@@ -227,7 +227,7 @@ class TSTPlanner:
 
     def do_action(self):
         #执行动作
-        filter=Kalman(10)
+        filter=Kalman(20)
         move=PrimAction('move')
         mate=PrimAction('mate')
         push=PrimAction('push')
@@ -279,7 +279,7 @@ class TSTPlanner:
                             i = i + 1
                             if self.action=='disassemble':
                                 filter.release()
-                                filter=Kalman(10)
+                                filter=Kalman(20)
                                 self.stage={'have_coarse_pose':True, 'above_bolt':False,'target_aim':False, 'target_clear':False,'cramped':False,'disassembled':False}
                                 if not self.next_pose is None:
                                     self.ret_dict['coarse_pose']=self.next_pose

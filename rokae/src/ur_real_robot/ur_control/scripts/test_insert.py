@@ -55,8 +55,8 @@ class TestInsert(TestBase):
             tamp_depth=scale_depth * i
             # SJTU HERE CHANGED ori: z x y
             tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-            tgt_pose_in_real_frame.position.x = -0.006+tamp_radius * math.cos(tamp_angle)
-            tgt_pose_in_real_frame.position.y = 0.004+tamp_radius * math.sin(tamp_angle)
+            tgt_pose_in_real_frame.position.x = -0.008+tamp_radius * math.cos(tamp_angle)
+            tgt_pose_in_real_frame.position.y =0.004+tamp_radius * math.sin(tamp_angle)
             tgt_pose_in_real_frame.position.z = -tool_len+tamp_depth
             q = tf.transformations.quaternion_from_euler(0, 0, tamp_angle)
             tgt_pose_in_real_frame.orientation.x = q[0]
@@ -208,7 +208,7 @@ class TestInsert(TestBase):
     
     def get_recramp_trajectory(self,vector):
         print('get_recramp_trajectory')
-        scale_step=0.015
+        scale_step=0.012
         trajectory = []
         start_pose= self.group.get_current_pose(self.effector).pose
         tgt_pose_in_effector_frame = geometry_msgs.msg.Pose()
@@ -243,7 +243,7 @@ class TestInsert(TestBase):
     def get_tgt_pose_in_world_frame(self,all_info):
         tool_len = 0.42
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-        tgt_pose_in_real_frame.position.x = -0.006
+        tgt_pose_in_real_frame.position.x = -0.008
         tgt_pose_in_real_frame.position.y = 0.004
         tgt_pose_in_real_frame.position.z = -tool_len
 

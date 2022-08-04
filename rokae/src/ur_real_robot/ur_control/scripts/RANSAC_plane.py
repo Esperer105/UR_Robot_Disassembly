@@ -54,7 +54,7 @@ class PlaneModel():
         return res
 
 
-def cal_ransac_plane(data, min_samples=5, residual_threshold=0.005,
+def cal_ransac_plane(data, min_samples=3, residual_threshold=0.005,
                      max_trials=1000, stop_sample_num=np.inf, stop_residuals_sum=0,
                      stop_probability=1):
     """

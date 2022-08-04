@@ -120,10 +120,10 @@ class TestBase(object):
         tgt_pose_in_bolt_frame.position.z = 0
         # q = tf.transformations.quaternion_from_euler(0, 1.57, 0)
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
-        # tgt_pose_in_bolt_frame.orientation.x = q[0]
-        # tgt_pose_in_bolt_frame.orientation.y = q[1]
-        # tgt_pose_in_bolt_frame.orientation.z = q[2]
-        # tgt_pose_in_bolt_frame.orientation.w = q[3]
+        tgt_pose_in_bolt_frame.orientation.x = q[0]
+        tgt_pose_in_bolt_frame.orientation.y = q[1]
+        tgt_pose_in_bolt_frame.orientation.z = q[2]
+        tgt_pose_in_bolt_frame.orientation.w = q[3]
         # self.print_pose(tgt_pose_in_bolt_frame, 'tgt_pose_in_bolt_frame')
         #SJTU
         tgt_pose_in_world_frame = self.transform_pose("bolt_frame",
@@ -131,11 +131,11 @@ class TestBase(object):
                                                       tgt_pose_in_bolt_frame,
                                                       all_info['bolt_ts'])
 
-        q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
-        tgt_pose_in_world_frame.orientation.x = q[0]
-        tgt_pose_in_world_frame.orientation.y = q[1]
-        tgt_pose_in_world_frame.orientation.z = q[2]
-        tgt_pose_in_world_frame.orientation.w = q[3]
+        # q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
+        # tgt_pose_in_world_frame.orientation.x = q[0]
+        # tgt_pose_in_world_frame.orientation.y = q[1]
+        # tgt_pose_in_world_frame.orientation.z = q[2]
+        # tgt_pose_in_world_frame.orientation.w = q[3]
 
         print (tgt_pose_in_world_frame)
         (r, p, y) = tf.transformations.euler_from_quaternion([tgt_pose_in_world_frame.orientation.x, tgt_pose_in_world_frame.orientation.y, tgt_pose_in_world_frame.orientation.z, tgt_pose_in_world_frame.orientation.w])
