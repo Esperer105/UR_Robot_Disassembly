@@ -20,7 +20,7 @@ class TestDisassemble(TestBase):
         trajectory =  [] 
         scale_depth= 0.025
         print('get_return_trajectory')
-        for i in range(2):
+        for i in range(3):
             tamp_depth=scale_depth *(i+1)
             # SJTU HERE CHANGED ori: z x y
             tgt_pose_in_effector_frame = geometry_msgs.msg.Pose()
@@ -91,7 +91,7 @@ class TestDisassemble(TestBase):
         trajectory = self.get_disassemble_trajectory()
         curr_pose = self.group.get_current_pose(self.effector).pose
         self.set_digital_out(0, True)
-        rospy.sleep(0.1)
+        rospy.sleep(0.2)
         print(self.switch)
         for ee_pose in trajectory:
             if not self.set_arm_pose(self.group, ee_pose, self.effector):

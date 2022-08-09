@@ -59,7 +59,7 @@ while True:
             
             frame_im = Image.fromarray(np.array(frame))
             result, yolo_detect = yolo.detect_image(frame_im)
-            result.show()
+            # result.show()
             print(yolo_detect)
             array_str = pickle.dumps(yolo_detect, protocol=2)
             conn.sendall(array_str)

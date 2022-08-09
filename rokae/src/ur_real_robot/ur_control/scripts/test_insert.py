@@ -45,18 +45,18 @@ class TestInsert(TestBase):
         radius=0.0015
         delta_angle = 30
         scale_angle = delta_angle * math.pi / 180
-        scale_depth= 0.0025
-
+        scale_depth= 0.002
+        total_ang=240
         tool_len = 0.42
         print('get_insert_trajectory')
-        for i in range(180 / delta_angle + 1):
-            tamp_radius=radius*(1-i*delta_angle/180)
+        for i in range( total_ang / delta_angle + 1):
+            tamp_radius=radius*(1-i*delta_angle/total_ang)
             tamp_angle = scale_angle * i
             tamp_depth=scale_depth * i
             # SJTU HERE CHANGED ori: z x y
             tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-            tgt_pose_in_real_frame.position.x = -0.008+tamp_radius * math.cos(tamp_angle)
-            tgt_pose_in_real_frame.position.y =0.004+tamp_radius * math.sin(tamp_angle)
+            tgt_pose_in_real_frame.position.x = -0.0075+tamp_radius * math.cos(tamp_angle)
+            tgt_pose_in_real_frame.position.y =0.0035+tamp_radius * math.sin(tamp_angle)
             tgt_pose_in_real_frame.position.z = -tool_len+tamp_depth
             q = tf.transformations.quaternion_from_euler(0, 0, tamp_angle)
             tgt_pose_in_real_frame.orientation.x = q[0]
@@ -208,7 +208,7 @@ class TestInsert(TestBase):
     
     def get_recramp_trajectory(self,vector):
         print('get_recramp_trajectory')
-        scale_step=0.012
+        scale_step=0.0105
         trajectory = []
         start_pose= self.group.get_current_pose(self.effector).pose
         tgt_pose_in_effector_frame = geometry_msgs.msg.Pose()
@@ -243,8 +243,8 @@ class TestInsert(TestBase):
     def get_tgt_pose_in_world_frame(self,all_info):
         tool_len = 0.42
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-        tgt_pose_in_real_frame.position.x = -0.008
-        tgt_pose_in_real_frame.position.y = 0.004
+        tgt_pose_in_real_frame.position.x = -0.0075
+        tgt_pose_in_real_frame.position.y = 0.0035
         tgt_pose_in_real_frame.position.z = -tool_len
 
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
@@ -327,10 +327,11 @@ class TestInsert(TestBase):
                     ee_pose = self.group.get_current_pose(self.effector).pose 
                     print(ee_pose)
                 # self.print_wrench()
+            # rospy.sleep(30)
             temp_pose=self.test_wrench()
             while not self.is_cramped:
                 if self.near_cramped:
-                    search_trajectory=self.get_search_trajectory(5,0.0015,5)
+                    search_trajectory=self.get_search_trajectory(5,0.001,5)
                     for ee_pose in search_trajectory:
                         if not self.set_arm_pose(self.group, ee_pose, self.effector):
                             print("search failed")
@@ -346,7 +347,7 @@ class TestInsert(TestBase):
                             print ('lost cramp')
                             break
                 else:
-                    search_trajectory=self.get_search_trajectory(5,0.0025)
+                    search_trajectory=self.get_search_trajectory(5,0.002)
                     for ee_pose in search_trajectory:
                         if not self.set_arm_pose(self.group, ee_pose, self.effector):
                             print("search failed")

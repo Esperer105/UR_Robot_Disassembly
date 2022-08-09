@@ -16,7 +16,7 @@ class TestClearObstacle(TestBase):
         trajectory = []
         delta_angle = 30
         scale_angle = delta_angle * math.pi / 180
-        #SJTU origininal=0.012
+        #SJTU origininal=0.0105
         radius = 0.015
 
         tool_len = 0.42
@@ -29,8 +29,8 @@ class TestClearObstacle(TestBase):
 
             # SJTU HERE CHANGED ori: z x y
             tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-            tgt_pose_in_real_frame.position.x = radius * math.cos(tamp_angle)
-            tgt_pose_in_real_frame.position.y = radius * math.sin(tamp_angle)
+            tgt_pose_in_real_frame.position.x = -0.0105 + radius * math.cos(tamp_angle)
+            tgt_pose_in_real_frame.position.y = 0.0035 + radius * math.sin(tamp_angle)
             tgt_pose_in_real_frame.position.z = -tool_len
 
             # q = tf.transformations.quaternion_from_euler(0, 1.57, 0)
@@ -61,8 +61,8 @@ class TestClearObstacle(TestBase):
     def get_tgt_pose_in_world_frame(self,all_info):
         tool_len = 0.42
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-        tgt_pose_in_real_frame.position.x = 0
-        tgt_pose_in_real_frame.position.y = 0
+        tgt_pose_in_real_frame.position.x =  -0.0105
+        tgt_pose_in_real_frame.position.y = 0.0035
         tgt_pose_in_real_frame.position.z = -tool_len-0.05
 
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
@@ -143,7 +143,8 @@ class TestClearObstacle(TestBase):
                         self.add_bolt_frameV2(screw, latest_infos)
                         screw_pose=self.get_bolt_pose_in_world_frame(latest_infos)
                         former_pose=kalman.get_former_pose()
-                        temp_diff=math.sqrt(pow(screw_pose.position.x - former_pose.position.x ,2)+pow(screw_pose.position.y - former_pose.position.y ,2)+pow(screw_pose.position.z - former_pose.position.z ,2))            
+                        # temp_diff=math.sqrt(pow(screw_pose.position.x - former_pose.position.x ,2)+pow(screw_pose.position.y - former_pose.position.y ,2)+pow(screw_pose.position.z- former_pose.position.z,2))
+                        temp_diff=math.sqrt(pow(screw_pose.position.x - former_pose.position.x ,2)+pow(screw_pose.position.y - former_pose.position.y ,2))          
                         if (temp_diff<min_diff):
                             min_diff=temp_diff
                             near_pose=screw_pose

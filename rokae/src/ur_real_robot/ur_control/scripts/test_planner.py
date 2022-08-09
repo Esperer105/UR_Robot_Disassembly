@@ -34,6 +34,7 @@ from test_disassemble import TestDisassemble
 from prim_action import PrimAction
 from kalman import Kalman
 from YOLO_client import YOLO_SendImg
+from sensor_msgs.msg import JointState
 
 import tf2_ros
 import geometry_msgs.msg
@@ -163,6 +164,26 @@ class TSTPlanner:
             self.stage['target_aim']=False
             self.stage['target_clear']=True
         else:
+            joint_states = rospy.wait_for_message("joint_states",JointState)
+            joint_pose = joint_states.position
+            joints = {}
+            joints["elbow_joint"] = joint_pose[0]
+            joints["shoulder_lift_joint"] = joint_pose[1]
+            joints["shoulder_pan_joint"] = joint_pose[2]
+            joints["wrist_1_joint"] = joint_pose[3]
+            joints["wrist_2_joint"] = joint_pose[4]
+            if (joint_pose[5] > math.pi):             
+                joints["wrist_3_joint"] = joint_pose[5]-2.5*math.pi
+            else:                
+                joints["wrist_3_joint"] = joint_pose[5]+0.5*math.pi
+
+            self.group.set_joint_value_target(joints)
+            plan = self.group.plan()
+            if len(plan.joint_trajectory.points) > 0:
+                self.group.execute(plan, wait=True)
+                print('hand adjusted')
+            else:
+                print('no plan result')
             return False
         return True
 
@@ -227,7 +248,7 @@ class TSTPlanner:
 
     def do_action(self):
         #执行动作
-        filter=Kalman(20)
+        filter=Kalman(15)
         move=PrimAction('move')
         mate=PrimAction('mate')
         push=PrimAction('push')
@@ -257,6 +278,7 @@ class TSTPlanner:
                         if self.action in ['move','disassemble']:
                             pre_is_ok=True
                         else:
+                            rospy.sleep(0.1)
                             pre_is_ok=self.call_edge_predicate(infos)
                         for pre in (prim_dict[self.action]).pre:
                             if not self.stage[pre]==(prim_dict[self.action].pre)[pre]:
@@ -279,7 +301,7 @@ class TSTPlanner:
                             i = i + 1
                             if self.action=='disassemble':
                                 filter.release()
-                                filter=Kalman(20)
+                                filter=Kalman(15)
                                 self.stage={'have_coarse_pose':True, 'above_bolt':False,'target_aim':False, 'target_clear':False,'cramped':False,'disassembled':False}
                                 if not self.next_pose is None:
                                     self.ret_dict['coarse_pose']=self.next_pose
@@ -377,7 +399,7 @@ if __name__ == '__main__':
         # pose_target.position.y = 0.38
         # pose_target.position.z = 0.65
 
-        pose_target.position.x = 0.08
+        pose_target.position.x = -0.38
         pose_target.position.y = 0.48
         pose_target.position.z = 0.70
 

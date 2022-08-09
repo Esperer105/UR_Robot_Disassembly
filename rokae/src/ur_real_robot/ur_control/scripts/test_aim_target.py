@@ -38,8 +38,8 @@ class TestAimTarget(TestBase):
     def get_tgt_pose_in_world_frame(self,all_info):
         tool_len = 0.42
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-        tgt_pose_in_real_frame.position.x = 0
-        tgt_pose_in_real_frame.position.y = 0
+        tgt_pose_in_real_frame.position.x = -0.0105
+        tgt_pose_in_real_frame.position.y = 0.0035
         tgt_pose_in_real_frame.position.z = - tool_len-0.05
 
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
@@ -79,10 +79,14 @@ class TestAimTarget(TestBase):
             # crop_img=raw_img[:,int(0.5*(width-height)):int(0.5*(width+height))]
             detect_ret=yolo.finish_YOLO_detect(crop_img)
             s=kalman.itr_sum
-            if 'screw' in detect_ret[1].keys():
-                print('screw success')
-
-                circlesbox = detect_ret[1]["screw"]
+            if 'screw' in detect_ret[1].keys() or 'nut' in detect_ret[1].keys():
+                circlesbox=[]
+                if 'screw' in detect_ret[1].keys():
+                    print('screw success')
+                    circlesbox.extend(detect_ret[1]["screw"])
+                if 'nut' in detect_ret[1].keys():
+                    print('nut success')
+                    circlesbox.extend(detect_ret[1]["nut"])                
                 #circle = self.findBestMatchCircle(circles)
 
                 # x = circle[1]+int(0.5*(width-0.5*height))
@@ -122,13 +126,17 @@ class TestAimTarget(TestBase):
                         self.add_bolt_frameV2(screw, latest_infos)
                         screw_pose=self.get_bolt_pose_in_world_frame(latest_infos)
                         former_pose=kalman.get_former_pose()
-                        temp_diff=math.sqrt(pow(screw_pose.position.x - former_pose.position.x ,2)+pow(screw_pose.position.y - former_pose.position.y ,2)+pow(screw_pose.position.z- former_pose.position.z,2))            
+                        # temp_diff=math.sqrt(pow(screw_pose.position.x - former_pose.position.x ,2)+pow(screw_pose.position.y - former_pose.position.y ,2)+pow(screw_pose.position.z- former_pose.position.z,2))
+                        temp_diff=math.sqrt(pow(screw_pose.position.x - former_pose.position.x ,2)+pow(screw_pose.position.y - former_pose.position.y ,2))                              
                         if (temp_diff<min_diff):
                             min_diff=temp_diff
                             near_pose=screw_pose
                         if(temp_diff > 0.05) and (np_collected==False):
                             coarse_pose = geometry_msgs.msg.Pose()
-                            coarse_pose.position.x = screw_pose.position.x-0.02
+                            if  screw_pose.position.x >0 and  screw_pose.position.x <0.02 :
+                                coarse_pose.position.x=0.08
+                            else:    
+                                coarse_pose.position.x = screw_pose.position.x-0.02
                             coarse_pose.position.y = screw_pose.position.y-0.02
                             coarse_pose.position.z = 0.70
 

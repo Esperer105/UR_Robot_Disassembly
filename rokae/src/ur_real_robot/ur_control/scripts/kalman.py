@@ -31,9 +31,9 @@ class Kalman:
         self.B = 0
         self.U1 = 0
         # self.R = np.diag([0.01,0.01,0.01,0.2,0.2,0.2,0.2])
-        self.R = np.diag([0.01,0.01,0.01,0.4,0.4,0.4])
+        self.R = np.diag([0.01,0.01,0.01,0.2,0.2,0.2])
         # self.P0=np.diag([0.05,0.05,0.05,1,1,1,1])
-        self.P0=np.diag([0.05,0.05,0.05,2,2,2])
+        self.P0=np.diag([0.05,0.05,0.05,1,1,1])
         # self.Q=np.diag([0,0,0,0,0,0,0])
         self.Q=np.diag([0,0,0,0,0,0])
         # self.H = np.diag([1,1,1,1,1,1,1])
@@ -56,9 +56,9 @@ class Kalman:
         V = Z - np.dot(self.H, X10)
         K = np.dot(np.dot(P10, self.H.T), np.linalg.pinv(np.dot(np.dot(self.H, P10), self.H.T) + self.R))
         X1 = X10 + np.dot(K, V)
-        # Sqrt=math.sqrt(pow(X1[3,0],2)+pow(X1[4,0],2)+pow(X1[5,0],2)+pow(X1[6,0],2))
-        # for i in range(4):
-        #     X1[i+3,0]=X1[i+3,0]/Sqrt
+        Sqrt=math.sqrt(pow(X1[3,0],2)+pow(X1[4,0],2)+pow(X1[5,0],2))
+        for i in range(3):
+            X1[i+3,0]=X1[i+3,0]/Sqrt
         P1 = np.dot(1 - np.dot(K, self.H), P10)
         return (X1, P1)
     
@@ -105,20 +105,22 @@ class Kalman:
             self.itr_time+= 1
             self.itr_sum+= 1
             X1_vector=X1[[3,4,5],:].reshape([1,3])
-            Xi_vector=Xi[[3,4,5],:].reshape([1,3])
+            Xi_vector=Xi[[3,4,5],:].reshape([3,1])
             X1_quat=(self.transform_vector(X1_vector)).reshape([1,4])
-            Xi_quat=(self.transform_vector(Xi_vector)).reshape([1,4])
+            # Xi_quat=(self.transform_vector(Xi_vector)).reshape([1,4])
             if(self.itr_time==self.itr_num):
                 self.finished=True
             else:
                 dist=math.sqrt(pow(X1[0,0]-Xi[0,0],2)+pow(X1[1,0]-Xi[1,0],2)+pow(X1[2,0]-Xi[2,0],2))
                 # (r, p, y) = tf.transformations.euler_from_quaternion([X1[3,0], X1[4,0], X1[5,0], X1[6,0]])
-                (x1,y1,z1,w1)= (-Xi_quat[0,0], -Xi_quat[0,1], -Xi_quat[0,2], Xi_quat[0,3])
-                (x2,y2,z2,w2)=(X1_quat[0,0], X1_quat[0,1], X1_quat[0,2], X1_quat[0,3])
-                ang_dist=2*np.arccos(w1*w2-x1*x2-y1*y2-z1*z2)
+                # (x1,y1,z1,w1)= (-Xi_quat[0,0], -Xi_quat[0,1], -Xi_quat[0,2], Xi_quat[0,3])
+                # (x2,y2,z2,w2)=(X1_quat[0,0], X1_quat[0,1], X1_quat[0,2], X1_quat[0,3])
+                # ang_dist=2*np.arccos(w1*w2-x1*x2-y1*y2-z1*z2)
+                ang_mat=np.dot(X1_vector,Xi_vector)
+                ang_dist=ang_mat[0,0]
                 print('ang_dist:')
                 print(ang_dist)
-                if (dist<0.001) and ((ang_dist<0.087) or (ang_dist>6.196)):
+                if (dist<0.001) and (ang_dist>0.996):
                     self.finished=True
             X1_pose = geometry_msgs.msg.Pose()
             X1_pose.position.x = X1[0,0]
@@ -217,4 +219,4 @@ class Kalman:
             plt.suptitle('Result of Kalman Filter')            
             plt.savefig("kalman_"+str(self.plt_time+1)+".png")
             self.plt_time+=1
-            # print(plt.show())
+            print(plt.show())
