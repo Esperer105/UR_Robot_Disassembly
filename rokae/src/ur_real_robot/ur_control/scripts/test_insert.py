@@ -55,8 +55,8 @@ class TestInsert(TestBase):
             tamp_depth=scale_depth * i
             # SJTU HERE CHANGED ori: z x y
             tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-            tgt_pose_in_real_frame.position.x = -0.0075+tamp_radius * math.cos(tamp_angle)
-            tgt_pose_in_real_frame.position.y =0.0035+tamp_radius * math.sin(tamp_angle)
+            tgt_pose_in_real_frame.position.x = -0.009+tamp_radius * math.cos(tamp_angle)
+            tgt_pose_in_real_frame.position.y =0.003+tamp_radius * math.sin(tamp_angle)
             tgt_pose_in_real_frame.position.z = -tool_len+tamp_depth
             q = tf.transformations.quaternion_from_euler(0, 0, tamp_angle)
             tgt_pose_in_real_frame.orientation.x = q[0]
@@ -243,8 +243,8 @@ class TestInsert(TestBase):
     def get_tgt_pose_in_world_frame(self,all_info):
         tool_len = 0.42
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-        tgt_pose_in_real_frame.position.x = -0.0075
-        tgt_pose_in_real_frame.position.y = 0.0035
+        tgt_pose_in_real_frame.position.x = -0.009
+        tgt_pose_in_real_frame.position.y = 0.003
         tgt_pose_in_real_frame.position.z = -tool_len
 
         q = tf.transformations.quaternion_from_euler(0, 0, 0)

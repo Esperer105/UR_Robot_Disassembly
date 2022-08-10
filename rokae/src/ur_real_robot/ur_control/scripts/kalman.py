@@ -92,6 +92,13 @@ class Kalman:
             Z1_pose.orientation.y = Z1_quat[0,1]
             Z1_pose.orientation.z = Z1_quat[0,2]
             Z1_pose.orientation.w= Z1_quat[0,3]
+
+            q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
+            Z1_pose.orientation.x = q[0]
+            Z1_pose.orientation.y = q[1]
+            Z1_pose.orientation.z = q[2]
+            Z1_pose.orientation.w = q[3]    
+            
             return Z1_pose
         else:
             # Xi = self.X1_np[:, s - 1].reshape([7, 1])
@@ -120,7 +127,8 @@ class Kalman:
                 ang_dist=ang_mat[0,0]
                 print('ang_dist:')
                 print(ang_dist)
-                if (dist<0.001) and (ang_dist>0.996):
+                # if (dist<0.001) and (ang_dist>0.996):
+                if (dist<0.001):
                     self.finished=True
             X1_pose = geometry_msgs.msg.Pose()
             X1_pose.position.x = X1[0,0]
@@ -130,6 +138,13 @@ class Kalman:
             X1_pose.orientation.y = X1_quat[0,1]
             X1_pose.orientation.z = X1_quat[0,2]
             X1_pose.orientation.w= X1_quat[0,3]
+
+            q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
+            X1_pose.orientation.x = q[0]
+            X1_pose.orientation.y = q[1]
+            X1_pose.orientation.z = q[2]
+            X1_pose.orientation.w = q[3]
+
             return X1_pose
 
     def transform_vector(self,vector):
@@ -164,6 +179,13 @@ class Kalman:
         Xi_pose.orientation.y = Xi_quat[0,1]
         Xi_pose.orientation.z = Xi_quat[0,2]
         Xi_pose.orientation.w= Xi_quat[0,3]
+
+        q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
+        Xi_pose.orientation.x = q[0]
+        Xi_pose.orientation.y = q[1]
+        Xi_pose.orientation.z = q[2]
+        Xi_pose.orientation.w = q[3]
+
         return Xi_pose
 
     def reset(self):

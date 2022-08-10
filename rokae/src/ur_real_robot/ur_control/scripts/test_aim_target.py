@@ -38,8 +38,8 @@ class TestAimTarget(TestBase):
     def get_tgt_pose_in_world_frame(self,all_info):
         tool_len = 0.42
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-        tgt_pose_in_real_frame.position.x = -0.0105
-        tgt_pose_in_real_frame.position.y = 0.0035
+        tgt_pose_in_real_frame.position.x = 0
+        tgt_pose_in_real_frame.position.y = 0
         tgt_pose_in_real_frame.position.z = - tool_len-0.05
 
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
