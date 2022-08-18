@@ -19,7 +19,7 @@ class TestClearObstacle(TestBase):
         #SJTU origininal=0.0105
         radius = 0.015
 
-        tool_len = 0.42
+        tool_len = 0.415
 
         print('get_circle_trajectory')
         self.adjust_bolt_frame(real_pose, all_info)        
@@ -59,7 +59,7 @@ class TestClearObstacle(TestBase):
         return trajectory
 
     def get_tgt_pose_in_world_frame(self,all_info):
-        tool_len = 0.42
+        tool_len = 0.415
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
         tgt_pose_in_real_frame.position.x =  0
         tgt_pose_in_real_frame.position.y = 0

@@ -38,16 +38,19 @@ class TestInsert(TestBase):
         self.ori_wrench=np.array([0,0,0,0]).reshape([4,1])
         self.is_cramped=False
         self.near_cramped=False
+        self.x_shift=-0.0075
+        self.y_shift=0.0025
 
     def get_insert_trajectory(self,real_pose,all_info):
 
         trajectory =  [] 
-        radius=0.0015
-        delta_angle = 30
+        # radius=0.0015
+        radius=0
+        delta_angle = 5
         scale_angle = delta_angle * math.pi / 180
-        scale_depth= 0.002
-        total_ang=240
-        tool_len = 0.42
+        scale_depth= 0.0015
+        total_ang=30
+        tool_len = 0.415
         print('get_insert_trajectory')
         for i in range( total_ang / delta_angle + 1):
             tamp_radius=radius*(1-i*delta_angle/total_ang)
@@ -55,10 +58,14 @@ class TestInsert(TestBase):
             tamp_depth=scale_depth * i
             # SJTU HERE CHANGED ori: z x y
             tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-            tgt_pose_in_real_frame.position.x = -0.009+tamp_radius * math.cos(tamp_angle)
-            tgt_pose_in_real_frame.position.y =0.003+tamp_radius * math.sin(tamp_angle)
+            # tgt_pose_in_real_frame.position.x = -0.009+tamp_radius * math.cos(tamp_angle)
+            # tgt_pose_in_real_frame.position.y =0.003+tamp_radius * math.sin(tamp_angle)
+            tgt_pose_in_real_frame.position.x = self.x_shift+tamp_radius * math.cos(tamp_angle)
+            tgt_pose_in_real_frame.position.y =self.y_shift+tamp_radius * math.sin(tamp_angle)
+
             tgt_pose_in_real_frame.position.z = -tool_len+tamp_depth
             q = tf.transformations.quaternion_from_euler(0, 0, tamp_angle)
+            # q = tf.transformations.quaternion_from_euler(0, 0, 0)           
             tgt_pose_in_real_frame.orientation.x = q[0]
             tgt_pose_in_real_frame.orientation.y = q[1]
             tgt_pose_in_real_frame.orientation.z = q[2]
@@ -116,7 +123,7 @@ class TestInsert(TestBase):
         trajectory=[]
         ori_pose= self.group.get_current_pose(self.effector).pose
         tgt_pose_in_effector_frame = geometry_msgs.msg.Pose()
-        tgt_pose_in_effector_frame.position.x = 0.0015
+        tgt_pose_in_effector_frame.position.x = 0.001
         tgt_pose_in_effector_frame.position.y = 0
         tgt_pose_in_effector_frame.position.z = 0
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
@@ -132,7 +139,7 @@ class TestInsert(TestBase):
         print('x+')
         # print (tgt_pose_in_world_frame)
 
-        tgt_pose_in_effector_frame.position.x = -0.0015
+        tgt_pose_in_effector_frame.position.x = -0.001
         tgt_pose_in_world_frame = self.transform_pose(self.effector,
                                                         "base_link",
                                                         tgt_pose_in_effector_frame,
@@ -142,7 +149,7 @@ class TestInsert(TestBase):
         # print (tgt_pose_in_world_frame)
 
         tgt_pose_in_effector_frame.position.x = 0
-        tgt_pose_in_effector_frame.position.y = 0.0015
+        tgt_pose_in_effector_frame.position.y = 0.001
         tgt_pose_in_world_frame = self.transform_pose(self.effector,
                                                         "base_link",
                                                         tgt_pose_in_effector_frame,
@@ -151,7 +158,7 @@ class TestInsert(TestBase):
         print('y+')
         # print (tgt_pose_in_world_frame)
 
-        tgt_pose_in_effector_frame.position.y = -0.0015
+        tgt_pose_in_effector_frame.position.y = -0.001
         tgt_pose_in_world_frame = self.transform_pose(self.effector,
                                                         "base_link",
                                                         tgt_pose_in_effector_frame,
@@ -241,10 +248,13 @@ class TestInsert(TestBase):
         return trajectory        
 
     def get_tgt_pose_in_world_frame(self,all_info):
-        tool_len = 0.42
+        tool_len = 0.415
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-        tgt_pose_in_real_frame.position.x = -0.009
-        tgt_pose_in_real_frame.position.y = 0.003
+        # tgt_pose_in_real_frame.position.x = -0.009
+        # tgt_pose_in_real_frame.position.y = 0.003
+
+        tgt_pose_in_real_frame.position.x = self.x_shift
+        tgt_pose_in_real_frame.position.y = self.y_shift
         tgt_pose_in_real_frame.position.z = -tool_len
 
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
@@ -295,22 +305,13 @@ class TestInsert(TestBase):
         # if not kalman.get_former_pose()  is None:
         if True:
             real_pose=kalman.get_former_pose()
-            # real_pose = geometry_msgs.msg.Pose()
-            # real_pose.position.x = -0.0695
-            # real_pose.position.x = -0.0848
-            # real_pose.position.y = 0.5038
-            # real_pose.position.z = 0.2312
 
-            # real_pose.orientation.x = 1
-            # real_pose.orientation.y = 0
-            # real_pose.orientation.z = 0
-            # real_pose.orientation.w =0
 
             print('real bolt detected')
             print('real pose')
-            print(real_pose)
-            (r, p, y) = tf.transformations.euler_from_quaternion([real_pose.orientation.x, real_pose.orientation.y, real_pose.orientation.z, real_pose.orientation.w])
-            print(r,p,y)
+            # print(real_pose)
+            # (r, p, y) = tf.transformations.euler_from_quaternion([real_pose.orientation.x, real_pose.orientation.y, real_pose.orientation.z, real_pose.orientation.w])
+            # print(r,p,y)
             self.adjust_bolt_frame(real_pose,all_info)
             ee_pose=self.get_tgt_pose_in_world_frame(all_info)
             rospy.Subscriber("/wrench", WrenchStamped, self.force_callback)

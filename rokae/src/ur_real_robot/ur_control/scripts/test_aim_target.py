@@ -36,13 +36,14 @@ from test_base import TestBase
 
 class TestAimTarget(TestBase):
     def get_tgt_pose_in_world_frame(self,all_info):
-        tool_len = 0.42
+        tool_len = 0.415
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
         tgt_pose_in_real_frame.position.x = 0
         tgt_pose_in_real_frame.position.y = 0
         tgt_pose_in_real_frame.position.z = - tool_len-0.05
 
-        q = tf.transformations.quaternion_from_euler(0, 0, 0)
+        # q = tf.transformations.quaternion_from_euler(0, 0, 0.1*math.pi)
+        q = tf.transformations.quaternion_from_euler(0, 0, 0)        
         tgt_pose_in_real_frame.orientation.x = q[0]
         tgt_pose_in_real_frame.orientation.y = q[1]
         tgt_pose_in_real_frame.orientation.z = q[2]
@@ -149,7 +150,7 @@ class TestAimTarget(TestBase):
                             planner.next_pose=coarse_pose
                             np_collected=True
 
-                    if (min_diff < 0.015):
+                    if (min_diff < 0.025):
                         real_pose=kalman.iteration(near_pose)
                         self.adjust_bolt_frame(real_pose,latest_infos)
                         ee_pose=self.get_tgt_pose_in_world_frame(latest_infos)

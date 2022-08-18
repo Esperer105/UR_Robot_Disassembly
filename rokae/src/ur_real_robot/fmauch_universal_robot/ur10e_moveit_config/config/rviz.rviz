@@ -32,7 +32,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: Image
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -274,11 +274,27 @@ Visualization Manager:
           Value: true
         base_link_inertia:
           Value: true
+        bolt_frame:
+          Value: true
+        camera_aligned_depth_to_color_frame:
+          Value: true
+        camera_color_frame:
+          Value: true
+        camera_color_optical_frame:
+          Value: true
+        camera_depth_frame:
+          Value: true
+        camera_depth_optical_frame:
+          Value: true
+        camera_link:
+          Value: true
         flange:
           Value: true
         forearm_link:
           Value: true
         ground_plane_box:
+          Value: true
+        real_bolt_frame:
           Value: true
         shoulder_link:
           Value: true
@@ -315,7 +331,19 @@ Visualization Manager:
                       wrist_3_link:
                         flange:
                           tool0:
-                            {}
+                            camera_link:
+                              camera_aligned_depth_to_color_frame:
+                                bolt_frame:
+                                  {}
+                                camera_color_optical_frame:
+                                  {}
+                              camera_color_frame:
+                                {}
+                              camera_depth_frame:
+                                camera_depth_optical_frame:
+                                  {}
+          real_bolt_frame:
+            {}
       Update Interval: 0
       Value: true
     - Class: rviz/Image
