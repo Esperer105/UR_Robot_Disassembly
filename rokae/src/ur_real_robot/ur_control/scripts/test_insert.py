@@ -38,18 +38,20 @@ class TestInsert(TestBase):
         self.ori_wrench=np.array([0,0,0,0]).reshape([4,1])
         self.is_cramped=False
         self.near_cramped=False
-        self.x_shift=-0.0075
-        self.y_shift=0.0025
+        # self.x_shift=-0.0075
+        # self.y_shift=0.0025
+        self.x_shift=-0.0085
+        self.y_shift=0.0035    
 
     def get_insert_trajectory(self,real_pose,all_info):
 
         trajectory =  [] 
         # radius=0.0015
         radius=0
-        delta_angle = 5
+        delta_angle = 10
         scale_angle = delta_angle * math.pi / 180
-        scale_depth= 0.0015
-        total_ang=30
+        scale_depth= 0.002
+        total_ang=60
         tool_len = 0.415
         print('get_insert_trajectory')
         for i in range( total_ang / delta_angle + 1):

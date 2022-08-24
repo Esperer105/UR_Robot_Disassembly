@@ -169,7 +169,7 @@ class TestBase(object):
             else:
                 print('no plan result')
                 return False
-        group.set_pose_target(pose, effector)
+        group.set_joint_value_target(pose, True)
         plan = group.plan()
         if len(plan.joint_trajectory.points) > 0:
             group.execute(plan, wait=True)

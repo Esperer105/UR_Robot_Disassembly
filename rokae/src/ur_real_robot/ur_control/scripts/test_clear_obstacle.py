@@ -20,6 +20,8 @@ class TestClearObstacle(TestBase):
         radius = 0.015
 
         tool_len = 0.415
+        x_shift=-0.0085
+        y_shift=0.0035
 
         print('get_circle_trajectory')
         self.adjust_bolt_frame(real_pose, all_info)        
@@ -29,8 +31,8 @@ class TestClearObstacle(TestBase):
 
             # SJTU HERE CHANGED ori: z x y
             tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-            tgt_pose_in_real_frame.position.x = 0 + radius * math.cos(tamp_angle)
-            tgt_pose_in_real_frame.position.y = 0 + radius * math.sin(tamp_angle)
+            tgt_pose_in_real_frame.position.x = x_shift + radius * math.cos(tamp_angle)
+            tgt_pose_in_real_frame.position.y = y_shift + radius * math.sin(tamp_angle)
             tgt_pose_in_real_frame.position.z = -tool_len
 
             # q = tf.transformations.quaternion_from_euler(0, 1.57, 0)
@@ -60,10 +62,12 @@ class TestClearObstacle(TestBase):
 
     def get_tgt_pose_in_world_frame(self,all_info):
         tool_len = 0.415
+        x_shift=-0.0085
+        y_shift=0.0035
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-        tgt_pose_in_real_frame.position.x =  0
-        tgt_pose_in_real_frame.position.y = 0
-        tgt_pose_in_real_frame.position.z = -tool_len-0.05
+        tgt_pose_in_real_frame.position.x = x_shift
+        tgt_pose_in_real_frame.position.y = y_shift
+        tgt_pose_in_real_frame.position.z = -tool_len-0.075
 
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
         tgt_pose_in_real_frame.orientation.x = q[0]
