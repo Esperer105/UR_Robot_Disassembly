@@ -399,8 +399,8 @@ if __name__ == '__main__':
         # pose_target.position.y = 0.38
         # pose_target.position.z = 0.65
 
-        pose_target.position.x = -0.38
-        pose_target.position.y = 0.48
+        pose_target.position.x = -0.35
+        pose_target.position.y = 0.50
         pose_target.position.z = 0.70
 
         pose_target.orientation.x = quat[0]

@@ -37,12 +37,12 @@ def img_primitive(img):
     img = data_transform(img)
     img = torch.unsqueeze(img, dim=0)
     align_json_path = './class_indices.json'
-    align_weights_path='./VGG_640.pth'
+    align_weights_path='./VGG_640_0822.pth'
 
     # obstacle_weights_path = "/home/nuc/.cache/torch/checkpoints/vgg16-397923af.pth"
     # align_weights_path = "/home/nuc/.cache/torch/checkpoints/vgg16-397923af.pth"
     obstacle_json_path = './class_indices.json'
-    obstacle_weights_path='./VGG_640.pth'
+    obstacle_weights_path='./VGG_640_0822.pth'
     
     json_path_sets = [align_json_path, obstacle_json_path]
     weights_path_sets = [align_weights_path, obstacle_weights_path]
