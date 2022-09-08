@@ -54,7 +54,7 @@ class PlaneModel():
         return res
 
 
-def cal_ransac_plane(data, min_samples=5, residual_threshold=0.005,
+def cal_ransac_plane(data, min_samples=3, residual_threshold=0.001,
                      max_trials=1000, stop_sample_num=np.inf, stop_residuals_sum=0,
                      stop_probability=1):
     """
@@ -139,7 +139,7 @@ def cal_bolt_plane(tl_x, tl_y, br_x, br_y, all_info):
     points_cloud = generate_selected_points(tl_x, tl_y, br_x, br_y, all_info)
     # print(points_cloud)
     filter_points = depth_filter(points_cloud)
-    stop_num=int(len(filter_points)*0.7)
+    stop_num=int(len(filter_points)*0.9)
     # print('filter:', filter_points)
     # print(filter_points)
     n_vector = rectify_vector(cal_ransac_plane(filter_points,stop_sample_num=stop_num,stop_probability=0.99).reshape(1, 3))

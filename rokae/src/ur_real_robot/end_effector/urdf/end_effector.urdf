@@ -8,17 +8,17 @@
     name="pneumatic_base_link">
     <inertial>
       <origin
-        xyz="0.1249 -4.7993E-05 0.0089791"
+        xyz="0.12367 -4.6756E-05 0.0055418"
         rpy="0 0 0" />
       <mass
-        value="0.77161" />
+        value="0.79203" />
       <inertia
-        ixx="0.00049513"
+        ixx="0.00050283"
         ixy="-7.8018E-08"
         ixz="-2.0905E-06"
-        iyy="0.00089931"
+        iyy="0.00090701"
         iyz="-1.037E-07"
-        izz="0.00073233" />
+        izz="0.00073335" />
     </inertial>
     <visual>
       <origin

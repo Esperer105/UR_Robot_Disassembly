@@ -27,6 +27,7 @@ import traceback
 import math
 import select, termios, tty
 import moveit_commander
+from sensor_msgs.msg import JointState
 
 
 # from PIL import Image,ImageDraw
@@ -119,10 +120,10 @@ class TestBase(object):
         tgt_pose_in_bolt_frame.position.z = 0
         # q = tf.transformations.quaternion_from_euler(0, 1.57, 0)
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
-        # tgt_pose_in_bolt_frame.orientation.x = q[0]
-        # tgt_pose_in_bolt_frame.orientation.y = q[1]
-        # tgt_pose_in_bolt_frame.orientation.z = q[2]
-        # tgt_pose_in_bolt_frame.orientation.w = q[3]
+        tgt_pose_in_bolt_frame.orientation.x = q[0]
+        tgt_pose_in_bolt_frame.orientation.y = q[1]
+        tgt_pose_in_bolt_frame.orientation.z = q[2]
+        tgt_pose_in_bolt_frame.orientation.w = q[3]
         # self.print_pose(tgt_pose_in_bolt_frame, 'tgt_pose_in_bolt_frame')
         #SJTU
         tgt_pose_in_world_frame = self.transform_pose("bolt_frame",
@@ -130,11 +131,11 @@ class TestBase(object):
                                                       tgt_pose_in_bolt_frame,
                                                       all_info['bolt_ts'])
 
-
-        tgt_pose_in_world_frame.orientation.x = 1
-        tgt_pose_in_world_frame.orientation.y = 0
-        tgt_pose_in_world_frame.orientation.z = 0
-        tgt_pose_in_world_frame.orientation.w =0
+        # q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
+        # tgt_pose_in_world_frame.orientation.x = q[0]
+        # tgt_pose_in_world_frame.orientation.y = q[1]
+        # tgt_pose_in_world_frame.orientation.z = q[2]
+        # tgt_pose_in_world_frame.orientation.w = q[3]
 
         print (tgt_pose_in_world_frame)
         (r, p, y) = tf.transformations.euler_from_quaternion([tgt_pose_in_world_frame.orientation.x, tgt_pose_in_world_frame.orientation.y, tgt_pose_in_world_frame.orientation.z, tgt_pose_in_world_frame.orientation.w])
@@ -150,7 +151,25 @@ class TestBase(object):
 
 
     def set_arm_pose(self, group, pose, effector):
-        group.set_pose_target(pose, effector)
+        joint_states = rospy.wait_for_message("joint_states",JointState)
+        joint_pose = joint_states.position
+        if (joint_pose[5] > math.pi):
+            joints = {}
+            joints["elbow_joint"] = joint_pose[0]
+            joints["shoulder_lift_joint"] = joint_pose[1]
+            joints["shoulder_pan_joint"] = joint_pose[2]
+            joints["wrist_1_joint"] = joint_pose[3]
+            joints["wrist_2_joint"] = joint_pose[4]
+            joints["wrist_3_joint"] = joint_pose[5]-2*math.pi
+            group.set_joint_value_target(joints)
+            plan = group.plan()
+            if len(plan.joint_trajectory.points) > 0:
+                group.execute(plan, wait=True)
+                print('hand adjusted')
+            else:
+                print('no plan result')
+                return False
+        group.set_joint_value_target(pose, True)
         plan = group.plan()
         if len(plan.joint_trajectory.points) > 0:
             group.execute(plan, wait=True)
@@ -324,20 +343,41 @@ class TestBase(object):
         real_trans.transform.translation.x = X1_pose.position.x
         real_trans.transform.translation.y = X1_pose.position.y
         real_trans.transform.translation.z = X1_pose.position.z
-        real_trans.transform.rotation.x =X1_pose.orientation.x
-        real_trans.transform.rotation.y =X1_pose.orientation.y
-        real_trans.transform.rotation.z =X1_pose.orientation.z
-        real_trans.transform.rotation.w=X1_pose.orientation.w
+        
+        q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
+        real_trans.transform.rotation.x =q[0]
+        real_trans.transform.rotation.y =q[1]
+        real_trans.transform.rotation.z =q[2]
+        real_trans.transform.rotation.w=q[3]
 
+        # real_trans.transform.rotation.x =X1_pose.orientation.x
+        # real_trans.transform.rotation.y =X1_pose.orientation.y
+        # real_trans.transform.rotation.z =X1_pose.orientation.z
+        # real_trans.transform.rotation.w=X1_pose.orientation.w
+
+        # real_pose_in_effector_frame = geometry_msgs.msg.Pose()
+        # real_pose_in_effector_frame.position.x = 0
+        # real_pose_in_effector_frame.position.y = 0
+        # real_pose_in_effector_frame.position.z = 0
+        # q = tf.transformations.quaternion_from_euler(0, 0,0)
+        # real_pose_in_effector_frame.orientation.x = q[0]
+        # real_pose_in_effector_frame.orientation.y = q[1]
+        # real_pose_in_effector_frame.orientation.z = q[2]
+        # real_pose_in_effector_frame.orientation.w = q[3]
+        # real_pose_in_world_frame = self.transform_pose(self.effector,
+        #                                               "base_link",
+        #                                               real_pose_in_effector_frame,
+        #                                               all_info['bolt_ts'])
+        # real_trans.transform.rotation.x =real_pose_in_world_frame.orientation.x
+        # real_trans.transform.rotation.y =real_pose_in_world_frame.orientation.y
+        # real_trans.transform.rotation.z =real_pose_in_world_frame.orientation.z
+        # real_trans.transform.rotation.w=real_pose_in_world_frame.orientation.w
+
+        
+        
         print (real_trans.transform)
         (r, p, y) = tf.transformations.euler_from_quaternion([real_trans.transform.rotation.x, real_trans.transform.rotation.y, real_trans.transform.rotation.z, real_trans.transform.rotation.w])
         print(r,p,y)
-        # q = (trans.transform.rotation.x,
-        #      trans.transform.rotation.y,
-        #      trans.transform.rotation.z,
-        #      trans.transform.rotation.w)
-        # rpy = tf.transformations.euler_from_quaternion(q)
-        # print 'transform RPY (%.2f, %.2f, %.2f)'%(rpy[0],rpy[1],rpy[2])
         self.br.sendTransform(real_trans)
 
     def action(self, all_info, pre_result_dict,kalman,yolo):

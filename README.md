@@ -146,10 +146,18 @@ cd rokae/src/ur_real_robot/YOLO_v5_detect
 python YOLO_server.py
 ```
 
+#### 启动`np`服务端(新的终端 Python3 环境下)
+
+```bash
+cd rokae/src/ur_real_robot/ur_control/scripts
+python np_server.py
+```
+
+
 #### 运行`nsplanner.py` (进行基于神经符号学的拆解规划)
 
 ```bash
-rosrun ur_control nsplanner.py
+rosrun ur_control test_planner.py
 ```
 
 git 测试

@@ -13,10 +13,10 @@ class PrimAction:
             self.eff={'above_bolt':True}
         elif self.prim=='mate':
             self.pre={'target_aim':False,'above_bolt':True}
-            self.eff={'target_aim':True}
+            self.eff={'target_aim':True,'target_clear':True}
         elif self.prim=='push':
             self.pre={'target_clear':False,'above_bolt':True}
-            self.eff={'target_clear':True}
+            self.eff={'target_clear':True,'target_aim':True}
         elif self.prim=='insert':
             self.pre={'target_aim':True,'target_clear':True,'cramped':False}
             self.eff={'cramped':True}

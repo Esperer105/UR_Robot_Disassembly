@@ -34,6 +34,7 @@ from test_disassemble import TestDisassemble
 from prim_action import PrimAction
 from kalman import Kalman
 from YOLO_client import YOLO_SendImg
+from sensor_msgs.msg import JointState
 
 import tf2_ros
 import geometry_msgs.msg
@@ -41,6 +42,9 @@ import geometry_msgs.msg
 import math
 from Queue import Queue
 import select, termios, tty
+import socket
+import pickle
+import struct
 
 class TSTPlanner:
     def __init__(self, camera_name, rgb_topic, depth_topic, camera_info_topic):
@@ -108,11 +112,80 @@ class TSTPlanner:
         self.all_infos = {}
         self.ret_dict = {}
         self.bolt_pose = None
+        self.next_pose = None
         self.all_infos_lock = threading.Lock()
         self.prim_thread = threading.Thread(target=self.do_action)
         self.prim_execution = True
         self.shut_down = False
         self.prim_thread.start()
+
+        # socket_client
+        ip_port = ('127.0.0.1', 5051)
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.connect(ip_port)
+    
+    # 编码图片
+    def pack_image(self, frame):
+        # encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
+        # result, frame = cv2.imencode('.jpg', frame, encode_param)
+        data = pickle.dumps(frame, 0)
+        size = len(data)
+        packed = struct.pack(">L", size) + data
+        return packed, data, size
+    
+    # 接收socket服务端消息
+    def get_predicate_result(self):
+        data = self.sock.recv(4096)
+        result = pickle.loads(data)
+        return result
+    
+    # 根据消息改变当前谓词状态
+    def call_edge_predicate(self, all_info):
+        action_params = ['rgb_img', 'depth_img', 'camera_model', 'timestamp']
+        for param in action_params:
+            if not param in all_info.keys():
+                print(param, 'must give')
+                return False
+        packed, data, size = self.pack_image(all_info['rgb_img'])
+        self.sock.sendall(packed)
+        print("prim send all finished")
+        result=(self.get_predicate_result())[0]
+        print(result)
+        if result[0].item() > 0.8:
+            self.stage['target_aim']=True
+            self.stage['target_clear']=False
+        elif  result[1].item() > 0.8:  
+            self.stage['target_aim']=True
+            self.stage['target_clear']=True
+        elif  result[2].item() > 0.8:
+            self.stage['target_aim']=False
+            self.stage['target_clear']=False
+        elif  result[3].item() > 0.8:
+            self.stage['target_aim']=False
+            self.stage['target_clear']=True
+        else:
+            joint_states = rospy.wait_for_message("joint_states",JointState)
+            joint_pose = joint_states.position
+            joints = {}
+            joints["elbow_joint"] = joint_pose[0]
+            joints["shoulder_lift_joint"] = joint_pose[1]
+            joints["shoulder_pan_joint"] = joint_pose[2]
+            joints["wrist_1_joint"] = joint_pose[3]
+            joints["wrist_2_joint"] = joint_pose[4]
+            if (joint_pose[5] > math.pi):             
+                joints["wrist_3_joint"] = joint_pose[5]-2.5*math.pi
+            else:                
+                joints["wrist_3_joint"] = joint_pose[5]+0.5*math.pi
+
+            self.group.set_joint_value_target(joints)
+            plan = self.group.plan()
+            if len(plan.joint_trajectory.points) > 0:
+                self.group.execute(plan, wait=True)
+                print('hand adjusted')
+            else:
+                print('no plan result')
+            return False
+        return True
 
     def auto_plan(self,original_stage):
         print ('start to plan')
@@ -175,7 +248,7 @@ class TSTPlanner:
 
     def do_action(self):
         #执行动作
-        filter=Kalman(10)
+        filter=Kalman(20)
         move=PrimAction('move')
         mate=PrimAction('mate')
         push=PrimAction('push')
@@ -202,7 +275,11 @@ class TSTPlanner:
                     self.all_infos_lock.release()
                     if self.action in prim_dict.keys():
                         #检测pre是否满足
-                        pre_is_ok=True
+                        if self.action in ['move','disassemble']:
+                            pre_is_ok=True
+                        else:
+                            rospy.sleep(0.1)
+                            pre_is_ok=self.call_edge_predicate(infos)
                         for pre in (prim_dict[self.action]).pre:
                             if not self.stage[pre]==(prim_dict[self.action].pre)[pre]:
                                 pre_is_ok=False
@@ -222,6 +299,19 @@ class TSTPlanner:
                             for eff in (prim_dict[self.action]).eff:
                                 self.stage[eff]=(prim_dict[self.action].eff)[eff]
                             i = i + 1
+                            if self.action=='disassemble':
+                                filter.release()
+                                filter=Kalman(20)
+                                self.stage={'have_coarse_pose':True, 'above_bolt':False,'target_aim':False, 'target_clear':False,'cramped':False,'disassembled':False}
+                                if not self.next_pose is None:
+                                    self.ret_dict['coarse_pose']=self.next_pose
+                                    print('next pose')
+                                    print(self.next_pose)
+                                else:
+                                    print("No next pose")
+                                print('reaction==start do auto_plan')
+                                step_list = self.auto_plan(self.stage)
+                                i = 0
                             self.action=step_list[i]
                         else:
                             #若pre不满足，重新生成规划方案
@@ -303,15 +393,15 @@ if __name__ == '__main__':
         rospy.init_node('tstplanner-moveit', anonymous=True)
 
         planner = TSTPlanner('camera', '/camera/color/image_raw', '/camera/aligned_depth_to_color/image_raw', '/camera/color/camera_info')
-        quat = tf.transformations.quaternion_from_euler(-math.pi, 0, -0.5*math.pi)
+        quat = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
         pose_target = geometry_msgs.msg.Pose()
         # pose_target.position.x = 0.30
         # pose_target.position.y = 0.38
         # pose_target.position.z = 0.65
 
-        pose_target.position.x = 0.15
-        pose_target.position.y = 0.40
-        pose_target.position.z = 0.65
+        pose_target.position.x = -0.35
+        pose_target.position.y = 0.50
+        pose_target.position.z = 0.70
 
         pose_target.orientation.x = quat[0]
         pose_target.orientation.y = quat[1]

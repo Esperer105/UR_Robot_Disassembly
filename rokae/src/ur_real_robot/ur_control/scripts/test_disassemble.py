@@ -18,9 +18,9 @@ class TestDisassemble(TestBase):
     def get_disassemble_trajectory(self):
 
         trajectory =  [] 
-        scale_depth= 0.025
+        scale_depth= 0.01
         print('get_return_trajectory')
-        for i in range(2):
+        for i in range(5):
             tamp_depth=scale_depth *(i+1)
             # SJTU HERE CHANGED ori: z x y
             tgt_pose_in_effector_frame = geometry_msgs.msg.Pose()
@@ -63,7 +63,7 @@ class TestDisassemble(TestBase):
             tgt_pose_in_effector_frame = geometry_msgs.msg.Pose()
             tgt_pose_in_effector_frame.position.x = 0
             tgt_pose_in_effector_frame.position.y = 0
-            tgt_pose_in_effector_frame.position.z = -0.05
+            tgt_pose_in_effector_frame.position.z = -0.0015
             q = tf.transformations.quaternion_from_euler(0, 0, 0)
             tgt_pose_in_effector_frame.orientation.x = q[0]
             tgt_pose_in_effector_frame.orientation.y = q[1]
@@ -73,7 +73,6 @@ class TestDisassemble(TestBase):
                                                           "base_link",
                                                           tgt_pose_in_effector_frame,
                                                           rospy.Time.now())
-            print (tgt_pose_in_world_frame)
             return tgt_pose_in_world_frame
 
     def action(self, all_info, pre_result_dict, kalman,yolo):
@@ -88,10 +87,13 @@ class TestDisassemble(TestBase):
         global set_io
         set_io = rospy.ServiceProxy('/ur_hardware_interface/set_io', SetIO)
         print("service-server has been started") 
+        # start_pose=self.get_tgt_pose_in_world_frame()
+        # if not self.set_arm_pose(self.group, start_pose, self.effector):
+        #         print("release failed")
         trajectory = self.get_disassemble_trajectory()
         curr_pose = self.group.get_current_pose(self.effector).pose
         self.set_digital_out(0, True)
-        rospy.sleep(0.1)
+        rospy.sleep(0.2)
         print(self.switch)
         for ee_pose in trajectory:
             if not self.set_arm_pose(self.group, ee_pose, self.effector):
@@ -101,6 +103,7 @@ class TestDisassemble(TestBase):
         self.set_digital_out(0, False)
         rospy.sleep(0.1)        
         print(self.switch)
+        rospy.is_shutdown
         # ee_pose=self.get_tgt_pose_in_world_frame()
         # curr_pose=self.group.get_current_pose(self.effector).pose
         # if not self.set_arm_pose(self.group, ee_pose, self.effector):

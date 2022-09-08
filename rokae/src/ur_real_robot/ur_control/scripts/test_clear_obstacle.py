@@ -16,10 +16,12 @@ class TestClearObstacle(TestBase):
         trajectory = []
         delta_angle = 30
         scale_angle = delta_angle * math.pi / 180
-        #SJTU origininal=0.012
+        #SJTU origininal=0.0105
         radius = 0.015
 
-        tool_len = 0.435
+        tool_len = 0.415
+        x_shift=-0.0085
+        y_shift=0.0035
 
         print('get_circle_trajectory')
         self.adjust_bolt_frame(real_pose, all_info)        
@@ -29,8 +31,8 @@ class TestClearObstacle(TestBase):
 
             # SJTU HERE CHANGED ori: z x y
             tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-            tgt_pose_in_real_frame.position.x = radius * math.cos(tamp_angle)
-            tgt_pose_in_real_frame.position.y = radius * math.sin(tamp_angle)
+            tgt_pose_in_real_frame.position.x = x_shift + radius * math.cos(tamp_angle)
+            tgt_pose_in_real_frame.position.y = y_shift + radius * math.sin(tamp_angle)
             tgt_pose_in_real_frame.position.z = -tool_len
 
             # q = tf.transformations.quaternion_from_euler(0, 1.57, 0)
@@ -45,9 +47,9 @@ class TestClearObstacle(TestBase):
                                                           "base_link",
                                                           tgt_pose_in_real_frame,
                                                           all_info['bolt_ts'])
-            print (tgt_pose_in_world_frame)
-            (r, p, y) = tf.transformations.euler_from_quaternion([tgt_pose_in_world_frame.orientation.x, tgt_pose_in_world_frame.orientation.y, tgt_pose_in_world_frame.orientation.z, tgt_pose_in_world_frame.orientation.w])
-            print(r,p,y)
+            # print (tgt_pose_in_world_frame)
+            # (r, p, y) = tf.transformations.euler_from_quaternion([tgt_pose_in_world_frame.orientation.x, tgt_pose_in_world_frame.orientation.y, tgt_pose_in_world_frame.orientation.z, tgt_pose_in_world_frame.orientation.w])
+            # print(r,p,y)
 
             if not tgt_pose_in_world_frame is None:
                 # self.print_pose(tgt_pose_in_world_frame, 'get_circle_trajectory %d' % i)
@@ -59,11 +61,13 @@ class TestClearObstacle(TestBase):
         return trajectory
 
     def get_tgt_pose_in_world_frame(self,all_info):
-        tool_len = 0.435
+        tool_len = 0.415
+        x_shift=-0.0085
+        y_shift=0.0035
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-        tgt_pose_in_real_frame.position.x = 0
-        tgt_pose_in_real_frame.position.y = 0
-        tgt_pose_in_real_frame.position.z = -tool_len-0.15
+        tgt_pose_in_real_frame.position.x = x_shift
+        tgt_pose_in_real_frame.position.y = y_shift
+        tgt_pose_in_real_frame.position.z = -tool_len-0.075
 
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
         tgt_pose_in_real_frame.orientation.x = q[0]
@@ -87,6 +91,7 @@ class TestClearObstacle(TestBase):
                 return False
         print("param satified, start to clear obstacle")
         planner = all_info['planner_handler']
+        np_collected=False
         while not kalman.finished:
             latest_infos = planner.get_latest_infos()
             # print (latest_infos.keys())        
@@ -101,10 +106,14 @@ class TestClearObstacle(TestBase):
             # crop_img=raw_img[:,int(0.5*(width-height)):int(0.5*(width+height))]
             detect_ret=yolo.finish_YOLO_detect(crop_img)
             s=kalman.itr_sum
-            if 'screw' in detect_ret[1].keys():
-                print('screw success')
-
-                circlesbox = detect_ret[1]["screw"]
+            if 'screw' in detect_ret[1].keys() or 'nut' in detect_ret[1].keys():
+                circlesbox=[]
+                if 'screw' in detect_ret[1].keys():
+                    print('screw success')
+                    circlesbox.extend(detect_ret[1]["screw"])
+                if 'nut' in detect_ret[1].keys():
+                    print('nut success')
+                    circlesbox.extend(detect_ret[1]["nut"])     
                 #circle = self.findBestMatchCircle(circles)
 
                 # x = circle[1]+int(0.5*(width-0.5*height))
@@ -112,20 +121,24 @@ class TestClearObstacle(TestBase):
                 # x=circle[1]+int(0.5*(width-height))
                 # y=circle[0]
                 if (s==0):
-                    circlebox = self.findBestMatchCircle(circlesbox)                
-                    # x=circle[0]-(r_width-width)/2
-                    # y=circle[1]-(r_height-height)/2
-                    # self.add_bolt_frame(x, y, latest_infos)
-                    circlebox[0] = circlebox[0]-(r_width-width)/2
-                    circlebox[2] = circlebox[2]-(r_width-width)/2
-                    circlebox[1] = circlebox[1]-(r_height-height)/2
-                    circlebox[3] = circlebox[3]-(r_height-height)/2
-                    self.add_bolt_frameV2(circlebox, latest_infos)
-                    bolt_pose = self.get_bolt_pose_in_world_frame(latest_infos)
-                    real_pose=kalman.iteration(bolt_pose)
+                    # circle = self.findBestMatchCircle(circles) 
+                    min_dist=100
+                    curr_pose= self.group.get_current_pose(self.effector).pose
+                    for screw in circlesbox:
+                        screw[0] = screw[0]-(r_width-width)/2
+                        screw[2] = screw[2]-(r_width-width)/2
+                        screw[1] = screw[1]-(r_height-height)/2
+                        screw[3] = screw[3]-(r_height-height)/2                        
+                        self.add_bolt_frameV2(screw, latest_infos)
+                        screw_pose=self.get_bolt_pose_in_world_frame(latest_infos)
+                        temp_dist=math.sqrt(pow(screw_pose.position.x - curr_pose.position.x ,2)+pow(screw_pose.position.y - curr_pose.position.y ,2))            
+                        if (temp_dist<min_dist):
+                            min_dist=temp_dist
+                            conv_pose=screw_pose
+                    real_pose=kalman.iteration(conv_pose)
                     self.adjust_bolt_frame(real_pose,latest_infos)
                     ee_pose=self.get_tgt_pose_in_world_frame(latest_infos)
-                    curr_pose= self.group.get_current_pose(self.effector).pose
+
                     if not self.set_arm_pose(self.group, ee_pose, self.effector):
                         print("failed")
                         print(curr_pose)
@@ -137,14 +150,32 @@ class TestClearObstacle(TestBase):
                         screw[1] = screw[1]-(r_height-height)/2
                         screw[3] = screw[3]-(r_height-height)/2
                         self.add_bolt_frameV2(screw, latest_infos)
-                        # self.add_bolt_frame(screw[1]-(r_width-width)/2, screw[0]-(r_height-height)/2, latest_infos)
                         screw_pose=self.get_bolt_pose_in_world_frame(latest_infos)
                         former_pose=kalman.get_former_pose()
-                        temp_diff=math.sqrt(pow(screw_pose.position.x - former_pose.position.x ,2)+pow(screw_pose.position.y - former_pose.position.y ,2)+pow(screw_pose.position.z - former_pose.position.z ,2))            
+                        # temp_diff=math.sqrt(pow(screw_pose.position.x - former_pose.position.x ,2)+pow(screw_pose.position.y - former_pose.position.y ,2)+pow(screw_pose.position.z- former_pose.position.z,2))
+                        temp_diff=math.sqrt(pow(screw_pose.position.x - former_pose.position.x ,2)+pow(screw_pose.position.y - former_pose.position.y ,2))          
                         if (temp_diff<min_diff):
                             min_diff=temp_diff
                             near_pose=screw_pose
-                    if (min_diff < 0.01):
+                        if(temp_diff > 0.05) and (np_collected==False):
+                            coarse_pose = geometry_msgs.msg.Pose()
+                            if  screw_pose.position.x >0 and  screw_pose.position.x <0.02 :
+                                coarse_pose.position.x=0.08
+                            else:    
+                                coarse_pose.position.x = screw_pose.position.x-0.02
+                            coarse_pose.position.y = screw_pose.position.y-0.02
+                            coarse_pose.position.z = 0.70
+
+                            q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
+                            coarse_pose.orientation.x = q[0]
+                            coarse_pose.orientation.y = q[1]
+                            coarse_pose.orientation.z = q[2]
+                            coarse_pose.orientation.w = q[3]
+
+                            planner.next_pose=coarse_pose
+                            np_collected=True
+
+                    if (min_diff < 0.015):
                         real_pose=kalman.iteration(near_pose)
                         self.adjust_bolt_frame(real_pose,latest_infos)
                         ee_pose=self.get_tgt_pose_in_world_frame(latest_infos)

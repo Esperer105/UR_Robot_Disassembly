@@ -13,7 +13,11 @@ from visualization_msgs.msg import Marker
 from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image, CameraInfo
 from tf import TransformListener, transformations
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
+
 # from  bolt_position_detector
 import copy
 import tf2_ros
@@ -34,27 +38,36 @@ class TestInsert(TestBase):
         self.ori_wrench=np.array([0,0,0,0]).reshape([4,1])
         self.is_cramped=False
         self.near_cramped=False
+        # self.x_shift=-0.0075
+        # self.y_shift=0.0025
+        self.x_shift=-0.0085
+        self.y_shift=0.0035    
 
     def get_insert_trajectory(self,real_pose,all_info):
 
         trajectory =  [] 
-        radius=0.0015
-        delta_angle = 30
+        # radius=0.0015
+        radius=0
+        delta_angle = 10
         scale_angle = delta_angle * math.pi / 180
         scale_depth= 0.002
-
-        tool_len = 0.435
+        total_ang=60
+        tool_len = 0.415
         print('get_insert_trajectory')
-        for i in range(180 / delta_angle + 1):
-            tamp_radius=radius*(1-i*delta_angle/180)
+        for i in range( total_ang / delta_angle + 1):
+            tamp_radius=radius*(1-i*delta_angle/total_ang)
             tamp_angle = scale_angle * i
             tamp_depth=scale_depth * i
             # SJTU HERE CHANGED ori: z x y
             tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-            tgt_pose_in_real_frame.position.x = tamp_radius * math.cos(tamp_angle)
-            tgt_pose_in_real_frame.position.y = 0.004+ tamp_radius * math.sin(tamp_angle)
+            # tgt_pose_in_real_frame.position.x = -0.009+tamp_radius * math.cos(tamp_angle)
+            # tgt_pose_in_real_frame.position.y =0.003+tamp_radius * math.sin(tamp_angle)
+            tgt_pose_in_real_frame.position.x = self.x_shift+tamp_radius * math.cos(tamp_angle)
+            tgt_pose_in_real_frame.position.y =self.y_shift+tamp_radius * math.sin(tamp_angle)
+
             tgt_pose_in_real_frame.position.z = -tool_len+tamp_depth
             q = tf.transformations.quaternion_from_euler(0, 0, tamp_angle)
+            # q = tf.transformations.quaternion_from_euler(0, 0, 0)           
             tgt_pose_in_real_frame.orientation.x = q[0]
             tgt_pose_in_real_frame.orientation.y = q[1]
             tgt_pose_in_real_frame.orientation.z = q[2]
@@ -64,9 +77,9 @@ class TestInsert(TestBase):
                                                           "base_link",
                                                           tgt_pose_in_real_frame,
                                                           all_info['bolt_ts'])
-            print (tgt_pose_in_world_frame)
-            (r, p, y) = tf.transformations.euler_from_quaternion([tgt_pose_in_world_frame.orientation.x, tgt_pose_in_world_frame.orientation.y, tgt_pose_in_world_frame.orientation.z, tgt_pose_in_world_frame.orientation.w])
-            print(r,p,y)
+            # print (tgt_pose_in_world_frame)
+            # (r, p, y) = tf.transformations.euler_from_quaternion([tgt_pose_in_world_frame.orientation.x, tgt_pose_in_world_frame.orientation.y, tgt_pose_in_world_frame.orientation.z, tgt_pose_in_world_frame.orientation.w])
+            # print(r,p,y)
 
             if not tgt_pose_in_world_frame is None:
                 trajectory.append(tgt_pose_in_world_frame)
@@ -112,7 +125,7 @@ class TestInsert(TestBase):
         trajectory=[]
         ori_pose= self.group.get_current_pose(self.effector).pose
         tgt_pose_in_effector_frame = geometry_msgs.msg.Pose()
-        tgt_pose_in_effector_frame.position.x = 0.0015
+        tgt_pose_in_effector_frame.position.x = 0.001
         tgt_pose_in_effector_frame.position.y = 0
         tgt_pose_in_effector_frame.position.z = 0
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
@@ -128,7 +141,7 @@ class TestInsert(TestBase):
         print('x+')
         # print (tgt_pose_in_world_frame)
 
-        tgt_pose_in_effector_frame.position.x = -0.0015
+        tgt_pose_in_effector_frame.position.x = -0.001
         tgt_pose_in_world_frame = self.transform_pose(self.effector,
                                                         "base_link",
                                                         tgt_pose_in_effector_frame,
@@ -138,7 +151,7 @@ class TestInsert(TestBase):
         # print (tgt_pose_in_world_frame)
 
         tgt_pose_in_effector_frame.position.x = 0
-        tgt_pose_in_effector_frame.position.y = 0.0015
+        tgt_pose_in_effector_frame.position.y = 0.001
         tgt_pose_in_world_frame = self.transform_pose(self.effector,
                                                         "base_link",
                                                         tgt_pose_in_effector_frame,
@@ -147,7 +160,7 @@ class TestInsert(TestBase):
         print('y+')
         # print (tgt_pose_in_world_frame)
 
-        tgt_pose_in_effector_frame.position.y = -0.0015
+        tgt_pose_in_effector_frame.position.y = -0.001
         tgt_pose_in_world_frame = self.transform_pose(self.effector,
                                                         "base_link",
                                                         tgt_pose_in_effector_frame,
@@ -204,7 +217,7 @@ class TestInsert(TestBase):
     
     def get_recramp_trajectory(self,vector):
         print('get_recramp_trajectory')
-        scale_step=0.015
+        scale_step=0.0105
         trajectory = []
         start_pose= self.group.get_current_pose(self.effector).pose
         tgt_pose_in_effector_frame = geometry_msgs.msg.Pose()
@@ -237,10 +250,13 @@ class TestInsert(TestBase):
         return trajectory        
 
     def get_tgt_pose_in_world_frame(self,all_info):
-        tool_len = 0.435
+        tool_len = 0.415
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-        tgt_pose_in_real_frame.position.x = 0
-        tgt_pose_in_real_frame.position.y = 0.004
+        # tgt_pose_in_real_frame.position.x = -0.009
+        # tgt_pose_in_real_frame.position.y = 0.003
+
+        tgt_pose_in_real_frame.position.x = self.x_shift
+        tgt_pose_in_real_frame.position.y = self.y_shift
         tgt_pose_in_real_frame.position.z = -tool_len
 
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
@@ -291,22 +307,13 @@ class TestInsert(TestBase):
         # if not kalman.get_former_pose()  is None:
         if True:
             real_pose=kalman.get_former_pose()
-            # real_pose = geometry_msgs.msg.Pose()
-            # real_pose.position.x = -0.0695
-            # real_pose.position.x = -0.0848
-            # real_pose.position.y = 0.5038
-            # real_pose.position.z = 0.2312
 
-            # real_pose.orientation.x = 1
-            # real_pose.orientation.y = 0
-            # real_pose.orientation.z = 0
-            # real_pose.orientation.w =0
 
             print('real bolt detected')
             print('real pose')
-            print(real_pose)
-            (r, p, y) = tf.transformations.euler_from_quaternion([real_pose.orientation.x, real_pose.orientation.y, real_pose.orientation.z, real_pose.orientation.w])
-            print(r,p,y)
+            # print(real_pose)
+            # (r, p, y) = tf.transformations.euler_from_quaternion([real_pose.orientation.x, real_pose.orientation.y, real_pose.orientation.z, real_pose.orientation.w])
+            # print(r,p,y)
             self.adjust_bolt_frame(real_pose,all_info)
             ee_pose=self.get_tgt_pose_in_world_frame(all_info)
             rospy.Subscriber("/wrench", WrenchStamped, self.force_callback)
@@ -323,10 +330,11 @@ class TestInsert(TestBase):
                     ee_pose = self.group.get_current_pose(self.effector).pose 
                     print(ee_pose)
                 # self.print_wrench()
+            # rospy.sleep(30)
             temp_pose=self.test_wrench()
             while not self.is_cramped:
                 if self.near_cramped:
-                    search_trajectory=self.get_search_trajectory(5,0.0015,5)
+                    search_trajectory=self.get_search_trajectory(5,0.001,5)
                     for ee_pose in search_trajectory:
                         if not self.set_arm_pose(self.group, ee_pose, self.effector):
                             print("search failed")
@@ -342,7 +350,7 @@ class TestInsert(TestBase):
                             print ('lost cramp')
                             break
                 else:
-                    search_trajectory=self.get_search_trajectory(5,0.0025)
+                    search_trajectory=self.get_search_trajectory(5,0.002)
                     for ee_pose in search_trajectory:
                         if not self.set_arm_pose(self.group, ee_pose, self.effector):
                             print("search failed")
