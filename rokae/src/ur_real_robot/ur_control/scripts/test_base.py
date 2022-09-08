@@ -344,16 +344,16 @@ class TestBase(object):
         real_trans.transform.translation.y = X1_pose.position.y
         real_trans.transform.translation.z = X1_pose.position.z
         
-        q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
-        real_trans.transform.rotation.x =q[0]
-        real_trans.transform.rotation.y =q[1]
-        real_trans.transform.rotation.z =q[2]
-        real_trans.transform.rotation.w=q[3]
+        # q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
+        # real_trans.transform.rotation.x =q[0]
+        # real_trans.transform.rotation.y =q[1]
+        # real_trans.transform.rotation.z =q[2]
+        # real_trans.transform.rotation.w=q[3]
 
-        # real_trans.transform.rotation.x =X1_pose.orientation.x
-        # real_trans.transform.rotation.y =X1_pose.orientation.y
-        # real_trans.transform.rotation.z =X1_pose.orientation.z
-        # real_trans.transform.rotation.w=X1_pose.orientation.w
+        real_trans.transform.rotation.x =X1_pose.orientation.x
+        real_trans.transform.rotation.y =X1_pose.orientation.y
+        real_trans.transform.rotation.z =X1_pose.orientation.z
+        real_trans.transform.rotation.w=X1_pose.orientation.w
 
         # real_pose_in_effector_frame = geometry_msgs.msg.Pose()
         # real_pose_in_effector_frame.position.x = 0

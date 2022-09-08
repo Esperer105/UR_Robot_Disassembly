@@ -3,5 +3,7 @@
 ./rokae/ur_env/
 ./rokae/ur_py3_env/
 *.pyc
+*.csv
+*.png
 ./.idea/
 .vscode/

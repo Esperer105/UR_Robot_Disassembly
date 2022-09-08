@@ -58,7 +58,6 @@ def cal_ransac_plane(data, min_samples=3, residual_threshold=0.001,
                      max_trials=1000, stop_sample_num=np.inf, stop_residuals_sum=0,
                      stop_probability=1):
     """
-
     :param data: array the array of 3D points
     :param min_samples: int the minimum number of data points to fit a model to.
     :param residual_threshold: float maximum distance for a data point to be classified as an inlier.
@@ -87,6 +86,8 @@ def depth_filter(point_cloud):
         filter_point_cloud.append(point)
     return np.array(filter_point_cloud)
 
+def clamp(x,minn,maxn):
+    return max(min(maxn, x), minn)
 
 def generate_selected_points(tl_x, tl_y, br_x, br_y, all_info):
     delta=10
@@ -94,6 +95,10 @@ def generate_selected_points(tl_x, tl_y, br_x, br_y, all_info):
     tl_y=tl_y-delta
     br_x=br_x+delta
     br_y=br_y+delta
+    tl_x = clamp(tl_x, 0, all_info['depth_img'].shape[1])
+    br_x = clamp(br_x, 0, all_info['depth_img'].shape[1])
+    tl_y = clamp(tl_y, 0, all_info['depth_img'].shape[0])
+    br_y = clamp(br_y, 0, all_info['depth_img'].shape[0])
     roi = rgb2gray(all_info['rgb_img'][tl_y:br_y, tl_x:br_x])
     # cv2.imshow('roi', roi)
     # cv2.waitKey(0)
