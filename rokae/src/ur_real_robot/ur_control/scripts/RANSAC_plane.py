@@ -87,7 +87,7 @@ def depth_filter(point_cloud):
         filter_point_cloud.append(point)
     return np.array(filter_point_cloud)
 
-def clamp(x,maxn,minn):
+def clamp(x,minn,maxn):
     return max(min(maxn, x), minn)
 
 def generate_selected_points(tl_x, tl_y, br_x, br_y, all_info):
