@@ -41,7 +41,7 @@ class TestInsert(TestBase):
         # self.x_shift=-0.0075
         # self.y_shift=0.0025
         self.x_shift=-0.0085
-        self.y_shift=0.0035    
+        self.y_shift=0.0035 
 
     def get_insert_trajectory(self,real_pose,all_info):
 
@@ -116,7 +116,7 @@ class TestInsert(TestBase):
                                                                 rospy.Time.now())  
                 if not tgt_pose_in_world_frame is None:
                     trajectory.append(tgt_pose_in_world_frame)
-                    print ("the %d-th trajectory"%(360/ delta_angle*i+j))  
+                    # print ("the %d-th trajectory"%(360/ delta_angle*i+j))  
         if len(trajectory) > 0:
             print ("trajectory collected")
         return trajectory
