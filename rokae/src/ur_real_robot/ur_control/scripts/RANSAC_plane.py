@@ -89,6 +89,11 @@ def depth_filter(point_cloud):
 
 
 def generate_selected_points(tl_x, tl_y, br_x, br_y, all_info):
+    delta=10
+    tl_x=tl_x-delta
+    tl_y=tl_y-delta
+    br_x=br_x+delta
+    br_y=br_y+delta
     roi = rgb2gray(all_info['rgb_img'][tl_y:br_y, tl_x:br_x])
     # cv2.imshow('roi', roi)
     # cv2.waitKey(0)
