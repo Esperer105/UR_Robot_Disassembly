@@ -38,10 +38,11 @@ class TestInsert(TestBase):
         self.ori_wrench=np.array([0,0,0,0]).reshape([4,1])
         self.is_cramped=False
         self.near_cramped=False
-        # self.x_shift=-0.0075
-        # self.y_shift=0.0025
         self.x_shift=-0.0085
         self.y_shift=0.0035 
+        # self.x_shift=-0.0125
+        # self.y_shift=0.007
+
 
     def get_insert_trajectory(self,real_pose,all_info):
 
@@ -113,7 +114,8 @@ class TestInsert(TestBase):
                 tgt_pose_in_world_frame = self.transform_pose(self.effector,
                                                                 "base_link",
                                                                 tgt_pose_in_effector_frame,
-                                                                rospy.Time.now())  
+                                                                rospy.Time.now()) 
+                tgt_pose_in_world_frame.position.z=0.628
                 if not tgt_pose_in_world_frame is None:
                     trajectory.append(tgt_pose_in_world_frame)
                     # print ("the %d-th trajectory"%(360/ delta_angle*i+j))  
@@ -137,6 +139,7 @@ class TestInsert(TestBase):
                                                         "base_link",
                                                         tgt_pose_in_effector_frame,
                                                         rospy.Time.now())
+        tgt_pose_in_world_frame.position.z=0.628
         trajectory.append(tgt_pose_in_world_frame)
         print('x+')
         # print (tgt_pose_in_world_frame)
@@ -146,6 +149,7 @@ class TestInsert(TestBase):
                                                         "base_link",
                                                         tgt_pose_in_effector_frame,
                                                         rospy.Time.now())
+        tgt_pose_in_world_frame.position.z=0.628
         trajectory.append(tgt_pose_in_world_frame)
         print('x-')
         # print (tgt_pose_in_world_frame)
@@ -156,6 +160,7 @@ class TestInsert(TestBase):
                                                         "base_link",
                                                         tgt_pose_in_effector_frame,
                                                         rospy.Time.now())
+        tgt_pose_in_world_frame.position.z=0.628
         trajectory.append(tgt_pose_in_world_frame)
         print('y+')
         # print (tgt_pose_in_world_frame)
@@ -165,6 +170,7 @@ class TestInsert(TestBase):
                                                         "base_link",
                                                         tgt_pose_in_effector_frame,
                                                         rospy.Time.now())
+        tgt_pose_in_world_frame.position.z=0.628
         trajectory.append(tgt_pose_in_world_frame)
         print('y-')
         # print (tgt_pose_in_world_frame)
@@ -182,7 +188,7 @@ class TestInsert(TestBase):
                 print ('Cramped!')
                 break
         for i in range (4):    
-            if self.wrench[0,self.wrench.shape[1]+i-4] < -3:
+            if self.wrench[0,self.wrench.shape[1]+i-4] < -5:
                 self.near_cramped=True
                 print ('Near cramped!')
         if not self.set_arm_pose(self.group, ori_pose, self.effector):
@@ -217,7 +223,7 @@ class TestInsert(TestBase):
     
     def get_recramp_trajectory(self,vector):
         print('get_recramp_trajectory')
-        scale_step=0.0105
+        scale_step=0.0125
         trajectory = []
         start_pose= self.group.get_current_pose(self.effector).pose
         tgt_pose_in_effector_frame = geometry_msgs.msg.Pose()
@@ -232,7 +238,7 @@ class TestInsert(TestBase):
         tgt_pose_in_world_frame = self.transform_pose(self.effector,
                                                         "base_link",
                                                         tgt_pose_in_effector_frame,
-                                                        rospy.Time.now())
+                                                        rospy.Time.now())                                                      
         trajectory.append(tgt_pose_in_world_frame)
         # print (tgt_pose_in_world_frame)
 
@@ -243,8 +249,24 @@ class TestInsert(TestBase):
                                                         "base_link",
                                                         tgt_pose_in_effector_frame,
                                                         rospy.Time.now())
+        tgt_pose_in_world_frame.position.z=0.628
         trajectory.append(tgt_pose_in_world_frame)
-        # print (tgt_pose_in_world_frame)
+        print (tgt_pose_in_world_frame)
+        
+        for i in range(5): 
+            q = tf.transformations.quaternion_from_euler(0, 0, i*math.pi/30)
+            tgt_pose_in_effector_frame.orientation.x = q[0]
+            tgt_pose_in_effector_frame.orientation.y = q[1]
+            tgt_pose_in_effector_frame.orientation.z = q[2]
+            tgt_pose_in_effector_frame.orientation.w = q[3]
+            tgt_pose_in_world_frame = self.transform_pose(self.effector,
+                                                            "base_link",
+                                                            tgt_pose_in_effector_frame,
+                                                            rospy.Time.now())
+            tgt_pose_in_world_frame.position.z=0.628
+            trajectory.append(tgt_pose_in_world_frame)
+
+
         if len(trajectory) > 0:
             print ("trajectory collected")
         return trajectory        
@@ -307,7 +329,17 @@ class TestInsert(TestBase):
         # if not kalman.get_former_pose()  is None:
         if True:
             real_pose=kalman.get_former_pose()
+            
 
+            # real_pose = geometry_msgs.msg.Pose()
+            # real_pose.position.x = -0.3360
+            # real_pose.position.y = 0.5097
+            # real_pose.position.z = 0.225
+            # q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
+            # real_pose.orientation.x = q[0]
+            # real_pose.orientation.y = q[1]
+            # real_pose.orientation.z = q[2]
+            # real_pose.orientation.w= q[3]
 
             print('real bolt detected')
             print('real pose')
@@ -341,7 +373,7 @@ class TestInsert(TestBase):
                         self.print_wrench()
                         pre_col=self.wrench.shape[1]-1
                         last_col=self.wrench.shape[1]-2
-                        if self.wrench[0,pre_col] - self.wrench[0,last_col] > 1:
+                        if self.wrench[0,pre_col] - self.wrench[0,last_col] > 1.5:
                             self.near_cramped=False
                             curr_pose=self.test_wrench()
                             if self.is_cramped:
@@ -356,7 +388,7 @@ class TestInsert(TestBase):
                             print("search failed")
                         self.print_wrench()
                         pre_col=self.wrench.shape[1]-1
-                        if self.wrench[1,pre_col]  > 10:
+                        if self.wrench[1,pre_col]  > 8:
                             vector_x= - self.wrench[2,pre_col]
                             vector_y= - self.wrench[3,pre_col]
                             vector_xy=math.sqrt(pow(vector_x,2)+pow(vector_y,2))

@@ -25,7 +25,7 @@ class TestClearObstacle(TestBase):
 
         print('get_circle_trajectory')
         self.adjust_bolt_frame(real_pose, all_info)        
-        for i in range(360 / delta_angle + 1):
+        for i in range(540 / delta_angle + 1):
 
             tamp_angle = scale_angle * i
 

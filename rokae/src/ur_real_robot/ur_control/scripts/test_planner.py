@@ -96,6 +96,7 @@ class TSTPlanner:
         self.bolt_detector=YOLO_SendImg()
 
         self.stage={'have_coarse_pose':False, 'above_bolt':False,'target_aim':False, 'target_clear':False,'cramped':False,'disassembled':False}
+        # self.stage={'have_coarse_pose':False, 'above_bolt':False,'target_aim':True, 'target_clear':True,'cramped':False,'disassembled':False}
 
         #初始化stage
         self.move_prim=TestMove(self.group)
@@ -285,6 +286,7 @@ class TSTPlanner:
                                 pre_is_ok=False
                                 break
                         if pre_is_ok==True:
+                        # if True:
                             prim = self.prims[self.action]
                             #execute primitive       
                             infos['planner_handler']=self
