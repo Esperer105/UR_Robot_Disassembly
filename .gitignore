@@ -2,6 +2,8 @@
 ./rokae/devel/
 ./rokae/ur_env/
 ./rokae/ur_py3_env/
+ur_env/
+ur_py3_env/
 *.pyc
 *.csv
 *.png
