@@ -56,7 +56,7 @@ class TestDisassemble(TestBase):
     def state_callback(self, data):
         try:
             self.switch=data.digital_out_states[0].state
-        except Exception, err:
+        except Exception as err:
             print("exception happen in message call back:", err)
 
     def get_tgt_pose_in_world_frame(self):

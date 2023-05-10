@@ -35,16 +35,53 @@ from rigid_transform_3D import rigid_transform_3D
 from test_base import TestBase
 
 class TestAimTarget(TestBase):
-    def get_tgt_pose_in_world_frame(self,all_info):
-        tool_len = 0.415
-        x_shift=-0.0085
-        y_shift=0.0035
+    def get_tgt_pose_in_world_frame(self,all_info,kalman):
+        
+        # opt=kalman.itr_sum
+        # step=0.03
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-        tgt_pose_in_real_frame.position.x = x_shift
-        tgt_pose_in_real_frame.position.y = y_shift
-        tgt_pose_in_real_frame.position.z = - tool_len-0.075
 
-        # q = tf.transformations.quaternion_from_euler(0, 0, 0.1*math.pi)
+        # if (opt==1):
+        #     tgt_pose_in_real_frame.position.x = -self.x_shift + 0.015
+        #     tgt_pose_in_real_frame.position.y = -self.y_shift + 0.065
+        #     tgt_pose_in_real_frame.position.z = -self.z_shift
+        # if (opt==2):
+        #     tgt_pose_in_real_frame.position.x = -self.x_shift + 0.015 - step
+        #     tgt_pose_in_real_frame.position.y = -self.y_shift + 0.065
+        #     tgt_pose_in_real_frame.position.z = -self.z_shift        
+        # if (opt==3):
+        #     tgt_pose_in_real_frame.position.x = -self.x_shift + 0.015 + step
+        #     tgt_pose_in_real_frame.position.y = -self.y_shift + 0.065
+        #     tgt_pose_in_real_frame.position.z = -self.z_shift    
+        # if (opt==4):
+        #     tgt_pose_in_real_frame.position.x = -self.x_shift + 0.015
+        #     tgt_pose_in_real_frame.position.y = -self.y_shift + 0.065 - step
+        #     tgt_pose_in_real_frame.position.z = -self.z_shift        
+        # if (opt==5):
+        #     tgt_pose_in_real_frame.position.x = -self.x_shift + 0.015
+        #     tgt_pose_in_real_frame.position.y = -self.y_shift + 0.065 + step
+        #     tgt_pose_in_real_frame.position.z = -self.z_shift
+        # if (opt==6):
+        #     tgt_pose_in_real_frame.position.x = -self.x_shift + 0.015
+        #     tgt_pose_in_real_frame.position.y = -self.y_shift + 0.065
+        #     tgt_pose_in_real_frame.position.z = -self.z_shift - step       
+        # if (opt==7):
+        #     tgt_pose_in_real_frame.position.x = -self.x_shift + 0.015
+        #     tgt_pose_in_real_frame.position.y = -self.y_shift + 0.065
+        #     tgt_pose_in_real_frame.position.z = -self.z_shift + step
+        # if (opt==8):
+        #     tgt_pose_in_real_frame.position.x = -self.x_shift + 0.015
+        #     tgt_pose_in_real_frame.position.y = -self.y_shift + 0.065
+        #     tgt_pose_in_real_frame.position.z = -self.z_shift      
+        
+        # print(opt)
+
+        tgt_pose_in_real_frame.position.x = -self.x_shift
+        tgt_pose_in_real_frame.position.y = -self.y_shift + 0.065
+        # tgt_pose_in_real_frame.position.y = -self.y_shift
+        tgt_pose_in_real_frame.position.z = -self.z_shift - 0.07
+
+        # q = tf.transformations.quaternion_from_euler(0, 0, math.pi/6)
         q = tf.transformations.quaternion_from_euler(0, 0, 0)        
         tgt_pose_in_real_frame.orientation.x = q[0]
         tgt_pose_in_real_frame.orientation.y = q[1]
@@ -59,6 +96,25 @@ class TestAimTarget(TestBase):
         (r, p, y) = tf.transformations.euler_from_quaternion([tgt_pose_in_world_frame.orientation.x, tgt_pose_in_world_frame.orientation.y, tgt_pose_in_world_frame.orientation.z, tgt_pose_in_world_frame.orientation.w])
         print(r,p,y)
         return tgt_pose_in_world_frame
+    
+    def get_controller_pose_in_tool0_frame(self):
+        tgt_pose_in_controller_frame = geometry_msgs.msg.Pose()
+        tgt_pose_in_controller_frame.position.x = 0
+        tgt_pose_in_controller_frame.position.y = 0
+        tgt_pose_in_controller_frame.position.z = 0
+
+        q = tf.transformations.quaternion_from_euler(0, 0, 0)        
+        tgt_pose_in_controller_frame.orientation.x = q[0]
+        tgt_pose_in_controller_frame.orientation.y = q[1]
+        tgt_pose_in_controller_frame.orientation.z = q[2]
+        tgt_pose_in_controller_frame.orientation.w = q[3]
+        tgt_pose_in_tool0_frame = self.transform_pose("tool0_controller",
+                                                      "tool0",
+                                                      tgt_pose_in_controller_frame,
+                                                      rospy.Time.now())
+        print (tgt_pose_in_tool0_frame)
+        return tgt_pose_in_tool0_frame
+
 
     def action(self, all_info, pre_result_dict,kalman,yolo):
         for param in self.action_params:
@@ -66,6 +122,8 @@ class TestAimTarget(TestBase):
                 print(param, 'must give')
                 return False
         print("param satified, start to mate")
+        # tf_pose=self.get_controller_pose_in_tool0_frame()
+        # rospy.sleep(90)
         planner = all_info['planner_handler']
         np_collected=False
         while not kalman.finished:
@@ -77,19 +135,22 @@ class TestAimTarget(TestBase):
             r_height=540
             r_width =960
             # print(height,width)
-            crop_img= cv2.copyMakeBorder(raw_img,(r_height-height)/2,(r_height-height)/2,(r_width-width)/2,(r_width-width)/2,cv2.BORDER_CONSTANT,value=0)
+            crop_img= cv2.copyMakeBorder(raw_img,int((r_height-height)/2),int((r_height-height)/2),int((r_width-width)/2),int((r_width-width)/2),cv2.BORDER_CONSTANT,value=0)
             # crop_img=raw_img[int(0.25*height):int(0.75*height),int(0.5*(width-0.5*height)):int(0.5*(width+0.5*height))]
             # crop_img=raw_img[:,int(0.5*(width-height)):int(0.5*(width+height))]
             detect_ret=yolo.finish_YOLO_detect(crop_img)
             s=kalman.itr_sum
-            if 'screw' in detect_ret[1].keys() or 'nut' in detect_ret[1].keys():
+            if 'screw' in detect_ret[1].keys() or 'nut' in detect_ret[1].keys() or 'bolt' in detect_ret[1].keys():
                 circlesbox=[]
                 if 'screw' in detect_ret[1].keys():
                     print('screw success')
                     circlesbox.extend(detect_ret[1]["screw"])
                 if 'nut' in detect_ret[1].keys():
                     print('nut success')
-                    circlesbox.extend(detect_ret[1]["nut"])                
+                    circlesbox.extend(detect_ret[1]["nut"]) 
+                if 'bolt' in detect_ret[1].keys():
+                    print('bolt success')
+                    circlesbox.extend(detect_ret[1]["bolt"])               
                 #circle = self.findBestMatchCircle(circles)
 
                 # x = circle[1]+int(0.5*(width-0.5*height))
@@ -113,8 +174,8 @@ class TestAimTarget(TestBase):
                             conv_pose=screw_pose
                     real_pose=kalman.iteration(conv_pose)
                     self.adjust_bolt_frame(real_pose,latest_infos)
-                    ee_pose=self.get_tgt_pose_in_world_frame(latest_infos)
-
+                    # ee_pose=self.get_tgt_pose_in_world_frame(latest_infos)
+                    ee_pose=self.get_tgt_pose_in_world_frame(latest_infos,kalman)
                     if not self.set_arm_pose(self.group, ee_pose, self.effector):
                         print("failed")
                         print(curr_pose)
@@ -136,14 +197,13 @@ class TestAimTarget(TestBase):
                             near_pose=screw_pose
                         if(temp_diff > 0.05) and (np_collected==False):
                             coarse_pose = geometry_msgs.msg.Pose()
-                            if  screw_pose.position.x >0 and  screw_pose.position.x <0.02 :
-                                coarse_pose.position.x=0.08
-                            else:    
-                                coarse_pose.position.x = screw_pose.position.x-0.02
+                            
+                            coarse_pose.position.x = screw_pose.position.x-0.02
                             coarse_pose.position.y = screw_pose.position.y-0.02
                             coarse_pose.position.z = 0.70
 
-                            q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
+                            q = tf.transformations.quaternion_from_euler(-math.pi, 0, -0.5*math.pi)
+                            
                             coarse_pose.orientation.x = q[0]
                             coarse_pose.orientation.y = q[1]
                             coarse_pose.orientation.z = q[2]
@@ -155,7 +215,8 @@ class TestAimTarget(TestBase):
                     if (min_diff < 0.015):
                         real_pose=kalman.iteration(near_pose)
                         self.adjust_bolt_frame(real_pose,latest_infos)
-                        ee_pose=self.get_tgt_pose_in_world_frame(latest_infos)
+                        # ee_pose=self.get_tgt_pose_in_world_frame(latest_infos)
+                        ee_pose=self.get_tgt_pose_in_world_frame(latest_infos,kalman)                        
                         curr_pose= self.group.get_current_pose(self.effector).pose
                         if not self.set_arm_pose(self.group, ee_pose, self.effector):
                             print("failed")

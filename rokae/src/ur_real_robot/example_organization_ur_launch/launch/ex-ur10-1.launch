@@ -9,8 +9,8 @@
   <arg name="tf_prefix" default="" doc="tf_prefix used for the robot."/>
   <arg name="controllers" default="joint_state_controller scaled_pos_joint_traj_controller speed_scaling_state_controller force_torque_sensor_controller" doc="Controllers that are activated by default."/>
   <arg name="stopped_controllers" default="pos_joint_traj_controller joint_group_vel_controller" doc="Controllers that are initally loaded, but not started."/>
-  <arg name="controller_config_file" default="$(find ur_robot_driver)/config/ur10_controllers.yaml" doc="Config file used for defining the ROS-Control controllers."/>
-  <arg name="robot_description_file" default="$(find ur_description)/launch/load_ur10.launch" doc="Robot description launch file."/>
+  <arg name="controller_config_file" default="$(find ur_robot_driver)/config/ur10e_controllers.yaml" doc="Config file used for defining the ROS-Control controllers."/>
+  <arg name="robot_description_file" default="$(find ur_description)/launch/load_ur10e.launch" doc="Robot description launch file."/>
   <arg name="kinematics_config" default="$(find example_organization_ur_launch)/etc/ex-ur10-1_calibration.yaml"/>
   
   <!-- <arg name="kinematics_config"    default="$(find ur_description)/config/ur10/default_kinematics.yaml" doc="Kinematics config file used for calibration correction. This will be used to verify the robot's calibration is matching the robot_description."/> -->

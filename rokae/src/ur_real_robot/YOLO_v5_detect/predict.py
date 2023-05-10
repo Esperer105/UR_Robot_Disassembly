@@ -1,8 +1,8 @@
 from PIL import Image
 
 from yolo import YOLO
-import std_msgs
-import rospy
+# import std_msgs
+# import rospy
 if __name__ == "__main__":
     yolo = YOLO()
     mode = "predict"

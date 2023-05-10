@@ -6,7 +6,8 @@ from sklearn import svm
 from skimage.feature import hog
 from sklearn import exceptions
 import numpy as np
-from sklearn.externals import joblib
+#from sklearn.externals import joblib
+import joblib
 import sys
 import copy
 from PIL import Image
@@ -139,7 +140,7 @@ class BoltDetector():
 
     def train_SVM(self, train=False):
         if train is True:
-            print '***** The training process starts *****'
+            print ('***** The training process starts *****')
             data, data_label = [], []
             for file in os.listdir(self.train_path['pos_path']):
                 file_path = os.path.join(self.train_path['pos_path'], file)
@@ -169,12 +170,12 @@ class BoltDetector():
                                self.hog_cells_per_block[0] * self.hog_cells_per_block[1]) * self.hog_orientations
             data = np.array(data).reshape(-1, length_n)
             self.model.fit(data, data_label)
-            print '***** The training process ends *****'
-            print 'parameters of the trained SVC:', self.model.get_params
+            print ('***** The training process ends *****')
+            print ('parameters of the trained SVC:', self.model.get_params)
             joblib.dump(self.model, self.model_save_path)
-            print 'the model file has been save to %s, please check' % self.model_save_path
+            print ('the model file has been save to %s, please check' % self.model_save_path)
         else:
-            print 'directly load the model file at %s ' % self.model_save_path
+            print ('directly load the model file at %s ' % self.model_save_path)
             self.model = joblib.load(self.model_save_path)
             print ('model has been loaded')
 
@@ -217,7 +218,7 @@ class BoltDetector():
         if len(windows) == 0:
             print ('no bolt detected')
         boxes = non_max_suppression_fast(windows, nms_threshold)
-        print "bounding box num:", len(boxes)
+        print ("bounding box num:", len(boxes))
 
         for (x, y, x2, y2, score) in boxes:
             # print(x, y, x2, y2)
@@ -251,7 +252,7 @@ class BoltDetector():
             filename = os.path.join('src/ur_real_robot/ur_control/scripts/Realsense/images/', str(i) + '.jpg')
             cv2.imwrite(filename, img)
         if bolts is not None:
-            print 'the number of detected bolts:', len(bolts)
+            print ('the number of detected bolts:', len(bolts))
             ret_dict['circles'] = bolts
         else:
             print ('no bolts are detected')
@@ -331,7 +332,7 @@ class BoltDetector():
             filename = os.path.join('src/ur_real_robot/ur_control/scripts/Realsense/images/', str(i) + '.jpg')
             cv2.imwrite(filename, img)
         if bolts is not None:
-            print 'the number of detected bolts:', len(bolts)
+            print ('the number of detected bolts:', len(bolts))
             ret_dict['circles'] = bolts
         else:
             print ('no bolts are detected')

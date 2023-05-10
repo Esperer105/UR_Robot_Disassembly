@@ -190,6 +190,7 @@ if __name__ == '__main__':
                     break
 
                 frame_im = Image.fromarray(np.array(frame))
+                # frame_im.show()
                 class_primitive = img_primitive(frame_im)
                 print(class_primitive)
                 array_str = pickle.dumps(class_primitive, protocol=2)

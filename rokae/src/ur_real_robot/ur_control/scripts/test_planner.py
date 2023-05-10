@@ -28,6 +28,7 @@ import math
 # import numpy as np
 from test_aim_target import TestAimTarget
 from test_move import TestMove
+# from wrench_clt import TestMove
 from test_clear_obstacle import TestClearObstacle
 from test_insert import TestInsert
 from test_disassemble import TestDisassemble
@@ -40,7 +41,8 @@ import tf2_ros
 import geometry_msgs.msg
 #  新增import
 import math
-from Queue import Queue
+#from Queue import Queue
+from queue import Queue
 import select, termios, tty
 import socket
 import pickle
@@ -92,10 +94,16 @@ class TSTPlanner:
         moveit_commander.roscpp_initialize(sys.argv)
         self.group = moveit_commander.MoveGroupCommander("manipulator")
         self.group.set_planner_id("RRTConnectkConfigDefault")
+        
+        self.group.allow_replanning(True)
+        self.group.set_pose_reference_frame('base_link')
+        self.group.set_goal_position_tolerance(0.001)
+        self.group.set_goal_orientation_tolerance(0.001)
+
 
         self.bolt_detector=YOLO_SendImg()
 
-        self.stage={'have_coarse_pose':False, 'above_bolt':False,'target_aim':False, 'target_clear':False,'cramped':False,'disassembled':False}
+        self.stage={'have_coarse_pose':False, 'above_bolt':False,'target_aim':False, 'target_clear':True,'cramped':False,'disassembled':False}
 
         #初始化stage
         self.move_prim=TestMove(self.group)
@@ -178,7 +186,8 @@ class TSTPlanner:
                 joints["wrist_3_joint"] = joint_pose[5]+0.5*math.pi
 
             self.group.set_joint_value_target(joints)
-            plan = self.group.plan()
+            #plan = self.group.plan()
+            plan_success, plan, planning_time, error_code = self.group.plan()
             if len(plan.joint_trajectory.points) > 0:
                 self.group.execute(plan, wait=True)
                 print('hand adjusted')
@@ -200,7 +209,7 @@ class TSTPlanner:
         prim_list=(move,mate,push,insert,disassemble)
 
         #基于FIFO的规划生成方法
-        pathQueue=Queue(0)
+        pathQueue=Queue(0)       
         pathQueue.put([ori_stage,[]])
         plan_is_end=False
         while not plan_is_end:
@@ -247,8 +256,9 @@ class TSTPlanner:
             return True
 
     def do_action(self):
+        itr=7
         #执行动作
-        filter=Kalman(20)
+        filter=Kalman(itr)
         move=PrimAction('move')
         mate=PrimAction('mate')
         push=PrimAction('push')
@@ -274,17 +284,18 @@ class TSTPlanner:
                     # print('clear in prim')
                     self.all_infos_lock.release()
                     if self.action in prim_dict.keys():
-                        #检测pre是否满足
-                        if self.action in ['move','disassemble']:
-                            pre_is_ok=True
-                        else:
-                            rospy.sleep(0.1)
-                            pre_is_ok=self.call_edge_predicate(infos)
-                        for pre in (prim_dict[self.action]).pre:
-                            if not self.stage[pre]==(prim_dict[self.action].pre)[pre]:
-                                pre_is_ok=False
-                                break
-                        if pre_is_ok==True:
+                        # #检测pre是否满足
+                        # if self.action in ['move','disassemble']:
+                        #     pre_is_ok=True
+                        # else:
+                        #     rospy.sleep(0.1)
+                        #     pre_is_ok=self.call_edge_predicate(infos)
+                        # for pre in (prim_dict[self.action]).pre:
+                        #     if not self.stage[pre]==(prim_dict[self.action].pre)[pre]:
+                        #         pre_is_ok=False
+                        #         break
+                        #if pre_is_ok==True:
+                        if True:
                             prim = self.prims[self.action]
                             #execute primitive       
                             infos['planner_handler']=self
@@ -301,7 +312,7 @@ class TSTPlanner:
                             i = i + 1
                             if self.action=='disassemble':
                                 filter.release()
-                                filter=Kalman(20)
+                                filter=Kalman(itr)
                                 self.stage={'have_coarse_pose':True, 'above_bolt':False,'target_aim':False, 'target_clear':False,'cramped':False,'disassembled':False}
                                 if not self.next_pose is None:
                                     self.ret_dict['coarse_pose']=self.next_pose
@@ -355,7 +366,7 @@ class TSTPlanner:
                 #print(self.all_infos.keys())
                 self.all_infos_lock.release()
 
-        except Exception, err:
+        except Exception as err:
             print("exception happen in message call back:", err)
 
     def __del__(self):
@@ -365,10 +376,10 @@ class TSTPlanner:
     def print_pose(self,pose):
         q = (pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w)
         rpy = tf.transformations.euler_from_quaternion(q)
-        print '%s: position (%.2f %.2f %.2f) orientation (%.2f %.2f %.2f %.2f) RPY (%.2f %.2f %.2f)' % \
+        print ('%s: position (%.2f %.2f %.2f) orientation (%.2f %.2f %.2f %.2f) RPY (%.2f %.2f %.2f)' % \
             (self.effector, pose.position.x, pose.position.y, pose.position.z, \
             pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w, \
-            rpy[0], rpy[1], rpy[2])
+            rpy[0], rpy[1], rpy[2]) )
 
     def reset_arm(self):
         joints = {}
@@ -379,7 +390,8 @@ class TSTPlanner:
         joints["wrist_2_joint"] = -math.pi/2.
         joints["wrist_3_joint"] = 0.
         self.group.set_joint_value_target(joints)
-        plan = self.group.plan()
+        #plan = self.group.plan()
+        plan_success, plan, planning_time, error_code = self.group.plan()
         if len(plan.joint_trajectory.points) > 0:
             self.group.execute(plan, wait=True)
             self.print_pose(self.group.get_current_pose(self.effector).pose)
@@ -393,15 +405,22 @@ if __name__ == '__main__':
         rospy.init_node('tstplanner-moveit', anonymous=True)
 
         planner = TSTPlanner('camera', '/camera/color/image_raw', '/camera/aligned_depth_to_color/image_raw', '/camera/color/camera_info')
-        quat = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
+        quat = tf.transformations.quaternion_from_euler(-math.pi, 0, -0.5*math.pi)
+        # eul  = tf.transformations.euler_from_quaternion(quat)
+        # print(eul)
+        # print (quat)
         pose_target = geometry_msgs.msg.Pose()
         # pose_target.position.x = 0.30
         # pose_target.position.y = 0.38
         # pose_target.position.z = 0.65
 
-        pose_target.position.x = -0.35
-        pose_target.position.y = 0.50
-        pose_target.position.z = 0.70
+        pose_target.position.x = - 0.125
+        pose_target.position.y = 0.53
+        pose_target.position.z = 0.625
+        
+        # pose_target.position.x = 0.04
+        # pose_target.position.y = 0.457
+        # pose_target.position.z = 0.556
 
         pose_target.orientation.x = quat[0]
         pose_target.orientation.y = quat[1]

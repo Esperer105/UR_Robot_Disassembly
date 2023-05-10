@@ -38,10 +38,6 @@ class TestInsert(TestBase):
         self.ori_wrench=np.array([0,0,0,0]).reshape([4,1])
         self.is_cramped=False
         self.near_cramped=False
-        # self.x_shift=-0.0075
-        # self.y_shift=0.0025
-        self.x_shift=-0.0085
-        self.y_shift=0.0035 
 
     def get_insert_trajectory(self,real_pose,all_info):
 
@@ -52,9 +48,8 @@ class TestInsert(TestBase):
         scale_angle = delta_angle * math.pi / 180
         scale_depth= 0.002
         total_ang=60
-        tool_len = 0.415
         print('get_insert_trajectory')
-        for i in range( total_ang / delta_angle + 1):
+        for i in range( int(total_ang / delta_angle + 1) ):
             tamp_radius=radius*(1-i*delta_angle/total_ang)
             tamp_angle = scale_angle * i
             tamp_depth=scale_depth * i
@@ -62,10 +57,10 @@ class TestInsert(TestBase):
             tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
             # tgt_pose_in_real_frame.position.x = -0.009+tamp_radius * math.cos(tamp_angle)
             # tgt_pose_in_real_frame.position.y =0.003+tamp_radius * math.sin(tamp_angle)
-            tgt_pose_in_real_frame.position.x = self.x_shift+tamp_radius * math.cos(tamp_angle)
-            tgt_pose_in_real_frame.position.y =self.y_shift+tamp_radius * math.sin(tamp_angle)
+            tgt_pose_in_real_frame.position.x =-self.x_shift+tamp_radius * math.cos(tamp_angle)
+            tgt_pose_in_real_frame.position.y =-self.y_shift+tamp_radius * math.sin(tamp_angle)
 
-            tgt_pose_in_real_frame.position.z = -tool_len+tamp_depth
+            tgt_pose_in_real_frame.position.z = -self.z_shift+ tamp_depth
             q = tf.transformations.quaternion_from_euler(0, 0, tamp_angle)
             # q = tf.transformations.quaternion_from_euler(0, 0, 0)           
             tgt_pose_in_real_frame.orientation.x = q[0]
@@ -97,9 +92,9 @@ class TestInsert(TestBase):
         scale_angle = delta_angle * math.pi / 180
 
         print('get_search_trajectory')
-        for i in range (attempt):
+        for i in range (int(attempt)):
             temp_radius=scale_radius*(i+1)
-            for j in range(360/ delta_angle ):
+            for j in range( int(360/ delta_angle) ):
                 temp_angle = scale_angle * j
                 tgt_pose_in_effector_frame = geometry_msgs.msg.Pose()
                 tgt_pose_in_effector_frame.position.x = temp_radius * math.cos(temp_angle)
@@ -202,7 +197,7 @@ class TestInsert(TestBase):
             # y_torque=msg.wrench.torque.y
             # z_torque=msg.wrench.torque.z            
             self.cur_wrench=np.array([ver_force,hor_force,x_force,y_force]).reshape([4,1])
-        except Exception, err:
+        except Exception as err:
             print("exception happen in message call back:", err)
     
     def print_wrench(self):
@@ -250,14 +245,10 @@ class TestInsert(TestBase):
         return trajectory        
 
     def get_tgt_pose_in_world_frame(self,all_info):
-        tool_len = 0.415
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
-        # tgt_pose_in_real_frame.position.x = -0.009
-        # tgt_pose_in_real_frame.position.y = 0.003
-
-        tgt_pose_in_real_frame.position.x = self.x_shift
-        tgt_pose_in_real_frame.position.y = self.y_shift
-        tgt_pose_in_real_frame.position.z = -tool_len
+        tgt_pose_in_real_frame.position.x = -self.x_shift
+        tgt_pose_in_real_frame.position.y = -self.y_shift
+        tgt_pose_in_real_frame.position.z = -self.z_shift - 0.01
 
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
         tgt_pose_in_real_frame.orientation.x = q[0]
@@ -322,15 +313,22 @@ class TestInsert(TestBase):
             if not self.set_arm_pose(self.group, ee_pose, self.effector):
                 print("failed")
                 print(curr_pose)
+            flange_pose=self.get_flange_pose_in_world_frame()
+            tool_pose=self.get_tool_pose_in_world_frame()
+            curr_pose= self.group.get_current_pose(self.effector).pose
+            print(curr_pose)
+            (r, p, y) = tf.transformations.euler_from_quaternion([curr_pose.orientation.x, curr_pose.orientation.y, curr_pose.orientation.z, curr_pose.orientation.w])
+            print(r,p,y)
             self.print_wrench()
+            rospy.sleep(30)
             insert_trajectory=self.get_insert_trajectory(real_pose,all_info)
             for ee_pose in insert_trajectory:
                 if not self.set_arm_pose(self.group, ee_pose, self.effector):
                     print("insert failed")
                     ee_pose = self.group.get_current_pose(self.effector).pose 
                     print(ee_pose)
+                # rospy.sleep(30)
                 # self.print_wrench()
-            # rospy.sleep(30)
             temp_pose=self.test_wrench()
             while not self.is_cramped:
                 if self.near_cramped:

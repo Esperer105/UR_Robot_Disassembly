@@ -35,7 +35,7 @@ from bolt_detector import BoltDetector
 
 class PrimAimTarget(PrimBase):
     def get_tgt_pose_in_world_frame(self,all_info):
-        tool_len = 0.45
+        tool_len = 0.5
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
         tgt_pose_in_real_frame.position.x = 0
         tgt_pose_in_real_frame.position.y = 0

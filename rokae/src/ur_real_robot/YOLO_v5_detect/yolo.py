@@ -1,4 +1,3 @@
-
 import colorsys
 import os
 
@@ -16,7 +15,7 @@ from utils.utils_bbox import DecodeBox
 class YOLO(object):
     _defaults = {
         "model_path": 'model_data/best_epoch_weights.pth',
-        "classes_path": 'model_data/voc_classes.txt',
+        "classes_path": 'model_data/our_class.txt',
         "anchors_path": 'model_data/yolo_anchors.txt',
         "anchors_mask": [[6, 7, 8], [3, 4, 5], [0, 1, 2]],
         # ---------------------------------------------------------------------#
@@ -32,11 +31,11 @@ class YOLO(object):
         # ---------------------------------------------------------------------#
         #   只有得分大于置信度的预测框会被保留下来,原始置信度=0.75
         # ---------------------------------------------------------------------#
-        "confidence": 0.75,
+        "confidence": 0.8,
         # ---------------------------------------------------------------------#
         #   非极大抑制所用到的nms_iou大小
         # ---------------------------------------------------------------------#
-        "nms_iou": 0.3,
+        "nms_iou": 0.2,
         # ---------------------------------------------------------------------#
         #   该变量用于控制是否使用letterbox_image对输入图像进行不失真的resize，
         #   在多次测试后，发现关闭letterbox_image直接resize的效果更好
@@ -123,10 +122,10 @@ class YOLO(object):
         # ---------------------------------------------------------#
         image_data = np.expand_dims(np.transpose(preprocess_input(
             np.array(image_data, dtype='float32')), (2, 0, 1)), 0)
-        
+
         bbox_collect = {}
         bbox_center_collect = {}
-        
+
         with torch.no_grad():
             images = torch.from_numpy(image_data)
             if self.cuda:
@@ -144,7 +143,7 @@ class YOLO(object):
                                                          nms_thres=self.nms_iou)
 
             if results[0] is None:
-                return image,bbox_collect
+                return image, bbox_collect
 
             top_label = np.array(results[0][:, 6], dtype='int32')
             top_conf = results[0][:, 4] * results[0][:, 5]
@@ -178,6 +177,14 @@ class YOLO(object):
                 bottom = min(image.size[1], np.floor(bottom).astype('int32'))
                 right = min(image.size[0], np.floor(right).astype('int32'))
 
+                wdt=right-left
+                hgt=bottom-top
+                len=max(wdt,hgt)
+                btm=top+len
+                rgt=left+len
+                bottom= min (image.size[1],btm)
+                right = min (image.size[0],rgt)
+
                 dir_save_path = "img_crop"
                 if not os.path.exists(dir_save_path):
                     os.makedirs(dir_save_path)
@@ -201,6 +208,14 @@ class YOLO(object):
             bottom = min(image.size[1], np.floor(bottom).astype('int32'))
             right = min(image.size[0], np.floor(right).astype('int32'))
 
+            wdt=right-left
+            hgt=bottom-top
+            len=max(wdt,hgt)
+            btm=top+len
+            rgt=left+len
+            bottom= min (image.size[1],btm)
+            right = min (image.size[0],rgt)
+
             label = '{} {:.2f}'.format(predicted_class, score)
             draw = ImageDraw.Draw(image)
             label_size = draw.textsize(label, font)
@@ -212,10 +227,10 @@ class YOLO(object):
             # bbox的中心是(x,y)
             if label_det not in bbox_center_collect.keys():
                 bbox_center_collect[label_det] = [
-                    [int((left+right)/2), int((top+bottom)/2)]]
+                    [int((left + right) / 2), int((top + bottom) / 2)]]
             else:
                 bbox_center_collect[label_det].append(
-                    [int((left+right)/2), int((top+bottom)/2)])
+                    [int((left + right) / 2), int((top + bottom) / 2)])
             # print(bbox_collect)
             # bbox是(xmin,ymin,xmax,ymax)
             if label_det not in bbox_collect.keys():
@@ -229,11 +244,14 @@ class YOLO(object):
 
             for i in range(thickness):
                 draw.rectangle([left + i, top + i, right - i,
-                               bottom - i], outline=self.colors[c])
+                                bottom - i], outline=self.colors[c])
+                # draw.rectangle([int((left + right) / 2) - i, int((top + bottom) / 2) - i, int((left + right) / 2) + i,
+                #                 int((bottom + top) / 2) + i],outline=self.colors[c])
             draw.rectangle([tuple(text_origin), tuple(
                 text_origin + label_size)], fill=self.colors[c])
             draw.text(text_origin, str(label, 'UTF-8'),
                       fill=(0, 0, 0), font=font)
+
             del draw
         # print(bbox_collect)
         return image, (bbox_center_collect, bbox_collect)

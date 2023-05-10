@@ -99,7 +99,7 @@ def generate_selected_points(tl_x, tl_y, br_x, br_y, all_info):
     br_x = clamp(br_x, 0, all_info['depth_img'].shape[1])
     tl_y = clamp(tl_y, 0, all_info['depth_img'].shape[0])
     br_y = clamp(br_y, 0, all_info['depth_img'].shape[0])
-    roi = rgb2gray(all_info['rgb_img'][tl_y:br_y, tl_x:br_x])
+    roi = rgb2gray(all_info['rgb_img'][int(tl_y):int(br_y), int(tl_x):int(br_x)])
     # cv2.imshow('roi', roi)
     # cv2.waitKey(0)
     binary = roi > threshold_otsu(roi)
@@ -115,8 +115,8 @@ def generate_selected_points(tl_x, tl_y, br_x, br_y, all_info):
             (selected_points_index[1], selected_points_index[0])))
         points = np.array([point/points[2] for point in points])
         camera_point = points * \
-            all_info['depth_img'][selected_points_index[0],
-                                  selected_points_index[1]]/1000
+            all_info['depth_img'][int(selected_points_index[0]),
+                                  int(selected_points_index[1])]/1000
         points_cloud.append(camera_point)
     return np.array(points_cloud)
 
@@ -169,7 +169,7 @@ def cal_bolt_plane(tl_x, tl_y, br_x, br_y, all_info):
     camera_model = all_info['camera_model']
     t = list(camera_model.projectPixelTo3dRay((center_x, center_y)))
     t = np.array([t_ele/t[2] for t_ele in t])*depth
-    sci_r = sci_R.from_dcm(R)
+    sci_r = sci_R.from_matrix(R)
     # print('quat:', sci_r.as_quat())
     # print(sci_r.as_euler('zyx', degrees=True))
     # print('t vector:', t)

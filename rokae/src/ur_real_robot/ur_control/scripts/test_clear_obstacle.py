@@ -19,9 +19,9 @@ class TestClearObstacle(TestBase):
         #SJTU origininal=0.0105
         radius = 0.015
 
-        tool_len = 0.415
-        x_shift=-0.0085
-        y_shift=0.0035
+        tool_len = 0.5
+        x_shift=0
+        y_shift=0
 
         print('get_circle_trajectory')
         self.adjust_bolt_frame(real_pose, all_info)        
@@ -61,9 +61,9 @@ class TestClearObstacle(TestBase):
         return trajectory
 
     def get_tgt_pose_in_world_frame(self,all_info):
-        tool_len = 0.415
-        x_shift=-0.0085
-        y_shift=0.0035
+        tool_len = 0.5
+        x_shift=0
+        y_shift=0
         tgt_pose_in_real_frame = geometry_msgs.msg.Pose()
         tgt_pose_in_real_frame.position.x = x_shift
         tgt_pose_in_real_frame.position.y = y_shift
@@ -101,7 +101,7 @@ class TestClearObstacle(TestBase):
             r_height=540
             r_width =960
             # print(height,width)
-            crop_img= cv2.copyMakeBorder(raw_img,(r_height-height)/2,(r_height-height)/2,(r_width-width)/2,(r_width-width)/2,cv2.BORDER_CONSTANT,value=0)
+            crop_img= cv2.copyMakeBorder(raw_img,int((r_height-height)/2),int((r_height-height)/2),int((r_width-width)/2),int((r_width-width)/2),cv2.BORDER_CONSTANT,value=0)
             # crop_img=raw_img[int(0.25*height):int(0.75*height),int(0.5*(width-0.5*height)):int(0.5*(width+0.5*height))]
             # crop_img=raw_img[:,int(0.5*(width-height)):int(0.5*(width+height))]
             detect_ret=yolo.finish_YOLO_detect(crop_img)
@@ -166,7 +166,7 @@ class TestClearObstacle(TestBase):
                             coarse_pose.position.y = screw_pose.position.y-0.02
                             coarse_pose.position.z = 0.70
 
-                            q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
+                            q = tf.transformations.quaternion_from_euler(-math.pi, 0, -0.5*math.pi)
                             coarse_pose.orientation.x = q[0]
                             coarse_pose.orientation.y = q[1]
                             coarse_pose.orientation.z = q[2]

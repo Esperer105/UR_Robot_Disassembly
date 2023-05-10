@@ -142,14 +142,14 @@ roslaunch easy_handeye publish.launch
 #### 启动`YOLOv5`服务端(新的终端 Python3 环境下)
 
 ```bash
-cd rokae/src/ur_real_robot/YOLO_v5_detect
+cd src/ur_real_robot/YOLO_v5_detect
 python YOLO_server.py
 ```
 
 #### 启动`np`服务端(新的终端 Python3 环境下)
 
 ```bash
-cd rokae/src/ur_real_robot/ur_control/scripts
+cd src/ur_real_robot/ur_control/scripts
 python np_server.py
 ```
 

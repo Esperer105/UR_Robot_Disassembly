@@ -9,6 +9,7 @@ import numpy as np
 import random
 from yolo import YOLO
 from PIL import Image
+from PIL import ImageShow
 import select
 
 def unpack_image(conn):
@@ -58,8 +59,9 @@ while True:
                 break
             
             frame_im = Image.fromarray(np.array(frame))
+
             result, yolo_detect = yolo.detect_image(frame_im)
-            # result.show()
+            result.show(title="result")
             print(yolo_detect)
             array_str = pickle.dumps(yolo_detect, protocol=2)
             conn.sendall(array_str)

@@ -1,0 +1,9 @@
+<launch>
+  <arg name="netft_host" default="192.168.56.102"/>
+  <arg name="publish_frequency" default="50"/>
+  <node name="ati_net_ft_driver" pkg="rpi_ati_net_ft" type="ati_net_ft_driver_ros" required="true">
+    <param name="netft_host" value="$(arg netft_host)"/>
+    <param name="publish_frequency" value="$(arg publish_frequency)" type="double"/>
+  </node>
+</launch>
+

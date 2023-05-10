@@ -50,14 +50,17 @@ class TestBase(object):
         self.clamp = lambda n, minn, maxn: max(min(maxn, n), minn)
         self.br = tf2_ros.TransformBroadcaster()
         self.bolt_pos_pub = rospy.Publisher('/NSPlanner/bolt_pose', geometry_msgs.msg.PoseStamped, queue_size =10 )
+        self.x_shift= 0.00061
+        self.y_shift= 0.00012
+        self.z_shift= 0.48702
 
     def print_pose(self,pose):
         q = (pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w)
         rpy = tf.transformations.euler_from_quaternion(q)
-        print '%s: position (%.2f %.2f %.2f) orientation (%.2f %.2f %.2f %.2f) RPY (%.2f %.2f %.2f)' % \
+        print ('%s: position (%.2f %.2f %.2f) orientation (%.2f %.2f %.2f %.2f) RPY (%.2f %.2f %.2f)' % \
             (self.effector, pose.position.x, pose.position.y, pose.position.z, \
             pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w, \
-            rpy[0], rpy[1], rpy[2])
+            rpy[0], rpy[1], rpy[2]))
 
     def findBestMatchCircle(self, circles):
         assert len(circles) > 0
@@ -148,7 +151,47 @@ class TestBase(object):
         # self.print_pose(tgt_pose_in_world_frame, 'tgt_pose_in_world_frame')
         return tgt_pose_in_world_frame
 
+    def get_tool_pose_in_world_frame(self):
+        print('get_tool_pose_in_world_frame')
+        tgt_pose_in_tool_frame = geometry_msgs.msg.Pose()
+        tgt_pose_in_tool_frame.position.x = 0
+        tgt_pose_in_tool_frame.position.y = 0
+        tgt_pose_in_tool_frame.position.z = 0
+        q = tf.transformations.quaternion_from_euler(0, 0, 0)
+        tgt_pose_in_tool_frame.orientation.x = q[0]
+        tgt_pose_in_tool_frame.orientation.y = q[1]
+        tgt_pose_in_tool_frame.orientation.z = q[2]
+        tgt_pose_in_tool_frame.orientation.w = q[3]
 
+        tgt_pose_in_world_frame = self.transform_pose("tool0_controller",
+                                                      "base_link",
+                                                      tgt_pose_in_tool_frame,
+                                                      rospy.Time.now())
+        print (tgt_pose_in_world_frame)
+        (r, p, y) = tf.transformations.euler_from_quaternion([tgt_pose_in_world_frame.orientation.x, tgt_pose_in_world_frame.orientation.y, tgt_pose_in_world_frame.orientation.z, tgt_pose_in_world_frame.orientation.w])
+        print(r,p,y)
+        return tgt_pose_in_world_frame
+
+    def get_flange_pose_in_world_frame(self):
+        print('get_flange_pose_in_world_frame')
+        tgt_pose_in_flange_frame = geometry_msgs.msg.Pose()
+        tgt_pose_in_flange_frame.position.x = 0
+        tgt_pose_in_flange_frame.position.y = 0
+        tgt_pose_in_flange_frame.position.z = 0
+        q = tf.transformations.quaternion_from_euler(0, 0, 0)
+        tgt_pose_in_flange_frame.orientation.x = q[0]
+        tgt_pose_in_flange_frame.orientation.y = q[1]
+        tgt_pose_in_flange_frame.orientation.z = q[2]
+        tgt_pose_in_flange_frame.orientation.w = q[3]
+
+        tgt_pose_in_world_frame = self.transform_pose("tool0",
+                                                      "base_link",
+                                                      tgt_pose_in_flange_frame,
+                                                      rospy.Time.now())
+        print (tgt_pose_in_world_frame)
+        (r, p, y) = tf.transformations.euler_from_quaternion([tgt_pose_in_world_frame.orientation.x, tgt_pose_in_world_frame.orientation.y, tgt_pose_in_world_frame.orientation.z, tgt_pose_in_world_frame.orientation.w])
+        print(r,p,y)
+        return tgt_pose_in_world_frame
 
     def set_arm_pose(self, group, pose, effector):
         joint_states = rospy.wait_for_message("joint_states",JointState)
@@ -162,7 +205,8 @@ class TestBase(object):
             joints["wrist_2_joint"] = joint_pose[4]
             joints["wrist_3_joint"] = joint_pose[5]-2*math.pi
             group.set_joint_value_target(joints)
-            plan = group.plan()
+            #plan = group.plan()
+            plan_success, plan, planning_time, error_code = group.plan()
             if len(plan.joint_trajectory.points) > 0:
                 group.execute(plan, wait=True)
                 print('hand adjusted')
@@ -170,7 +214,8 @@ class TestBase(object):
                 print('no plan result')
                 return False
         group.set_joint_value_target(pose, True)
-        plan = group.plan()
+        #plan = group.plan()
+        plan_success, plan, planning_time, error_code = group.plan()
         if len(plan.joint_trajectory.points) > 0:
             group.execute(plan, wait=True)
             return True
@@ -344,16 +389,16 @@ class TestBase(object):
         real_trans.transform.translation.y = X1_pose.position.y
         real_trans.transform.translation.z = X1_pose.position.z
         
-        # q = tf.transformations.quaternion_from_euler(-math.pi, 0, 0.5*math.pi)
-        # real_trans.transform.rotation.x =q[0]
-        # real_trans.transform.rotation.y =q[1]
-        # real_trans.transform.rotation.z =q[2]
-        # real_trans.transform.rotation.w=q[3]
+        q = tf.transformations.quaternion_from_euler(-math.pi, 0, -0.5*math.pi)
+        real_trans.transform.rotation.x =q[0]
+        real_trans.transform.rotation.y =q[1]
+        real_trans.transform.rotation.z =q[2]
+        real_trans.transform.rotation.w=q[3]
 
-        real_trans.transform.rotation.x =X1_pose.orientation.x
-        real_trans.transform.rotation.y =X1_pose.orientation.y
-        real_trans.transform.rotation.z =X1_pose.orientation.z
-        real_trans.transform.rotation.w=X1_pose.orientation.w
+        # real_trans.transform.rotation.x =X1_pose.orientation.x
+        # real_trans.transform.rotation.y =X1_pose.orientation.y
+        # real_trans.transform.rotation.z =X1_pose.orientation.z
+        # real_trans.transform.rotation.w=X1_pose.orientation.w
 
         # real_pose_in_effector_frame = geometry_msgs.msg.Pose()
         # real_pose_in_effector_frame.position.x = 0

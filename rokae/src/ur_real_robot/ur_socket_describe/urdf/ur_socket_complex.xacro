@@ -3,6 +3,7 @@
 
   <xacro:include filename="$(find ur_description)/urdf/inc/ur10e_macro.xacro"/>
   <xacro:ur10e_robot prefix="" />
+  <!-- <xacro:include filename="$(find end_effector)/urdf/end_effector.urdf" /> -->
   <xacro:include filename="$(find end_effector)/urdf/end_effector.urdf" />
 
   <joint name="ur_socket_joint" type="fixed">
